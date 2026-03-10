@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Hand Off — AI CTF Duel{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        <div class="result-icon">&#9876;</div>
+        <h1>The Castle is Fortified!</h1>
+        <p class="subtitle">The Defender's prompt passed the sanity check.</p>
+    </div>
+
+    <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">
+        <strong>Defender:</strong> Hand the keyboard to the <strong>Attacker</strong>.
+    </p>
+    <p style="color: #8888aa;">
+        Attacker, press the button below when you are ready to begin the siege.
+    </p>
+
+    <form method="post" action="/game/handoff" class="mt-3">
+        <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
+            I'm the Attacker — Begin Siege
+        </button>
+    </form>
+</div>
+{% endblock %}

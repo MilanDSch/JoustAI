@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Results — AI CTF Duel{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        {% if result == "attacker_win" %}
+        <div class="result-icon">&#128481;</div>
+        <h1 style="color: #e74c3c;">The Castle Has Fallen!</h1>
+        <p class="subtitle">The Attacker extracted the password.</p>
+        {% else %}
+        <div class="result-icon">&#127984;</div>
+        <h1 style="color: #27ae60;">The Castle Stands!</h1>
+        <p class="subtitle">The Defender's fortifications held strong.</p>
+        {% endif %}
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">{{ password }}</div>
+            <div class="stat-label">Secret Password</div>
+        </div>
+        {% if cracked_on_turn %}
+        <div class="stat">
+            <div class="stat-value">{{ cracked_on_turn }}/{{ max_turns }}</div>
+            <div class="stat-label">Cracked On Turn</div>
+        </div>
+        {% endif %}
+        <div class="stat">
+            <div class="stat-value">{{ total_turns }}/{{ max_turns }}</div>
+            <div class="stat-label">Turns Played</div>
+        </div>
+    </div>
+
+    {% if turns %}
+    <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Battle Log</h2>
+    <div class="chat-history" id="chat-history" style="text-align: left;">
+        {% for turn in turns %}
+        <div class="chat-bubble user">
+            <div class="label">Attacker (Turn {{ turn.turn_number }})</div>
+            {{ turn.attacker_prompt }}
+        </div>
+        <div class="chat-bubble assistant">
+            <div class="label">AI</div>
+            {{ turn.ai_response }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="/game/restart" class="mt-3">
+        <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
+            Play Again
+        </button>
+    </form>
+</div>
+{% endblock %}

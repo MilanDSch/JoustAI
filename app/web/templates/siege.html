@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}The Siege — AI CTF Duel{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>Phase 2: The Siege</h1>
+        <p class="subtitle">Trick the AI into revealing the secret password.</p>
+    </div>
+
+    <div class="text-center mb-2">
+        <span class="badge badge-attempts">Attempts remaining: {{ turns_remaining }}</span>
+    </div>
+
+    {% if turns %}
+    <div class="chat-history" id="chat-history">
+        {% for turn in turns %}
+        <div class="chat-bubble user">
+            <div class="label">You (Turn {{ turn.turn_number }})</div>
+            {{ turn.attacker_prompt }}
+        </div>
+        <div class="chat-bubble assistant">
+            <div class="label">AI</div>
+            {{ turn.ai_response }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not game_over %}
+    <form id="attack-form" method="post" action="/game/attack">
+        <div class="form-group">
+            <textarea id="attacker_prompt" name="attacker_prompt" placeholder="Enter your prompt to trick the AI..." required rows="3" style="min-height: 80px;"></textarea>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            <button type="submit" id="submit-btn" class="btn btn-primary" style="flex: 1;">
+                Send Prompt
+            </button>
+            <button type="button" id="surrender-btn" class="btn btn-secondary" onclick="document.getElementById('surrender-form').submit();">
+                Surrender
+            </button>
+        </div>
+    </form>
+
+    <form id="surrender-form" method="post" action="/game/surrender" style="display:none;"></form>
+
+    <div id="loading" class="loading">
+        <span class="spinner"></span> AI is thinking...
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-scroll chat history to bottom
+var chat = document.getElementById('chat-history');
+if (chat) chat.scrollTop = chat.scrollHeight;
+
+var form = document.getElementById('attack-form');
+if (form) {
+    form.addEventListener('submit', function() {
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('surrender-btn').disabled = true;
+        document.getElementById('submit-btn').textContent = 'Waiting...';
+        document.getElementById('loading').style.display = 'block';
+    });
+}
+</script>
+{% endblock %}

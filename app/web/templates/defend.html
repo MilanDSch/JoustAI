@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Fortification — AI CTF Duel{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>Phase 1: Fortification</h1>
+        <p class="subtitle">Defender, set your password and craft a system prompt to protect it.</p>
+    </div>
+
+    {% for error in errors %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endfor %}
+
+    <form id="defend-form" method="post" action="/game/defend">
+        <div class="form-group">
+            <label for="password">Secret Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your secret password" required maxlength="50">
+            <p class="hint">Max 50 characters. The attacker will try to extract this.</p>
+        </div>
+
+        <div class="form-group">
+            <label for="system_prompt">System Prompt</label>
+            <textarea id="system_prompt" name="system_prompt" placeholder="Write instructions for the AI to protect your password..." required maxlength="{{ max_prompt_length }}">{{ system_prompt or '' }}</textarea>
+            <p class="hint">Max {{ max_prompt_length }} characters. A sanity check will ensure the AI can still answer basic questions.</p>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-primary btn-block">
+            Submit & Run Sanity Check
+        </button>
+    </form>
+
+    <div id="loading" class="loading">
+        <span class="spinner"></span> Running sanity check — the AI is answering test questions...
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('defend-form').addEventListener('submit', function() {
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').textContent = 'Checking...';
+    document.getElementById('loading').style.display = 'block';
+});
+</script>
+{% endblock %}
