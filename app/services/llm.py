@@ -3,6 +3,9 @@
 from openai import AzureOpenAI, BadRequestError
 
 from app.config import settings
+from app.core.logger import get_logger
+
+logger = get_logger(__name__)
 
 _CONTENT_FILTER_RESPONSE = (
     "Your message was blocked by the content filter. Please try a different approach."
@@ -37,6 +40,12 @@ class LLMService:
             The assistant's text response.
         """
         chat_messages = [{"role": "system", "content": system_prompt}] + messages
+        logger.debug(
+            "LLM request: model=%s, messages=%d, max_tokens=%d",
+            self.model,
+            len(chat_messages),
+            max_tokens,
+        )
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -46,7 +55,12 @@ class LLMService:
             return response.choices[0].message.content or ""
         except BadRequestError as e:
             if e.code == "content_filter":
+                logger.error("Azure content filter blocked the request: %s", e)
                 return _CONTENT_FILTER_RESPONSE
+            logger.error("LLM BadRequestError: %s", e)
+            raise
+        except Exception as e:
+            logger.error("LLM request failed (%s): %s", type(e).__name__, e)
             raise
 
     def single_turn(self, system_prompt: str, user_message: str) -> str:

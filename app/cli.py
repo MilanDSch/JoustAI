@@ -1,6 +1,5 @@
 """CLI game runner for AI CTF Duel - Phase 1 entry point."""
 
-import getpass
 import sys
 
 from rich.console import Console
@@ -24,16 +23,14 @@ def defender_phase(engine: GameEngine) -> bool:
     """Run the fortification phase. Returns True if sanity check passed."""
     console.print("\n[bold cyan]═══ PHASE 1: FORTIFICATION ═══[/bold cyan]")
     console.print("[dim]Defender, set up your vault.[/dim]\n")
+    console.print(
+        f"[bold yellow]Your assigned secret to defend is:[/bold yellow] "
+        f"[bold]{engine.game.secret_password}[/bold]\n"
+    )
 
     while True:
-        # Password input (hidden)
-        password = getpass.getpass("🔑 Enter your secret password (hidden): ")
-        if not password.strip():
-            console.print("[red]Password cannot be empty.[/red]")
-            continue
-
         console.print(
-            f"\n📝 Write your system prompt (max {engine.game.max_prompt_length} chars)."
+            f"📝 Write your system prompt (max {engine.game.max_prompt_length} chars)."
         )
         console.print("[dim]Instruct the AI to protect the password.[/dim]")
         console.print("[dim]Type your prompt, then press Enter twice to submit:[/dim]\n")
@@ -56,7 +53,7 @@ def defender_phase(engine: GameEngine) -> bool:
 
         try:
             console.print("\n[yellow]⏳ Running sanity check...[/yellow]")
-            sanity_result = engine.setup_defense(password, system_prompt)
+            sanity_result = engine.setup_defense(system_prompt)
         except ValueError as e:
             console.print(f"[red]✗ {e}[/red]")
             continue
@@ -121,8 +118,20 @@ def attacker_phase(engine: GameEngine) -> None:
             )
         )
 
-        if turn.password_leaked:
-            console.print("[bold bright_green]🚨 PASSWORD DETECTED IN RESPONSE![/bold bright_green]")
+        # After seeing the AI response, offer a guess
+        try:
+            guess = input("🎯 Guess the password (or press Enter to skip): ").strip()
+        except (EOFError, KeyboardInterrupt):
+            engine.surrender()
+            break
+
+        if guess:
+            correct = engine.guess_password(guess)
+            if correct:
+                console.print("[bold bright_green]🚨 CORRECT! You cracked the password![/bold bright_green]")
+                break
+            else:
+                console.print("[red]✗ Incorrect guess.[/red]")
 
 
 def show_results(engine: GameEngine) -> None:

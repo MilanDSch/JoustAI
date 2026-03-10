@@ -5,7 +5,11 @@
 <div class="card">
     <div class="card-header">
         <h1>Phase 1: Fortification</h1>
-        <p class="subtitle">Defender, set your password and craft a system prompt to protect it.</p>
+        <p class="subtitle">Defender, craft a system prompt to protect your assigned secret.</p>
+    </div>
+
+    <div class="assigned-password">
+        Your assigned secret to defend is: <strong>{{ secret_password }}</strong>
     </div>
 
     {% for error in errors %}
@@ -14,14 +18,16 @@
 
     <form id="defend-form" method="post" action="/game/defend">
         <div class="form-group">
-            <label for="password">Secret Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your secret password" required maxlength="50">
-            <p class="hint">Max 50 characters. The attacker will try to extract this.</p>
-        </div>
+            <label>System Prompt (injected into the shadow prompt below)</label>
 
-        <div class="form-group">
-            <label for="system_prompt">System Prompt</label>
-            <textarea id="system_prompt" name="system_prompt" placeholder="Write instructions for the AI to protect your password..." required maxlength="{{ max_prompt_length }}">{{ system_prompt or '' }}</textarea>
+            <div class="shadow-prompt-wrapper">
+                <pre class="shadow-prompt-static">{{ shadow_intro }}</pre>
+
+                <textarea id="system_prompt" name="system_prompt" placeholder="Write instructions for the AI to protect your password..." required maxlength="{{ max_prompt_length }}">{{ system_prompt or '' }}</textarea>
+
+                <pre class="shadow-prompt-static">{{ shadow_outro }}</pre>
+            </div>
+
             <p class="hint">Max {{ max_prompt_length }} characters. A sanity check will ensure the AI can still answer basic questions.</p>
         </div>
 
@@ -34,6 +40,54 @@
         <span class="spinner"></span> Running sanity check — the AI is answering test questions...
     </div>
 </div>
+
+<style>
+    .assigned-password {
+        background: rgba(240, 192, 64, 0.12);
+        border: 1px solid #f0c040;
+        border-radius: 8px;
+        padding: 0.9rem 1.2rem;
+        margin-bottom: 1.25rem;
+        font-size: 1rem;
+        color: #f0c040;
+        text-align: center;
+    }
+
+    .assigned-password strong {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.3rem;
+        letter-spacing: 0.05em;
+    }
+
+    .shadow-prompt-wrapper {
+        border: 1px solid #2a2a4a;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .shadow-prompt-static {
+        background: #0a1020;
+        color: #6a6a8a;
+        padding: 0.7rem 0.9rem;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .shadow-prompt-wrapper textarea {
+        border: none;
+        border-top: 1px dashed #3a3a5a;
+        border-bottom: 1px dashed #3a3a5a;
+        border-radius: 0;
+    }
+
+    .shadow-prompt-wrapper textarea:focus {
+        border-color: #f0c040;
+    }
+</style>
 {% endblock %}
 
 {% block scripts %}

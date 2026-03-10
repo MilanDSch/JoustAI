@@ -28,6 +28,20 @@
     {% endif %}
 
     {% if not game_over %}
+    {% if error == 'incorrect_guess' %}
+    <div class="alert alert-error" style="background: #fee; border: 1px solid #c00; color: #c00; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1rem; font-weight: 500;">
+        Incorrect guess! You lost 1 attempt.
+    </div>
+    {% endif %}
+
+    <div class="card" style="margin-bottom: 1rem; padding: 1rem; border: 2px dashed var(--accent, #d4af37);">
+        <h3 style="margin: 0 0 0.5rem 0;">Know the password?</h3>
+        <form method="post" action="/game/guess" style="display: flex; gap: 0.5rem; align-items: end;">
+            <input type="text" name="guess" placeholder="Enter your guess..." required style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc;">
+            <button type="submit" class="btn btn-primary">Submit Guess</button>
+        </form>
+    </div>
+
     <form id="attack-form" method="post" action="/game/attack">
         <div class="form-group">
             <textarea id="attacker_prompt" name="attacker_prompt" placeholder="Enter your prompt to trick the AI..." required rows="3" style="min-height: 80px;"></textarea>

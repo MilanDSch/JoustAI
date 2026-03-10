@@ -4,8 +4,12 @@ from fastapi import APIRouter, Cookie, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from app.core.engine import SHADOW_PROMPT_INTRO, SHADOW_PROMPT_OUTRO
+from app.core.logger import get_logger
 from app.models.game import GamePhase, GameResult
 from app.web.sessions import create_session, destroy_session, get_session
+
+logger = get_logger(__name__)
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/web/templates")
@@ -45,6 +49,7 @@ async def start_page(request: Request):
 async def new_game():
     session_id, engine = create_session()
     engine.game.phase = GamePhase.FORTIFICATION
+    logger.info("Session created: %s", session_id)
     response = RedirectResponse(url="/game/defend", status_code=303)
     response.set_cookie(
         key="joust_session",
@@ -70,17 +75,20 @@ async def defend_page(
     if redirect:
         return redirect
 
+    password = engine.game.secret_password
     return templates.TemplateResponse(request, "defend.html", {
         "errors": [],
         "system_prompt": "",
         "max_prompt_length": engine.game.max_prompt_length,
+        "secret_password": password,
+        "shadow_intro": SHADOW_PROMPT_INTRO.replace("{secret_password}", password),
+        "shadow_outro": SHADOW_PROMPT_OUTRO,
     })
 
 
 @router.post("/game/defend", response_class=HTMLResponse)
 async def defend_submit(
     request: Request,
-    password: str = Form(...),
     system_prompt: str = Form(...),
     joust_session: str | None = Cookie(default=None),
 ):
@@ -92,27 +100,34 @@ async def defend_submit(
     if redirect:
         return redirect
 
+    password = engine.game.secret_password
     errors: list[str] = []
 
-    try:
-        sanity_result = engine.setup_defense(password, system_prompt)
-    except ValueError as e:
-        errors.append(str(e))
-        return templates.TemplateResponse(request, "defend.html", {
-            "errors": errors,
+    if not system_prompt.strip():
+        logger.warning("Bad request: empty system prompt submitted")
+
+    def _defend_context(extra_errors: list[str] | None = None):
+        return {
+            "errors": extra_errors or errors,
             "system_prompt": system_prompt,
             "max_prompt_length": engine.game.max_prompt_length,
-        })
+            "secret_password": password,
+            "shadow_intro": SHADOW_PROMPT_INTRO.replace("{secret_password}", password),
+            "shadow_outro": SHADOW_PROMPT_OUTRO,
+        }
+
+    try:
+        sanity_result = engine.setup_defense(system_prompt)
+    except ValueError as e:
+        logger.warning("Defense setup rejected: %s", e)
+        errors.append(str(e))
+        return templates.TemplateResponse(request, "defend.html", _defend_context())
 
     if not sanity_result.passed:
         errors.append("Sanity check failed — your prompt is too restrictive.")
         for failure in sanity_result.failures:
             errors.append(failure)
-        return templates.TemplateResponse(request, "defend.html", {
-            "errors": errors,
-            "system_prompt": system_prompt,
-            "max_prompt_length": engine.game.max_prompt_length,
-        })
+        return templates.TemplateResponse(request, "defend.html", _defend_context())
 
     # Sanity passed — phase is now SIEGE
     return RedirectResponse(url="/game/handoff", status_code=303)
@@ -149,6 +164,7 @@ async def handoff_confirm(joust_session: str | None = Cookie(default=None)):
 @router.get("/game/siege", response_class=HTMLResponse)
 async def siege_page(
     request: Request,
+    error: str | None = None,
     joust_session: str | None = Cookie(default=None),
 ):
     engine = _get_engine(joust_session)
@@ -169,6 +185,7 @@ async def siege_page(
         "turns": engine.game.round.turns,
         "turns_remaining": engine.game.turns_remaining,
         "game_over": engine.game.is_siege_over,
+        "error": error,
     })
 
 
@@ -186,13 +203,37 @@ async def attack_submit(
             url=PHASE_REDIRECTS.get(engine.game.phase, "/"),
             status_code=303,
         )
-
+    
     engine.attack(attacker_prompt)
 
     if engine.game.phase == GamePhase.COMPLETED:
         return RedirectResponse(url="/game/results", status_code=303)
 
     return RedirectResponse(url="/game/siege", status_code=303)
+
+
+@router.post("/game/guess")
+async def guess_submit(
+    guess: str = Form(...),
+    joust_session: str | None = Cookie(default=None),
+):
+    engine = _get_engine(joust_session)
+    if not engine:
+        return RedirectResponse(url="/", status_code=303)
+
+    if engine.game.phase != GamePhase.SIEGE:
+        return RedirectResponse(
+            url=PHASE_REDIRECTS.get(engine.game.phase, "/"),
+            status_code=303,
+        )
+
+    engine.guess_password(guess)
+
+    if engine.game.phase == GamePhase.COMPLETED:
+        return RedirectResponse(url="/game/results", status_code=303)
+
+    # Wrong guess but game continues
+    return RedirectResponse(url="/game/siege?error=incorrect_guess", status_code=303)
 
 
 @router.post("/game/surrender")
@@ -237,6 +278,7 @@ async def results_page(
 async def restart_game(joust_session: str | None = Cookie(default=None)):
     if joust_session:
         destroy_session(joust_session)
+        logger.info("Session destroyed: %s", joust_session)
     response = RedirectResponse(url="/", status_code=303)
     response.delete_cookie("joust_session")
     return response

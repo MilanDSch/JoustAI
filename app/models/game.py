@@ -55,6 +55,7 @@ class Game(BaseModel):
     id: str = Field(default_factory=lambda: uuid4().hex[:8])
     phase: GamePhase = GamePhase.SETUP
     round: Round = Field(default_factory=Round)
+    secret_password: str = ""
     max_turns: int = 5
     max_prompt_length: int = 2000
     created_at: datetime = Field(default_factory=datetime.now)
