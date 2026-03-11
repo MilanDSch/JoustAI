@@ -9,6 +9,7 @@ from app.models.game import (
     Game,
     GamePhase,
     GameResult,
+    Round,
     Turn,
 )
 from app.services.llm import LLMService
@@ -139,8 +140,8 @@ class GameEngine:
         # Check if turns exhausted
         if self.game.is_siege_over:
             self.game.round.result = GameResult.DEFENDER_WIN
-            self.game.phase = GamePhase.COMPLETED
-            logger.info("Game over — defender wins (turns exhausted)")
+            self._finish_round()
+            logger.info("Round over — defender wins (turns exhausted)")
 
         return turn
 
@@ -170,15 +171,15 @@ class GameEngine:
         if correct:
             self.game.round.result = GameResult.ATTACKER_WIN
             self.game.round.cracked_on_turn = turn.turn_number
-            self.game.phase = GamePhase.COMPLETED
-            logger.info("Game over — attacker wins with correct guess on turn %d", turn.turn_number)
+            self._finish_round()
+            logger.info("Round over — attacker wins with correct guess on turn %d", turn.turn_number)
             return True
 
         # Incorrect guess — check if turns exhausted
         if self.game.is_siege_over:
             self.game.round.result = GameResult.DEFENDER_WIN
-            self.game.phase = GamePhase.COMPLETED
-            logger.info("Game over — defender wins (turns exhausted)")
+            self._finish_round()
+            logger.info("Round over — defender wins (turns exhausted)")
 
         return False
 
@@ -186,8 +187,57 @@ class GameEngine:
         """Attacker gives up."""
         if self.game.phase == GamePhase.SIEGE:
             self.game.round.result = GameResult.DEFENDER_WIN
-            self.game.phase = GamePhase.COMPLETED
-            logger.info("Game over — attacker surrendered")
+            self._finish_round()
+            logger.info("Round over — attacker surrendered")
+
+    def _finish_round(self) -> None:
+        """Award points and transition phase after a round ends."""
+        game = self.game
+        result = game.round.result
+
+        # Award points (static roles: Player 1 = Defender, Player 2 = Attacker)
+        if result == GameResult.DEFENDER_WIN:
+            points = 10
+            game.defender_score += points
+            logger.info("Awarded %d pts to Defender (Player 1)", points)
+        elif result == GameResult.ATTACKER_WIN:
+            cracked_on = game.round.cracked_on_turn or 1
+            points = max(11 - cracked_on, 1)
+            game.attacker_score += points
+            logger.info("Awarded %d pts to Attacker (Player 2)", points)
+
+        # Transition phase
+        if game.round_number < game.max_rounds:
+            game.phase = GamePhase.INTERMISSION
+        else:
+            game.phase = GamePhase.COMPLETED
+
+    def next_round(self) -> None:
+        """Advance to the next round: archive current round, reset state."""
+        if self.game.phase != GamePhase.INTERMISSION:
+            raise RuntimeError(f"Cannot start next round in phase: {self.game.phase}")
+
+        # Archive completed round
+        self.game.rounds_history.append(self.game.round)
+        self.game.round_number += 1
+
+        # Pick a new password, avoiding previously used ones
+        used = {r.defender_setup.password for r in self.game.rounds_history if r.defender_setup}
+        available = [p for p in settings.password_pool if p not in used]
+        self.game.secret_password = random.choice(available or settings.password_pool)
+
+        # Fresh round
+        self.game.round = Round()
+        self.game.phase = GamePhase.FORTIFICATION
+        logger.info("Starting round %d (new password assigned)", self.game.round_number)
+
+    def end_match(self) -> None:
+        """End the match early (skip optional Chaos Round)."""
+        if self.game.phase != GamePhase.INTERMISSION:
+            raise RuntimeError(f"Cannot end match in phase: {self.game.phase}")
+        self.game.rounds_history.append(self.game.round)
+        self.game.phase = GamePhase.COMPLETED
+        logger.info("Match ended early after round %d", self.game.round_number)
 
 
 if __name__ == "__main__":

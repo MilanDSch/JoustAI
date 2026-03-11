@@ -6,19 +6,19 @@
     <div class="card-header">
         <div class="result-icon">&#9876;</div>
         <h1>The Castle is Fortified!</h1>
-        <p class="subtitle">The Defender's prompt passed the sanity check.</p>
+        <p class="subtitle">Round {{ round_number }} of {{ max_rounds }} &mdash; {{ defender_label }}'s prompt passed the sanity check.</p>
     </div>
 
     <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">
-        <strong>Defender:</strong> Hand the keyboard to the <strong>Attacker</strong>.
+        <strong>{{ defender_label }}:</strong> Hand the keyboard to <strong>{{ attacker_label }}</strong>.
     </p>
     <p style="color: #8888aa;">
-        Attacker, press the button below when you are ready to begin the siege.
+        {{ attacker_label }}, press the button below when you are ready to begin the siege.
     </p>
 
     <form method="post" action="/game/handoff" class="mt-3">
         <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
-            I'm the Attacker — Begin Siege
+            I'm {{ attacker_label }} &mdash; Begin Siege
         </button>
     </form>
 </div>

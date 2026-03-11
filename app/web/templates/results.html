@@ -1,52 +1,56 @@
 {% extends "base.html" %}
-{% block title %}Results — AI CTF Duel{% endblock %}
+{% block title %}Match Results — AI CTF Duel{% endblock %}
 
 {% block content %}
 <div class="card text-center">
     <div class="card-header">
-        {% if result == "attacker_win" %}
-        <div class="result-icon">&#128481;</div>
-        <h1 style="color: #e74c3c;">The Castle Has Fallen!</h1>
-        <p class="subtitle">The Attacker extracted the password.</p>
+        {% if overall_winner == "draw" %}
+        <div class="result-icon">&#9878;</div>
+        <h1 style="color: #f0c040;">It's a Draw!</h1>
+        <p class="subtitle">Evenly matched opponents.</p>
         {% else %}
-        <div class="result-icon">&#127984;</div>
-        <h1 style="color: #27ae60;">The Castle Stands!</h1>
-        <p class="subtitle">The Defender's fortifications held strong.</p>
+        <div class="result-icon">&#128081;</div>
+        <h1 style="color: #f0c040;">{{ overall_winner }} Wins the Match!</h1>
+        <p class="subtitle">A dominant performance across {{ rounds_summary|length }} rounds.</p>
         {% endif %}
     </div>
 
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-value">{{ password }}</div>
-            <div class="stat-label">Secret Password</div>
+    <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid #f0c040; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
+        <div style="font-size: 1.5rem; font-weight: 600; color: #f0c040; margin-bottom: 0.5rem;">
+            Final Score
         </div>
-        {% if cracked_on_turn %}
-        <div class="stat">
-            <div class="stat-value">{{ cracked_on_turn }}/{{ max_turns }}</div>
-            <div class="stat-label">Cracked On Turn</div>
-        </div>
-        {% endif %}
-        <div class="stat">
-            <div class="stat-value">{{ total_turns }}/{{ max_turns }}</div>
-            <div class="stat-label">Turns Played</div>
+        <div style="font-size: 1.4rem;">
+            <span style="color: #5dade2;">Defender (P1): {{ defender_score }} pts</span>
+            <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
+            <span style="color: #f0c040;">Attacker (P2): {{ attacker_score }} pts</span>
         </div>
     </div>
 
-    {% if turns %}
-    <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Battle Log</h2>
-    <div class="chat-history" id="chat-history" style="text-align: left;">
-        {% for turn in turns %}
-        <div class="chat-bubble user">
-            <div class="label">Attacker (Turn {{ turn.turn_number }})</div>
-            {{ turn.attacker_prompt }}
-        </div>
-        <div class="chat-bubble assistant">
-            <div class="label">AI</div>
-            {{ turn.ai_response }}
+    <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Round Breakdown</h2>
+    <div style="text-align: left; margin-bottom: 1.5rem;">
+        {% for r in rounds_summary %}
+        <div style="background: #0f1a30; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                <div style="font-weight: 600; color: #f0c040;">Round {{ r.number }}</div>
+                <div>
+                    {% if r.result == "attacker_win" %}
+                    <span class="badge" style="background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c;">Attacker (P2) wins</span>
+                    {% elif r.result == "defender_win" %}
+                    <span class="badge" style="background: rgba(39, 174, 96, 0.2); color: #27ae60; border: 1px solid #27ae60;">Defender (P1) wins</span>
+                    {% else %}
+                    <span class="badge" style="background: rgba(136, 136, 170, 0.2); color: #8888aa; border: 1px solid #8888aa;">Draw</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div style="font-size: 0.85rem; color: #8888aa;">
+                Password: <span style="color: #e0d6c8;">{{ r.password }}</span>
+                &mdash; {{ r.total_turns }}/{{ max_turns }} turns
+                {% if r.cracked_on_turn %} (cracked turn {{ r.cracked_on_turn }}){% endif %}
+                {% if r.points_to %} &mdash; <strong style="color: #f0c040;">+{{ r.points_awarded }} pts to {{ r.points_to }}</strong>{% endif %}
+            </div>
         </div>
         {% endfor %}
     </div>
-    {% endif %}
 
     <form method="post" action="/game/restart" class="mt-3">
         <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">

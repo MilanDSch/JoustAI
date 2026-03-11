@@ -12,6 +12,7 @@ class GamePhase(str, Enum):
     FORTIFICATION = "fortification"
     SANITY_CHECK = "sanity_check"
     SIEGE = "siege"
+    INTERMISSION = "intermission"
     COMPLETED = "completed"
 
 
@@ -55,6 +56,11 @@ class Game(BaseModel):
     id: str = Field(default_factory=lambda: uuid4().hex[:8])
     phase: GamePhase = GamePhase.SETUP
     round: Round = Field(default_factory=Round)
+    rounds_history: list[Round] = Field(default_factory=list)
+    round_number: int = 1
+    max_rounds: int = 4
+    defender_score: int = 0
+    attacker_score: int = 0
     secret_password: str = ""
     max_turns: int = 5
     max_prompt_length: int = 2000
@@ -69,3 +75,35 @@ class Game(BaseModel):
         if self.round.result is not None:
             return True
         return self.turns_remaining <= 0
+
+    @property
+    def is_match_over(self) -> bool:
+        return self.phase == GamePhase.COMPLETED
+
+    @property
+    def match_score(self) -> dict[str, int]:
+        return {"defender": self.defender_score, "attacker": self.attacker_score}
+
+    @property
+    def defender_label(self) -> str:
+        return "Player 1"
+
+    @property
+    def attacker_label(self) -> str:
+        return "Player 2"
+
+    @property
+    def is_optional_round(self) -> bool:
+        """Round 4 is the optional Chaos Round."""
+        return self.round_number == 4
+
+    @property
+    def unlock_tier(self) -> int:
+        """0 = raw (R1), 1 = attacker guide (R2), 2 = defender guide+templates (R3), 3 = power-ups (R4)."""
+        if self.round_number <= 1:
+            return 0
+        elif self.round_number == 2:
+            return 1
+        elif self.round_number == 3:
+            return 2
+        return 3
