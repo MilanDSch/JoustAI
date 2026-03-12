@@ -3,10 +3,11 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import Response
 
-from app.web.routes import game
+from app.web.routes import game, pve
 
 app = FastAPI(title="AI CTF Duel")
 app.include_router(game.router)
+app.include_router(pve.router)
 
 
 @app.middleware("http")

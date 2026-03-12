@@ -7,6 +7,11 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 
 
+class GameMode(str, Enum):
+    PVP = "pvp"
+    PVE = "pve"
+
+
 class GamePhase(str, Enum):
     SETUP = "setup"
     FORTIFICATION = "fortification"
@@ -54,6 +59,7 @@ class Game(BaseModel):
     """Top-level game state."""
 
     id: str = Field(default_factory=lambda: uuid4().hex[:8])
+    game_mode: GameMode = GameMode.PVP
     phase: GamePhase = GamePhase.SETUP
     round: Round = Field(default_factory=Round)
     rounds_history: list[Round] = Field(default_factory=list)
@@ -64,6 +70,7 @@ class Game(BaseModel):
     secret_password: str = ""
     max_turns: int = 5
     max_prompt_length: int = 2000
+    vault_level: int = 0
     created_at: datetime = Field(default_factory=datetime.now)
 
     @property
@@ -86,20 +93,33 @@ class Game(BaseModel):
 
     @property
     def defender_label(self) -> str:
+        if self.game_mode == GameMode.PVE:
+            return "Delaware"
         return "Player 1"
 
     @property
     def attacker_label(self) -> str:
+        if self.game_mode == GameMode.PVE:
+            return "You"
         return "Player 2"
 
     @property
+    def is_pve(self) -> bool:
+        return self.game_mode == GameMode.PVE
+
+    @property
     def is_optional_round(self) -> bool:
-        """Round 4 is the optional Chaos Round."""
+        """Round 4 is the optional Chaos Round (PvP only)."""
+        if self.game_mode == GameMode.PVE:
+            return False
         return self.round_number == 4
 
     @property
     def unlock_tier(self) -> int:
-        """0 = raw (R1), 1 = attacker guide (R2), 2 = defender guide+templates (R3), 3 = power-ups (R4)."""
+        """0 = raw (R1), 1 = attacker guide (R2), 2 = defender guide+templates (R3), 3 = power-ups (R4).
+        In PvE, attacker guide is available from round 1."""
+        if self.game_mode == GameMode.PVE:
+            return min(self.round_number, 3)
         if self.round_number <= 1:
             return 0
         elif self.round_number == 2:

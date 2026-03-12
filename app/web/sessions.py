@@ -3,14 +3,23 @@
 import uuid
 
 from app.core.engine import GameEngine
+from app.core.pve_engine import PvEEngine
 
 _sessions: dict[str, GameEngine] = {}
 
 
 def create_session() -> tuple[str, GameEngine]:
-    """Create a new game session and return (session_id, engine)."""
+    """Create a new PvP game session and return (session_id, engine)."""
     session_id = uuid.uuid4().hex
     engine = GameEngine()
+    _sessions[session_id] = engine
+    return session_id, engine
+
+
+def create_pve_session() -> tuple[str, PvEEngine]:
+    """Create a new PvE (Beat Delaware) session and return (session_id, engine)."""
+    session_id = uuid.uuid4().hex
+    engine = PvEEngine()
     _sessions[session_id] = engine
     return session_id, engine
 
