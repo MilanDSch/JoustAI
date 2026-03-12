@@ -2,38 +2,40 @@
 {% block title %}AI CTF Duel{% endblock %}
 
 {% block content %}
-<div class="card text-center">
-    <div class="card-header">
-        <h1>JoustAI</h1>
-        <p class="subtitle">A battle of wits in the age of AI</p>
-    </div>
+<div class="cyber-hud">
+    <div class="cyber-hud-inner text-center">
+        <div class="card-header">
+            <h1 style="font-size: 2.8rem; text-shadow: 0 0 20px rgba(240, 192, 64, 0.5);">JoustAI</h1>
+            <p class="subtitle">// a battle of wits in the age of AI</p>
+        </div>
 
-    <p class="mb-2" style="font-size: 1.05rem;">
-        One player defends a secret password with a system prompt.<br>
-        The other tries to trick the AI into revealing it.
-    </p>
+        <p class="mb-2" style="font-size: 1.05rem; font-family: var(--font-terminal); line-height: 1.7;">
+            One player defends a secret password with a system prompt.<br>
+            The other tries to trick the AI into revealing it.
+        </p>
 
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
-        <form method="post" action="/game/new" style="flex: 1; min-width: 200px;">
-            <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 1rem;">
-                Duel a Friend
-            </button>
-            <p style="font-size: 0.85rem; color: #8888aa; margin-top: 0.5rem;">
-                Hot-seat PvP &mdash; take turns attacking &amp; defending
-            </p>
-        </form>
-        <form method="post" action="/pve/new" style="flex: 1; min-width: 200px;">
-            <button type="submit" class="btn btn-block" style="font-size: 1.1rem; padding: 1rem; background: linear-gradient(135deg, #1e3a5f, #2c5282); color: #f0c040; border: 2px solid #f0c040;">
-                Beat Delaware
-            </button>
-            <p style="font-size: 0.85rem; color: #8888aa; margin-top: 0.5rem;">
-                Solo PvE &mdash; crack 5 increasingly difficult AI vaults
-            </p>
-        </form>
-    </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
+            <form method="post" action="/game/new" style="flex: 1; min-width: 200px;">
+                <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.1rem; padding: 1rem;">
+                    Duel a Friend
+                </button>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; font-family: var(--font-terminal);">
+                    Hot-seat PvP &mdash; take turns attacking &amp; defending
+                </p>
+            </form>
+            <form method="post" action="/pve/new" style="flex: 1; min-width: 200px;">
+                <button type="submit" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="font-size: 1.1rem; padding: 1rem;">
+                    Beat Delaware
+                </button>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; font-family: var(--font-terminal);">
+                    Solo PvE &mdash; crack 5 increasingly difficult AI vaults
+                </p>
+            </form>
+        </div>
 
-    <div style="text-align: center; margin-top: 1.5rem;">
-        <a href="/leaderboard" style="color: #f0c040; font-size: 0.95rem; text-decoration: none;">&#9876; View Leaderboard</a>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="/leaderboard" style="color: var(--gold); font-size: 0.9rem; text-decoration: none; font-family: var(--font-terminal); letter-spacing: 0.05em;">&#9876; VIEW LEADERBOARD</a>
+        </div>
     </div>
 </div>
 {% endblock %}

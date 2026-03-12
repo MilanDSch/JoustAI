@@ -16,12 +16,12 @@
     }
 
     .lb-table th {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.8rem;
+        font-family: var(--font-terminal);
+        font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #6a6a8a;
+        letter-spacing: 0.08em;
+        color: var(--text-muted);
         padding: 0.5rem 1rem;
         text-align: left;
     }
@@ -31,120 +31,142 @@
 
     .lb-table td {
         padding: 0.9rem 1rem;
-        background: #0f1a30;
-        font-size: 1.05rem;
+        background: var(--void-deep);
+        font-size: 1rem;
+        font-family: var(--font-terminal);
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid var(--border);
     }
 
-    .lb-table tr td:first-child { border-radius: 8px 0 0 8px; }
-    .lb-table tr td:last-child { border-radius: 0 8px 8px 0; }
+    .lb-table tr td:first-child { border-left: 3px solid transparent; }
 
     .lb-row-1 td {
-        background: rgba(240, 192, 64, 0.12);
-        border-top: 1px solid #f0c040;
-        border-bottom: 1px solid #f0c040;
+        background: rgba(240, 192, 64, 0.08);
+        border-bottom-color: rgba(240, 192, 64, 0.3);
     }
-    .lb-row-1 td:first-child { border-left: 1px solid #f0c040; }
-    .lb-row-1 td:last-child { border-right: 1px solid #f0c040; }
+    .lb-row-1 td:first-child { border-left-color: var(--gold); }
+
+    .lb-row-2 td {
+        border-bottom-color: rgba(192, 192, 192, 0.2);
+    }
+    .lb-row-2 td:first-child { border-left-color: #c0c0c0; }
+
+    .lb-row-3 td {
+        border-bottom-color: rgba(205, 127, 50, 0.2);
+    }
+    .lb-row-3 td:first-child { border-left-color: #cd7f32; }
 
     .rank-badge {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
+        width: 2.2rem;
+        height: 2.2rem;
         font-weight: 700;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+        font-family: var(--font-terminal);
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     }
 
-    .rank-1 { background: #f0c040; color: #1a1a2e; animation: glow 2s ease-in-out infinite alternate; }
-    .rank-2 { background: #c0c0c0; color: #1a1a2e; }
-    .rank-3 { background: #cd7f32; color: #1a1a2e; }
-    .rank-other { background: #2a2a4a; color: #8888aa; }
+    .rank-1 {
+        background: var(--gold);
+        color: var(--void-deep);
+        filter: drop-shadow(0 0 8px rgba(240, 192, 64, 0.6));
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+    .rank-2 { background: #c0c0c0; color: var(--void-deep); filter: drop-shadow(0 0 6px rgba(192, 192, 192, 0.4)); }
+    .rank-3 { background: #cd7f32; color: var(--void-deep); filter: drop-shadow(0 0 6px rgba(205, 127, 50, 0.4)); }
+    .rank-other { background: var(--border); color: var(--text-muted); }
 
     @keyframes glow {
-        from { box-shadow: 0 0 4px rgba(240, 192, 64, 0.4); }
-        to { box-shadow: 0 0 16px rgba(240, 192, 64, 0.8); }
+        from { filter: drop-shadow(0 0 4px rgba(240, 192, 64, 0.4)); }
+        to { filter: drop-shadow(0 0 16px rgba(240, 192, 64, 0.8)); }
     }
 
     .vaults-bar {
         display: inline-flex;
-        gap: 0.25rem;
+        gap: 0.3rem;
     }
 
     .vault-pip {
         width: 1.2rem;
         height: 1.2rem;
-        border-radius: 3px;
-        background: #2a2a4a;
+        background: var(--border);
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     }
 
-    .vault-pip.cleared { background: #f0c040; }
+    .vault-pip.cleared {
+        background: var(--gold);
+        filter: drop-shadow(0 0 4px rgba(240, 192, 64, 0.5));
+    }
 
     .lb-empty {
         text-align: center;
         padding: 3rem 1rem;
-        color: #6a6a8a;
+        color: var(--text-muted);
         font-size: 1.1rem;
+        font-family: var(--font-terminal);
     }
 </style>
 
-<div class="card" style="padding: 2rem 2.5rem;">
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">&#9876;</div>
-        <h1 style="font-size: 2.5rem; margin-bottom: 0.25rem;">Leaderboard</h1>
-        <p style="color: #8888aa; font-size: 1rem;">Top 10 Siege Masters</p>
-    </div>
+<div class="cyber-hud">
+    <div class="cyber-hud-inner" style="padding: 2rem 2.5rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 10px rgba(240, 192, 64, 0.4));">&#9876;</div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(240, 192, 64, 0.4);">Leaderboard</h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem; font-family: var(--font-terminal);">// Top 10 Siege Masters</p>
+        </div>
 
-    {% if entries %}
-    <table class="lb-table">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>Vaults Cleared</th>
-                <th>Turns</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in entries %}
-            <tr class="lb-row-{{ loop.index }}">
-                <td>
-                    <span class="rank-badge {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% else %}rank-other{% endif %}">
-                        {{ loop.index }}
-                    </span>
-                </td>
-                <td style="font-weight: 600; color: #e0d6c8;">{{ entry.name }}</td>
-                <td style="color: #8888aa;">{{ entry.company or "—" }}</td>
-                <td>
-                    <div class="vaults-bar">
-                        {% for v in range(5) %}
-                        <div class="vault-pip {% if v < entry.highest_level %}cleared{% endif %}"></div>
-                        {% endfor %}
-                    </div>
-                    <span style="margin-left: 0.5rem; color: #f0c040; font-weight: 600;">{{ entry.highest_level }}/5</span>
-                </td>
-                <td style="font-weight: 600; color: #5dade2;">{{ entry.total_turns }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div class="lb-empty">
-        <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#127984;</p>
-        <p>No scores yet. Be the first to claim the throne!</p>
-    </div>
-    {% endif %}
+        {% if entries %}
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Vaults Cleared</th>
+                    <th>Turns</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr class="lb-row-{{ loop.index }}">
+                    <td>
+                        <span class="rank-badge {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% else %}rank-other{% endif %}">
+                            {{ loop.index }}
+                        </span>
+                    </td>
+                    <td style="font-weight: 600; color: var(--text-primary);">{{ entry.name }}</td>
+                    <td style="color: var(--text-muted);">{{ entry.company or "—" }}</td>
+                    <td>
+                        <div class="vaults-bar">
+                            {% for v in range(5) %}
+                            <div class="vault-pip {% if v < entry.highest_level %}cleared{% endif %}"></div>
+                            {% endfor %}
+                        </div>
+                        <span style="margin-left: 0.5rem; color: var(--gold); font-weight: 600;">{{ entry.highest_level }}/5</span>
+                    </td>
+                    <td style="font-weight: 600; color: var(--arcane);">{{ entry.total_turns }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="lb-empty">
+            <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#127984;</p>
+            <p>No scores yet. Be the first to claim the throne!</p>
+        </div>
+        {% endif %}
 
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="/" class="btn btn-secondary" style="font-size: 0.95rem; padding: 0.6rem 1.5rem;">
-            &#127968; Back to Home
-        </a>
-    </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/" class="glowing-btn glowing-btn-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.5rem;">
+                &#127968; Back to Home
+            </a>
+        </div>
 
-    <div style="text-align: center; margin-top: 1rem; color: #3a3a5a; font-size: 0.85rem;">
-        JoustAI &mdash; Beat Delaware &nbsp;|&nbsp; Auto-refreshes every 30s
+        <div style="text-align: center; margin-top: 1rem; color: #2a2a4a; font-size: 0.8rem; font-family: var(--font-terminal);">
+            JoustAI &mdash; Beat Delaware &nbsp;|&nbsp; Auto-refreshes every 30s
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -2,115 +2,101 @@
 {% block title %}Round {{ round_number }} Complete — AI CTF Duel{% endblock %}
 
 {% block content %}
-<div class="card text-center">
-    <div class="card-header">
-        {% if last_result == "attacker_win" %}
-        <div class="result-icon">&#128481;</div>
-        {% if is_pve | default(false) %}
-        <h1 style="color: #e74c3c;">Vault Breached!</h1>
-        <p class="subtitle">You cracked {{ vault_name }}'s defenses.</p>
-        {% else %}
-        <h1 style="color: #e74c3c;">The Castle Has Fallen!</h1>
-        <p class="subtitle">{{ attacker_label }} cracked the password in Round {{ round_number }}.</p>
-        {% endif %}
-        {% else %}
-        <div class="result-icon">&#127984;</div>
-        {% if is_pve | default(false) %}
-        <h1 style="color: #27ae60;">The Vault Holds!</h1>
-        <p class="subtitle">Delaware's {{ vault_name }} withstood your assault.</p>
-        {% else %}
-        <h1 style="color: #27ae60;">The Castle Stands!</h1>
-        <p class="subtitle">{{ defender_label }} held strong in Round {{ round_number }}.</p>
-        {% endif %}
-        {% endif %}
-    </div>
-
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-value">{{ password }}</div>
-            <div class="stat-label">The Password Was</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value">{{ total_turns }}/{{ max_turns }}</div>
-            <div class="stat-label">Turns Used</div>
-        </div>
-    </div>
-
-    <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid #f0c040; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; text-align: center;">
-        <div style="font-size: 1.5rem; font-weight: 600; color: #f0c040; margin-bottom: 0.5rem;">
-            Match Score
-        </div>
-        <div style="font-size: 1.2rem;">
+<div class="cyber-hud">
+    <div class="cyber-hud-inner text-center">
+        <div class="card-header">
+            {% if last_result == "attacker_win" %}
+            <div class="result-icon">&#128481;</div>
             {% if is_pve | default(false) %}
-            <span style="color: #f0c040;">You: {{ attacker_score }} pts</span>
-            <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
-            <span style="color: #5dade2;">Delaware: {{ defender_score }} pts</span>
+            <h1 style="color: var(--alert); text-shadow: 0 0 16px rgba(231, 76, 60, 0.5);">Vault Breached!</h1>
+            <p class="subtitle">You cracked {{ vault_name }}'s defenses.</p>
             {% else %}
-            <span style="color: #5dade2;">Defender (P1): {{ defender_score }} pts</span>
-            <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
-            <span style="color: #f0c040;">Attacker (P2): {{ attacker_score }} pts</span>
+            <h1 style="color: var(--alert); text-shadow: 0 0 16px rgba(231, 76, 60, 0.5);">The Castle Has Fallen!</h1>
+            <p class="subtitle">{{ attacker_label }} cracked the password in Round {{ round_number }}.</p>
+            {% endif %}
+            {% else %}
+            <div class="result-icon" style="filter: drop-shadow(0 0 10px rgba(39, 174, 96, 0.5));">&#127984;</div>
+            {% if is_pve | default(false) %}
+            <h1 style="color: var(--success); text-shadow: 0 0 16px rgba(39, 174, 96, 0.5);">The Vault Holds!</h1>
+            <p class="subtitle">Delaware's {{ vault_name }} withstood your assault.</p>
+            {% else %}
+            <h1 style="color: var(--success); text-shadow: 0 0 16px rgba(39, 174, 96, 0.5);">The Castle Stands!</h1>
+            <p class="subtitle">{{ defender_label }} held strong in Round {{ round_number }}.</p>
+            {% endif %}
             {% endif %}
         </div>
-    </div>
 
-    <div style="background: #1e3a5f; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; text-align: left;">
-        {% if is_pve | default(false) %}
-            {% if next_vault %}
-            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Next: {{ next_vault.name }}</h3>
-            <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
-                {{ next_vault.description }}
-            </p>
-            {% else %}
-            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">All vaults attempted!</h3>
-            <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
-                You've faced all of Delaware's defenses. Time to see the final results.
-            </p>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">{{ password }}</div>
+                <div class="stat-label">The Password Was</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{ total_turns }}/{{ max_turns }}</div>
+                <div class="stat-label">Turns Used</div>
+            </div>
+        </div>
+
+        <div class="score-box">
+            <div class="score-title">Match Score</div>
+            <div class="score-values">
+                {% if is_pve | default(false) %}
+                <span style="color: var(--gold);">Your Score: {{ attacker_score }} pts</span>
+                <span style="color: var(--text-muted); margin: 0 0.75rem;">|</span>
+                <span style="color: var(--arcane);">Vaults Cleared: {{ round_number }} / {{ max_rounds }}</span>
+                {% else %}
+                <span style="color: var(--arcane);">Defender (P1): {{ defender_score }} pts</span>
+                <span style="color: var(--text-muted); margin: 0 0.75rem;">&mdash;</span>
+                <span style="color: var(--gold);">Attacker (P2): {{ attacker_score }} pts</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="info-panel scanline-overlay">
+            {% if is_pve | default(false) %}
+                {% if next_vault %}
+                <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Next: {{ next_vault.name }}</h3>
+                <p>{{ next_vault.description }}</p>
+                {% else %}
+                <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">All vaults attempted!</h3>
+                <p>You've faced all of Delaware's defenses. Time to see the final results.</p>
+                {% endif %}
+            {% elif round_number == 1 %}
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Raw duel complete!</h3>
+            <p>No guides yet &mdash; one more raw round before the Attacker gets help. Player 1 defends again with a new password.</p>
+            {% elif round_number == 2 %}
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">The Attacker's Arsenal Unlocks!</h3>
+            <p>In the previous round, the Attacker gained access to the <strong style="color: var(--alert);">Field Guide</strong> &mdash; a primer on prompt injection tactics. However there also exist defending tacktics</p>
+            {% elif round_number == 3 %}
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">The Optional Chaos Round Awaits!</h3>
+            <p>Three rounds are complete. You can end the match now, or enter the <strong style="color: var(--gold);">Chaos Round</strong> where both sides get all tools: <strong style="color: var(--gold);">Field Guides</strong>, <strong style="color: var(--gold);">Starter Templates</strong>, and <strong style="color: var(--gold);">Power-Ups</strong>!</p>
             {% endif %}
-        {% elif round_number == 1 %}
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Raw duel complete!</h3>
-        <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
-            No guides yet &mdash; one more raw round before the Attacker gets help.
-            Player 1 defends again with a new password.
-        </p>
-        {% elif round_number == 2 %}
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">The Attacker's Arsenal Unlocks!</h3>
-        <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
-            In the previous round, the Attacker gained access to the <strong style="color: #e74c3c;">Field Guide</strong> &mdash;
-            a primer on prompt injection tactics. However there also exist defending tacktics
-        </p>
-        {% elif round_number == 3 %}
-        <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">The Optional Chaos Round Awaits!</h3>
-        <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
-            Three rounds are complete. You can end the match now, or enter the <strong style="color: #f0c040;">Chaos Round</strong>
-            where both sides get all tools: <strong style="color: #f0c040;">Field Guides</strong>,
-            <strong style="color: #f0c040;">Starter Templates</strong>, and <strong style="color: #f0c040;">Power-Ups</strong>!
-        </p>
-        {% endif %}
-    </div>
+        </div>
 
-    {% if is_optional_round %}
-    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <form method="post" action="{{ url_prefix | default('/game') }}/next-round" style="flex: 1;">
-            <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
-                Enter Optional Chaos Round (Power-Ups Unlocked!)
+        {% if is_optional_round %}
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <form method="post" action="{{ url_prefix | default('/game') }}/next-round" style="flex: 1;">
+                <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1rem; padding: 0.9rem;">
+                    Enter Optional Chaos Round
+                </button>
+            </form>
+            <form method="post" action="{{ url_prefix | default('/game') }}/end-match" style="flex: 1;">
+                <button type="submit" class="glowing-btn glowing-btn-secondary glowing-btn-block" style="font-size: 1rem; padding: 0.9rem;">
+                    Finish Match Now
+                </button>
+            </form>
+        </div>
+        {% else %}
+        <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
+            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
+                {% if is_pve | default(false) %}
+                Enter Vault {{ round_number + 1 }} of {{ max_rounds }}
+                {% else %}
+                Start Round {{ round_number + 1 }} of {{ max_rounds }}
+                {% endif %}
             </button>
         </form>
-        <form method="post" action="{{ url_prefix | default('/game') }}/end-match" style="flex: 1;">
-            <button type="submit" class="btn btn-secondary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
-                Finish Match Now
-            </button>
-        </form>
+        {% endif %}
     </div>
-    {% else %}
-    <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
-        <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
-            {% if is_pve | default(false) %}
-            Enter Vault {{ round_number + 1 }} of {{ max_rounds }}
-            {% else %}
-            Start Round {{ round_number + 1 }} of {{ max_rounds }}
-            {% endif %}
-        </button>
-    </form>
-    {% endif %}
 </div>
 {% endblock %}

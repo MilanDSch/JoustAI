@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     local_api_base: str = "http://localhost:11434/v1"
     local_model_name: str = "llama3.2:3b"
     openai_model_name: str = "gpt-4.1-mini"
-    max_attack_turns: int = 5
+    max_attack_turns: int = 3
     max_defender_prompt_length: int = 2000
     # Auto-generated medieval-fantasy passwords
     password_pool: list[str] = [

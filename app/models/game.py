@@ -68,7 +68,7 @@ class Game(BaseModel):
     defender_score: int = 0
     attacker_score: int = 0
     secret_password: str = ""
-    max_turns: int = 5
+    max_turns: int = 3
     max_prompt_length: int = 2000
     vault_level: int = 0
     created_at: datetime = Field(default_factory=datetime.now)

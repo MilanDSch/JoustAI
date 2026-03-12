@@ -50,9 +50,7 @@ def _round_context(engine: PvEEngine) -> dict:
     return {
         "round_number": game.round_number,
         "max_rounds": game.max_rounds,
-        "defender_score": game.defender_score,
         "attacker_score": game.attacker_score,
-        "defender_label": game.defender_label,
         "attacker_label": game.attacker_label,
         "unlock_tier": game.unlock_tier,
         "is_optional_round": game.is_optional_round,
@@ -273,13 +271,6 @@ async def results_page(
 
     total_turns = sum(len(r.turns) for r in all_rounds)
 
-    if game.attacker_score > game.defender_score:
-        overall_winner = "You"
-    elif game.defender_score > game.attacker_score:
-        overall_winner = "Delaware"
-    else:
-        overall_winner = "draw"
-
     rounds_summary = []
     for i, r in enumerate(all_rounds, 1):
         vault = get_vault(i)
@@ -294,7 +285,6 @@ async def results_page(
         })
 
     return templates.TemplateResponse(request, "results.html", {
-        "overall_winner": overall_winner,
         "rounds_summary": rounds_summary,
         "max_turns": game.max_turns,
         "vaults_breached": vaults_breached,
