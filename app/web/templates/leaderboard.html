@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard — JoustAI{% endblock %}
+
+{% block head_extra %}
+<meta http-equiv="refresh" content="30">
+{% endblock %}
+
+{% block content %}
+<style>
+    .container { max-width: 960px; }
+
+    .lb-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 0.5rem;
+    }
+
+    .lb-table th {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6a6a8a;
+        padding: 0.5rem 1rem;
+        text-align: left;
+    }
+
+    .lb-table th:last-child,
+    .lb-table td:last-child { text-align: right; }
+
+    .lb-table td {
+        padding: 0.9rem 1rem;
+        background: #0f1a30;
+        font-size: 1.05rem;
+    }
+
+    .lb-table tr td:first-child { border-radius: 8px 0 0 8px; }
+    .lb-table tr td:last-child { border-radius: 0 8px 8px 0; }
+
+    .lb-row-1 td {
+        background: rgba(240, 192, 64, 0.12);
+        border-top: 1px solid #f0c040;
+        border-bottom: 1px solid #f0c040;
+    }
+    .lb-row-1 td:first-child { border-left: 1px solid #f0c040; }
+    .lb-row-1 td:last-child { border-right: 1px solid #f0c040; }
+
+    .rank-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+    .rank-1 { background: #f0c040; color: #1a1a2e; animation: glow 2s ease-in-out infinite alternate; }
+    .rank-2 { background: #c0c0c0; color: #1a1a2e; }
+    .rank-3 { background: #cd7f32; color: #1a1a2e; }
+    .rank-other { background: #2a2a4a; color: #8888aa; }
+
+    @keyframes glow {
+        from { box-shadow: 0 0 4px rgba(240, 192, 64, 0.4); }
+        to { box-shadow: 0 0 16px rgba(240, 192, 64, 0.8); }
+    }
+
+    .vaults-bar {
+        display: inline-flex;
+        gap: 0.25rem;
+    }
+
+    .vault-pip {
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 3px;
+        background: #2a2a4a;
+    }
+
+    .vault-pip.cleared { background: #f0c040; }
+
+    .lb-empty {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6a6a8a;
+        font-size: 1.1rem;
+    }
+</style>
+
+<div class="card" style="padding: 2rem 2.5rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">&#9876;</div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.25rem;">Leaderboard</h1>
+        <p style="color: #8888aa; font-size: 1rem;">Top 10 Siege Masters</p>
+    </div>
+
+    {% if entries %}
+    <table class="lb-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Vaults Cleared</th>
+                <th>Turns</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr class="lb-row-{{ loop.index }}">
+                <td>
+                    <span class="rank-badge {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% else %}rank-other{% endif %}">
+                        {{ loop.index }}
+                    </span>
+                </td>
+                <td style="font-weight: 600; color: #e0d6c8;">{{ entry.name }}</td>
+                <td style="color: #8888aa;">{{ entry.company or "—" }}</td>
+                <td>
+                    <div class="vaults-bar">
+                        {% for v in range(5) %}
+                        <div class="vault-pip {% if v < entry.highest_level %}cleared{% endif %}"></div>
+                        {% endfor %}
+                    </div>
+                    <span style="margin-left: 0.5rem; color: #f0c040; font-weight: 600;">{{ entry.highest_level }}/5</span>
+                </td>
+                <td style="font-weight: 600; color: #5dade2;">{{ entry.total_turns }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="lb-empty">
+        <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">&#127984;</p>
+        <p>No scores yet. Be the first to claim the throne!</p>
+    </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/" class="btn btn-secondary" style="font-size: 0.95rem; padding: 0.6rem 1.5rem;">
+            &#127968; Back to Home
+        </a>
+    </div>
+
+    <div style="text-align: center; margin-top: 1rem; color: #3a3a5a; font-size: 0.85rem;">
+        JoustAI &mdash; Beat Delaware &nbsp;|&nbsp; Auto-refreshes every 30s
+    </div>
+</div>
+{% endblock %}

@@ -3,11 +3,18 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import Response
 
-from app.web.routes import game, pve
+from app.services.leaderboard import init_db
+from app.web.routes import game, leaderboard, pve
 
 app = FastAPI(title="AI CTF Duel")
 app.include_router(game.router)
 app.include_router(pve.router)
+app.include_router(leaderboard.router)
+
+
+@app.on_event("startup")
+async def startup():
+    init_db()
 
 
 @app.middleware("http")

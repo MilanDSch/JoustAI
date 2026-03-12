@@ -8,6 +8,7 @@ from app.core.logger import get_logger
 from app.core.pve_engine import PvEEngine
 from app.data.vaults import get_vault
 from app.models.game import GamePhase, GameResult
+from app.services.leaderboard import add_entry
 from app.web.sessions import create_pve_session, destroy_session, get_session
 
 logger = get_logger(__name__)
@@ -265,6 +266,13 @@ async def results_page(
         1 for r in all_rounds if r.result == GameResult.ATTACKER_WIN
     )
 
+    highest_level = 0
+    for i, r in enumerate(all_rounds, 1):
+        if r.result == GameResult.ATTACKER_WIN:
+            highest_level = i
+
+    total_turns = sum(len(r.turns) for r in all_rounds)
+
     if game.attacker_score > game.defender_score:
         overall_winner = "You"
     elif game.defender_score > game.attacker_score:
@@ -275,16 +283,6 @@ async def results_page(
     rounds_summary = []
     for i, r in enumerate(all_rounds, 1):
         vault = get_vault(i)
-        if r.result == GameResult.DEFENDER_WIN:
-            points = 10
-            points_to = "Delaware"
-        elif r.result == GameResult.ATTACKER_WIN:
-            points = max(11 - (r.cracked_on_turn or 1), 1)
-            points_to = "You"
-        else:
-            points = 0
-            points_to = None
-
         rounds_summary.append({
             "number": i,
             "vault_name": vault.name,
@@ -293,8 +291,6 @@ async def results_page(
             "result": r.result.value if r.result else "draw",
             "total_turns": len(r.turns),
             "cracked_on_turn": r.cracked_on_turn,
-            "points_awarded": points,
-            "points_to": points_to,
         })
 
     return templates.TemplateResponse(request, "results.html", {
@@ -302,9 +298,103 @@ async def results_page(
         "rounds_summary": rounds_summary,
         "max_turns": game.max_turns,
         "vaults_breached": vaults_breached,
+        "highest_level": highest_level,
+        "total_turns": total_turns,
         "total_vaults": len(all_rounds),
+        "eligible_for_leaderboard": highest_level >= 1,
         **_round_context(engine),
     })
+
+
+# --- Claim Score ---
+
+@router.get("/claim", response_class=HTMLResponse)
+async def claim_page(
+    request: Request,
+    joust_session: str | None = Cookie(default=None),
+):
+    engine = _get_pve_engine(joust_session)
+    if not engine:
+        return RedirectResponse(url="/", status_code=303)
+
+    if engine.game.phase != GamePhase.COMPLETED:
+        return RedirectResponse(url="/", status_code=303)
+
+    game = engine.game
+    all_rounds = [*game.rounds_history, game.round]
+
+    highest_level = 0
+    for i, r in enumerate(all_rounds, 1):
+        if r.result == GameResult.ATTACKER_WIN:
+            highest_level = i
+
+    total_turns = sum(len(r.turns) for r in all_rounds)
+
+    if highest_level < 1:
+        return RedirectResponse(url="/pve/results", status_code=303)
+
+    return templates.TemplateResponse(request, "claim.html", {
+        "highest_level": highest_level,
+        "total_turns": total_turns,
+        **_round_context(engine),
+    })
+
+
+@router.post("/claim")
+async def claim_submit(
+    request: Request,
+    name: str = Form(...),
+    email: str = Form(...),
+    company: str = Form(default=""),
+    joust_session: str | None = Cookie(default=None),
+):
+    engine = _get_pve_engine(joust_session)
+    if not engine:
+        return RedirectResponse(url="/", status_code=303)
+
+    game = engine.game
+    all_rounds = [*game.rounds_history, game.round]
+
+    # Recompute from session state (anti-tamper)
+    highest_level = 0
+    for i, r in enumerate(all_rounds, 1):
+        if r.result == GameResult.ATTACKER_WIN:
+            highest_level = i
+    total_turns = sum(len(r.turns) for r in all_rounds)
+
+    if highest_level < 1:
+        return RedirectResponse(url="/pve/results", status_code=303)
+
+    name = name.strip()
+    email = email.strip()
+    company = company.strip() or None
+
+    if not name or not email:
+        return templates.TemplateResponse(request, "claim.html", {
+            "highest_level": highest_level,
+            "total_turns": total_turns,
+            "error": "Name and email are required.",
+            "name": name,
+            "company": company or "",
+            "email": email,
+            **_round_context(engine),
+        })
+
+    add_entry(
+        name=name,
+        company=company,
+        email=email,
+        highest_level=highest_level,
+        total_turns=total_turns,
+    )
+
+    if joust_session:
+        destroy_session(joust_session)
+        logger.info("PvE session destroyed after claim: %s", joust_session)
+
+    response = RedirectResponse(url="/leaderboard", status_code=303)
+    response.delete_cookie("joust_session")
+    return response
 
 
 # --- Restart ---

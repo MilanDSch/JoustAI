@@ -58,6 +58,9 @@ cover/
 # Application logs
 logs/
 
+# Leaderboard database
+leaderboard.db
+
 # Django stuff:
 *.log
 local_settings.py

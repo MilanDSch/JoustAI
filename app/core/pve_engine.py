@@ -14,6 +14,7 @@ from app.models.game import (
     Round,
 )
 from app.services.llm import LLMService
+from app.services.sanity import run_sanity_check
 
 logger = get_logger(__name__)
 
@@ -48,6 +49,9 @@ class PvEEngine(GameEngine):
         available = [p for p in settings.password_pool if p not in used]
         self.game.secret_password = random.choice(available or settings.password_pool)
 
+        sanity_result = run_sanity_check(self.llm, vault.system_prompt)
+        print(sanity_result)
+
         # Set up defense with the curated prompt (no sanity check needed)
         self.game.round.defender_setup = DefenderSetup(
             password=self.game.secret_password,
@@ -63,22 +67,22 @@ class PvEEngine(GameEngine):
         )
 
     def _finish_round(self) -> None:
-        """Award points and transition phase after a vault attempt ends."""
+        """Record stats and transition phase after a vault attempt ends."""
         game = self.game
         result = game.round.result
 
-        if result == GameResult.DEFENDER_WIN:
-            game.defender_score += 10
-            logger.info("Delaware's vault held — +10 pts to Delaware")
-        elif result == GameResult.ATTACKER_WIN:
-            cracked_on = game.round.cracked_on_turn or 1
-            points = max(11 - cracked_on, 1)
-            game.attacker_score += points
-            logger.info("Vault breached — +%d pts to attacker", points)
-
-        if game.round_number < game.max_rounds:
-            game.phase = GamePhase.INTERMISSION
-        else:
+        if result == GameResult.ATTACKER_WIN:
+            logger.info("Vault %d breached!", game.vault_level)
+            # The player moves on ONLY if they win
+            if game.round_number < game.max_rounds:
+                game.phase = GamePhase.INTERMISSION
+            else:
+                logger.info("Player beat all vaults!")
+                game.phase = GamePhase.COMPLETED  # They beat Level 5!
+                
+        elif result == GameResult.DEFENDER_WIN:
+            logger.info("Delaware's vault held on Level %d. Run over.", game.vault_level)
+            # If they fail to crack the vault, the entire run ends here.
             game.phase = GamePhase.COMPLETED
 
     def next_round(self) -> None:
@@ -94,3 +98,7 @@ class PvEEngine(GameEngine):
         # Jump straight to the next vault
         self._setup_vault(self.game.vault_level + 1)
         logger.info("Starting vault %d", self.game.vault_level)
+
+if __name__ == "__main__":
+    engine = PvEEngine()
+    print("Assigned password:", engine.game.secret_password)

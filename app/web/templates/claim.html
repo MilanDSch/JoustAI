@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Claim Your Score — AI CTF Duel{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        <div class="result-icon">&#128081;</div>
+        <h1 style="color: #f0c040;">Claim Your Place</h1>
+        <p class="subtitle">Enter your details to join the leaderboard.</p>
+    </div>
+
+    <div style="display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem;">
+        <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid #f0c040; border-radius: 8px; padding: 1.25rem; flex: 1;">
+            <div style="font-size: 2rem; font-weight: 700; color: #f0c040;">{{ highest_level }} / 5</div>
+            <div style="font-size: 0.85rem; color: #8888aa; margin-top: 0.3rem;">Vaults Cleared</div>
+        </div>
+        <div style="background: rgba(93, 173, 226, 0.1); border: 1px solid #5dade2; border-radius: 8px; padding: 1.25rem; flex: 1;">
+            <div style="font-size: 2rem; font-weight: 700; color: #5dade2;">{{ total_turns }}</div>
+            <div style="font-size: 0.85rem; color: #8888aa; margin-top: 0.3rem;">Total Turns Used</div>
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/pve/claim" style="text-align: left;">
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required maxlength="100"
+                   value="{{ name | default('') }}" placeholder="Sir Lancelot">
+        </div>
+
+        <div class="form-group">
+            <label for="company">Company <span style="color: #6a6a8a;">(optional)</span></label>
+            <input type="text" id="company" name="company" maxlength="100"
+                   value="{{ company | default('') }}" placeholder="Knights of the Round Table">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required maxlength="200"
+                   value="{{ email | default('') }}" placeholder="lancelot@camelot.com">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem; margin-top: 0.5rem;">
+            &#9876; Claim Your Score
+        </button>
+    </form>
+
+    <div style="margin-top: 1rem;">
+        <a href="/pve/restart" style="color: #6a6a8a; font-size: 0.9rem; text-decoration: none;">Skip &mdash; just play again</a>
+    </div>
+</div>
+{% endblock %}
