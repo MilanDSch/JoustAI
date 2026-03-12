@@ -1,6 +1,6 @@
-"""LLM service layer wrapping the Azure OpenAI API."""
+"""LLM service layer wrapping the OpenAI-compatible API."""
 
-from openai import AzureOpenAI, BadRequestError
+from openai import AzureOpenAI, BadRequestError, OpenAI
 
 from app.config import settings
 from app.core.logger import get_logger
@@ -13,15 +13,24 @@ _CONTENT_FILTER_RESPONSE = (
 
 
 class LLMService:
-    """Handles all interactions with the Azure OpenAI API."""
+    """Handles all interactions with an OpenAI-compatible API."""
 
     def __init__(self) -> None:
-        self.client = AzureOpenAI(
-            azure_endpoint=settings.azure_openai_endpoint,
-            api_key=settings.azure_api_key,
-            api_version="2024-12-01-preview",
-        )
-        self.model = settings.llm_model
+        if settings.llm_provider == "local":
+            self.client = OpenAI(
+                base_url=settings.local_api_base,
+                api_key="local-mode",
+            )
+            self.model = settings.local_model_name
+        else:
+            self.client = AzureOpenAI(
+                azure_endpoint=settings.azure_openai_endpoint,
+                api_key=settings.azure_api_key,
+                api_version="2024-12-01-preview",
+            )
+            self.model = settings.openai_model_name
+
+        logger.info("Using provider: %s, model: %s", settings.llm_provider, self.model)
 
     def chat(
         self,
