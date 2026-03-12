@@ -6,12 +6,22 @@
     <div class="card-header">
         {% if last_result == "attacker_win" %}
         <div class="result-icon">&#128481;</div>
+        {% if is_pve | default(false) %}
+        <h1 style="color: #e74c3c;">Vault Breached!</h1>
+        <p class="subtitle">You cracked {{ vault_name }}'s defenses.</p>
+        {% else %}
         <h1 style="color: #e74c3c;">The Castle Has Fallen!</h1>
         <p class="subtitle">{{ attacker_label }} cracked the password in Round {{ round_number }}.</p>
+        {% endif %}
         {% else %}
         <div class="result-icon">&#127984;</div>
+        {% if is_pve | default(false) %}
+        <h1 style="color: #27ae60;">The Vault Holds!</h1>
+        <p class="subtitle">Delaware's {{ vault_name }} withstood your assault.</p>
+        {% else %}
         <h1 style="color: #27ae60;">The Castle Stands!</h1>
         <p class="subtitle">{{ defender_label }} held strong in Round {{ round_number }}.</p>
+        {% endif %}
         {% endif %}
     </div>
 
@@ -31,14 +41,32 @@
             Match Score
         </div>
         <div style="font-size: 1.2rem;">
+            {% if is_pve | default(false) %}
+            <span style="color: #f0c040;">You: {{ attacker_score }} pts</span>
+            <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
+            <span style="color: #5dade2;">Delaware: {{ defender_score }} pts</span>
+            {% else %}
             <span style="color: #5dade2;">Defender (P1): {{ defender_score }} pts</span>
             <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
             <span style="color: #f0c040;">Attacker (P2): {{ attacker_score }} pts</span>
+            {% endif %}
         </div>
     </div>
 
     <div style="background: #1e3a5f; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; text-align: left;">
-        {% if round_number == 1 %}
+        {% if is_pve | default(false) %}
+            {% if next_vault %}
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Next: {{ next_vault.name }}</h3>
+            <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
+                {{ next_vault.description }}
+            </p>
+            {% else %}
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">All vaults attempted!</h3>
+            <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
+                You've faced all of Delaware's defenses. Time to see the final results.
+            </p>
+            {% endif %}
+        {% elif round_number == 1 %}
         <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Raw duel complete!</h3>
         <p style="color: #c0b8a8; font-size: 0.95rem; line-height: 1.6;">
             No guides yet &mdash; one more raw round before the Attacker gets help.
@@ -62,21 +90,25 @@
 
     {% if is_optional_round %}
     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <form method="post" action="/game/next-round" style="flex: 1;">
+        <form method="post" action="{{ url_prefix | default('/game') }}/next-round" style="flex: 1;">
             <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
                 Enter Optional Chaos Round (Power-Ups Unlocked!)
             </button>
         </form>
-        <form method="post" action="/game/end-match" style="flex: 1;">
+        <form method="post" action="{{ url_prefix | default('/game') }}/end-match" style="flex: 1;">
             <button type="submit" class="btn btn-secondary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
                 Finish Match Now
             </button>
         </form>
     </div>
     {% else %}
-    <form method="post" action="/game/next-round">
+    <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
         <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
+            {% if is_pve | default(false) %}
+            Enter Vault {{ round_number + 1 }} of {{ max_rounds }}
+            {% else %}
             Start Round {{ round_number + 1 }} of {{ max_rounds }}
+            {% endif %}
         </button>
     </form>
     {% endif %}

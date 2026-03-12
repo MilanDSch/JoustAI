@@ -8,6 +8,14 @@
         <div class="result-icon">&#9878;</div>
         <h1 style="color: #f0c040;">It's a Draw!</h1>
         <p class="subtitle">Evenly matched opponents.</p>
+        {% elif is_pve | default(false) and overall_winner == "You" %}
+        <div class="result-icon">&#128081;</div>
+        <h1 style="color: #f0c040;">You Beat Delaware!</h1>
+        <p class="subtitle">The vaults have fallen to your siege.</p>
+        {% elif is_pve | default(false) and overall_winner == "Delaware" %}
+        <div class="result-icon">&#127984;</div>
+        <h1 style="color: #5dade2;">Delaware Holds Strong!</h1>
+        <p class="subtitle">The vaults proved too well-defended.</p>
         {% else %}
         <div class="result-icon">&#128081;</div>
         <h1 style="color: #f0c040;">{{ overall_winner }} Wins the Match!</h1>
@@ -15,28 +23,57 @@
         {% endif %}
     </div>
 
+    {% if is_pve | default(false) %}
+    <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid #f0c040; border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem;">
+        <div style="font-size: 1.5rem; font-weight: 600; color: #f0c040; margin-bottom: 0.5rem;">
+            Vaults Breached
+        </div>
+        <div style="font-size: 2rem; font-weight: 700; color: #e74c3c;">
+            {{ vaults_breached | default(0) }} / {{ total_vaults | default(5) }}
+        </div>
+    </div>
+    {% endif %}
+
     <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid #f0c040; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
         <div style="font-size: 1.5rem; font-weight: 600; color: #f0c040; margin-bottom: 0.5rem;">
             Final Score
         </div>
         <div style="font-size: 1.4rem;">
+            {% if is_pve | default(false) %}
+            <span style="color: #f0c040;">You: {{ attacker_score }} pts</span>
+            <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
+            <span style="color: #5dade2;">Delaware: {{ defender_score }} pts</span>
+            {% else %}
             <span style="color: #5dade2;">Defender (P1): {{ defender_score }} pts</span>
             <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
             <span style="color: #f0c040;">Attacker (P2): {{ attacker_score }} pts</span>
+            {% endif %}
         </div>
     </div>
 
-    <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">Round Breakdown</h2>
+    <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">
+        {% if is_pve | default(false) %}Vault Breakdown{% else %}Round Breakdown{% endif %}
+    </h2>
     <div style="text-align: left; margin-bottom: 1.5rem;">
         {% for r in rounds_summary %}
         <div style="background: #0f1a30; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                <div style="font-weight: 600; color: #f0c040;">Round {{ r.number }}</div>
+                <div style="font-weight: 600; color: #f0c040;">
+                    {% if is_pve | default(false) and r.vault_name %}
+                    Vault {{ r.number }}: {{ r.vault_name }}
+                    {% else %}
+                    Round {{ r.number }}
+                    {% endif %}
+                </div>
                 <div>
                     {% if r.result == "attacker_win" %}
-                    <span class="badge" style="background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c;">Attacker (P2) wins</span>
+                    <span class="badge" style="background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c;">
+                        {% if is_pve | default(false) %}Breached{% else %}Attacker (P2) wins{% endif %}
+                    </span>
                     {% elif r.result == "defender_win" %}
-                    <span class="badge" style="background: rgba(39, 174, 96, 0.2); color: #27ae60; border: 1px solid #27ae60;">Defender (P1) wins</span>
+                    <span class="badge" style="background: rgba(39, 174, 96, 0.2); color: #27ae60; border: 1px solid #27ae60;">
+                        {% if is_pve | default(false) %}Held{% else %}Defender (P1) wins{% endif %}
+                    </span>
                     {% else %}
                     <span class="badge" style="background: rgba(136, 136, 170, 0.2); color: #8888aa; border: 1px solid #8888aa;">Draw</span>
                     {% endif %}
@@ -52,7 +89,7 @@
         {% endfor %}
     </div>
 
-    <form method="post" action="/game/restart" class="mt-3">
+    <form method="post" action="{{ url_prefix | default('/game') }}/restart" class="mt-3">
         <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
             Play Again
         </button>

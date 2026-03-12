@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Vault {{ vault.level }} — Beat Delaware{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        <h1>Vault {{ vault.level }} of {{ max_rounds }}</h1>
+        <p class="subtitle" style="font-family: 'MedievalSharp', cursive; font-size: 1.4rem; color: #f0c040;">
+            {{ vault.name }}
+        </p>
+    </div>
+
+    <div style="margin: 1.5rem 0;">
+        {% if vault.difficulty == "easy" %}
+        <span class="badge" style="background: rgba(39, 174, 96, 0.2); color: #27ae60; border: 1px solid #27ae60; font-size: 0.95rem; padding: 0.4rem 1rem;">Easy</span>
+        {% elif vault.difficulty == "medium" %}
+        <span class="badge" style="background: rgba(241, 196, 15, 0.2); color: #f1c40f; border: 1px solid #f1c40f; font-size: 0.95rem; padding: 0.4rem 1rem;">Medium</span>
+        {% elif vault.difficulty == "hard" %}
+        <span class="badge" style="background: rgba(230, 126, 34, 0.2); color: #e67e22; border: 1px solid #e67e22; font-size: 0.95rem; padding: 0.4rem 1rem;">Hard</span>
+        {% elif vault.difficulty == "expert" %}
+        <span class="badge" style="background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; font-size: 0.95rem; padding: 0.4rem 1rem;">Expert</span>
+        {% elif vault.difficulty == "legendary" %}
+        <span class="badge" style="background: rgba(155, 89, 182, 0.2); color: #9b59b6; border: 1px solid #9b59b6; font-size: 0.95rem; padding: 0.4rem 1rem;">Legendary</span>
+        {% endif %}
+    </div>
+
+    <div style="background: #0f1a30; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; text-align: left;">
+        <p style="color: #c0b8a8; font-size: 1rem; line-height: 1.7;">
+            {{ vault.description }}
+        </p>
+    </div>
+
+    <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid #f0c040; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0;">
+        <div style="font-size: 1.2rem;">
+            <span style="color: #f0c040;">Your Score: {{ attacker_score }} pts</span>
+            <span style="color: #8888aa; margin: 0 0.75rem;">&mdash;</span>
+            <span style="color: #5dade2;">Delaware: {{ defender_score }} pts</span>
+        </div>
+    </div>
+
+    <form method="post" action="/pve/siege" style="margin-top: 1rem;">
+        <a href="/pve/siege" class="btn btn-primary btn-block" style="font-size: 1.15rem; padding: 1rem; display: block; text-decoration: none; text-align: center;">
+            Begin Siege
+        </a>
+    </form>
+</div>
+{% endblock %}
