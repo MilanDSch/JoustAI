@@ -61,7 +61,7 @@
     .portal-pvp .portal-inner {
         /* Image + Darkened Overlay for Text Readability with Green Tint */
         background-image: linear-gradient(180deg, rgba(15, 25, 20, 0.8) 0%, rgba(9, 12, 21, 0.95) 100%), 
-                          url('{{ "left_castle.jpg" }}');
+                          url('/static/left_castle.jpeg');
     }
     .portal-pvp:hover {
         filter: drop-shadow(0 10px 20px rgba(39, 174, 96, 0.4));
@@ -76,7 +76,7 @@
     .portal-pve .portal-inner {
         /* Image + Darkened Overlay for Text Readability with Delaware Red Tint */
         background-image: linear-gradient(180deg, rgba(30, 10, 10, 0.8) 0%, rgba(9, 12, 21, 0.95) 100%), 
-                          url('{{ "right_castle.jpeg" }}');
+                          url('{{ "/static/right_castle.jpeg" }}');
     }
     .portal-pve:hover {
         filter: drop-shadow(0 10px 20px rgba(227, 0, 15, 0.4));

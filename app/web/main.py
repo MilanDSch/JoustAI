@@ -1,12 +1,19 @@
 """FastAPI application for the AI CTF Duel hot-seat game."""
 
+from pathlib import Path
+
 from fastapi import FastAPI, Request
 from fastapi.responses import Response
+from fastapi.staticfiles import StaticFiles
 
 from app.services.leaderboard import init_db
 from app.web.routes import game, leaderboard, pve
 
 app = FastAPI(title="AI CTF Duel")
+
+STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
 app.include_router(game.router)
 app.include_router(pve.router)
 app.include_router(leaderboard.router)

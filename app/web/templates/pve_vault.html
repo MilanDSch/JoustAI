@@ -56,53 +56,19 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        background-image: linear-gradient(180deg, rgba(30, 10, 10, 0.55) 0%, rgba(9, 12, 21, 0.75) 100%),
+                          url('/static/right_castle.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        clip-path: var(--chamfer);
+        min-height: 500px;
+        padding: 2.5rem 2rem;
+        border: 1px solid rgba(227, 0, 15, 0.2);
     }
 
-    /* 5. Pure CSS Rotating Arcane Lock */
-    .rune-lock-container {
-        position: relative;
-        width: 220px;
-        height: 220px;
-        margin-bottom: 3rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .rune-ring-outer {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        border: 2px dashed rgba(93, 173, 226, 0.4);
-        border-top-color: var(--arcane);
-        border-bottom-color: var(--arcane);
-        animation: spin-slow 20s linear infinite;
-    }
-
-    .rune-ring-inner {
-        position: absolute;
-        width: 75%;
-        height: 75%;
-        border-radius: 50%;
-        border: 2px dotted rgba(240, 192, 64, 0.4);
-        animation: counter-spin 15s linear infinite;
-    }
-
-    .rune-core {
-        position: absolute;
-        font-family: 'MedievalSharp', cursive;
-        font-size: 4.5rem;
-        color: var(--text-primary);
-        text-shadow: 0 0 20px rgba(93, 173, 226, 0.6);
-        z-index: 5;
-    }
-
-    @keyframes spin-slow { 100% { transform: rotate(360deg); } }
-    @keyframes counter-spin { 100% { transform: rotate(-360deg); } }
-
-    /* 6. Score Box redesign */
+    /* 5. Score Box redesign */
     .quest-score {
         background: rgba(0, 0, 0, 0.4);
         border: 1px solid var(--border);
@@ -159,21 +125,14 @@
             Current Renown: <strong style="color: var(--gold); font-size: 1.1rem;">{{ attacker_score }} pts</strong>
         </div>
 
-        <div class="rune-lock-container">
-            <div class="rune-ring-outer"></div>
-            <div class="rune-ring-inner"></div>
-            <div class="rune-core">&#128274;</div>
-        </div>
-
-        <div style="width: 100%; max-width: 300px;">
-            <a href="/pve/siege" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; letter-spacing: 0.05em; animation: pulse-legendary 3s infinite alternate; text-decoration: none; text-align: center; display: block;">
+        <div style="width: 100%; max-width: 300px; margin-top: auto;">
+            <a href="/pve/siege" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="padding: 1.2rem; font-size: 1.1rem; text-decoration: none; text-align: center; display: block; background: rgba(30, 58, 95, 0.5); backdrop-filter: blur(4px);">
                 &#9876; Storm the Gates
             </a>
+            <p style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-terminal); margin-top: 1rem; text-align: center;">
+                Prepare your incantations.
+            </p>
         </div>
-
-        <p style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-terminal); margin-top: 1rem; text-align: center;">
-            Prepare your incantations.
-        </p>
 
     </div>
 </div>
