@@ -37,18 +37,18 @@
         border-left: 4px solid var(--arcane);
         padding: 3rem;
         clip-path: var(--chamfer);
-        box-shadow: inset 0 0 30px rgba(93, 173, 226, 0.05);
+        box-shadow: inset 0 0 30px rgba(var(--arcane-rgb), 0.05);
         position: relative;
     }
 
     .lore-text {
-        color: #c0b8a8;
+        color: var(--text-secondary);
         font-family: var(--font-terminal);
         font-size: 1.05rem;
         line-height: 1.8;
         margin-top: 1.5rem;
         padding-top: 1.5rem;
-        border-top: 1px dashed rgba(93, 173, 226, 0.3);
+        border-top: 1px dashed rgba(var(--arcane-rgb), 0.3);
     }
 
     /* 4. The Vault Door Panel (Right Side) */
@@ -65,7 +65,7 @@
         clip-path: var(--chamfer);
         min-height: 500px;
         padding: 2.5rem 2rem;
-        border: 1px solid rgba(227, 0, 15, 0.2);
+        border: 1px solid rgba(var(--primary-rgb), 0.2);
     }
 
     /* 5. Score Box redesign */
@@ -88,7 +88,7 @@
     <p style="font-family: var(--font-terminal); color: var(--arcane); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem;">
         The Delaware Quest &mdash; Stage {{ vault.level }} of {{ max_rounds }}
     </p>
-    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(93, 173, 226, 0.3);">
+    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(var(--arcane-rgb), 0.3);">
         Approach the Vault
     </h1>
 </div>
@@ -96,7 +96,7 @@
 <div class="vault-grid">
     
     <div class="vault-lore-panel">
-        <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2.2rem; color: var(--gold); text-shadow: 0 0 15px rgba(240, 192, 64, 0.4); margin-bottom: 1rem;">
+        <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2.2rem; color: var(--gold); text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.4); margin-bottom: 1rem;">
             {{ vault.name }}
         </h2>
         

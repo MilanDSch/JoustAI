@@ -10,10 +10,10 @@
 
     .ledger-panel {
         background: linear-gradient(180deg, rgba(35, 25, 15, 0.95) 0%, var(--void-deep) 100%);
-        border: 1px solid rgba(240, 192, 64, 0.4);
+        border: 1px solid rgba(var(--gold-rgb), 0.4);
         border-top: 4px solid var(--gold);
         border-bottom: 4px solid var(--gold);
-        box-shadow: inset 0 0 50px rgba(240, 192, 64, 0.05), 0 15px 35px rgba(0,0,0,0.6);
+        box-shadow: inset 0 0 50px rgba(var(--gold-rgb), 0.05), 0 15px 35px rgba(0,0,0,0.6);
         padding: 3.5rem 3rem;
         clip-path: var(--chamfer);
         position: relative;
@@ -33,7 +33,7 @@
     .ledger-header {
         text-align: center;
         margin-bottom: 2.5rem;
-        border-bottom: 1px dashed rgba(240, 192, 64, 0.3);
+        border-bottom: 1px dashed rgba(var(--gold-rgb), 0.3);
         padding-bottom: 1.5rem;
     }
 
@@ -41,7 +41,7 @@
         font-size: 3.5rem;
         margin-bottom: 0.5rem;
         color: var(--gold);
-        filter: drop-shadow(0 0 15px rgba(240, 192, 64, 0.5));
+        filter: drop-shadow(0 0 15px rgba(var(--gold-rgb), 0.5));
         line-height: 1;
     }
 
@@ -80,14 +80,14 @@
         text-transform: uppercase;
         font-size: 0.8rem;
         letter-spacing: 0.1em;
-        color: #c0b8a8;
+        color: var(--text-secondary);
         margin-bottom: 0.5rem;
     }
 
     .ledger-input {
         width: 100%;
         background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(240, 192, 64, 0.2);
+        border: 1px solid rgba(var(--gold-rgb), 0.2);
         border-bottom: 2px solid var(--gold);
         color: var(--text-primary);
         font-family: 'MedievalSharp', cursive;
@@ -98,9 +98,9 @@
 
     .ledger-input:focus {
         outline: none;
-        background: rgba(240, 192, 64, 0.05);
+        background: rgba(var(--gold-rgb), 0.05);
         border-color: var(--gold);
-        box-shadow: inset 0 0 15px rgba(240, 192, 64, 0.1);
+        box-shadow: inset 0 0 15px rgba(var(--gold-rgb), 0.1);
     }
 
     .ledger-input::placeholder {
@@ -135,7 +135,7 @@
         
         <div class="ledger-header">
             <div class="ledger-icon">&#128081;</div>
-            <h1 style="font-size: 2.8rem; color: var(--gold); text-shadow: 0 0 20px rgba(240, 192, 64, 0.4); margin-bottom: 0.5rem;">
+            <h1 style="font-size: 2.8rem; color: var(--gold); text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.4); margin-bottom: 0.5rem;">
                 Inscribe Your Legacy
             </h1>
             <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.95rem;">
@@ -145,7 +145,7 @@
 
         <div class="ledger-stats">
             <div class="stat-plaque stat-plaque-gold">
-                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);">
+                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);">
                     {{ highest_level }} / 5
                 </div>
                 <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
@@ -153,7 +153,7 @@
                 </div>
             </div>
             <div class="stat-plaque stat-plaque-arcane">
-                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--arcane); text-shadow: 0 0 10px rgba(93, 173, 226, 0.3);">
+                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--arcane); text-shadow: 0 0 10px rgba(var(--arcane-rgb), 0.3);">
                     {{ total_turns }}
                 </div>
                 <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
@@ -163,7 +163,7 @@
         </div>
 
         {% if error %}
-        <div class="alert alert-error" style="border-left: 3px solid var(--alert); background: rgba(231, 76, 60, 0.1); text-align: center; margin-bottom: 2rem;">
+        <div class="alert alert-error" style="border-left: 3px solid var(--alert); background: rgba(var(--danger-rgb), 0.1); text-align: center; margin-bottom: 2rem;">
             <strong>&#9888; Ink Spilled:</strong> {{ error }}
         </div>
         {% endif %}
@@ -187,7 +187,7 @@
                        value="{{ email | default('') }}" placeholder="e.g., lancelot@camelot.com" style="font-family: var(--font-terminal); font-size: 1.1rem;">
             </div>
 
-            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 20px rgba(240, 192, 64, 0.2);">
+            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 20px rgba(var(--gold-rgb), 0.2);">
                 &#10022; Seal the Decree
             </button>
         </form>

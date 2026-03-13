@@ -55,8 +55,8 @@
     /* PvP Specific Styling (Green Theme) - Use uploaded left castle image */
     .portal-pvp {
         /* Keep the border gradient effect */
-        background: linear-gradient(135deg, rgba(39, 174, 96, 0.7) 0%, #145a32 100%);
-        filter: drop-shadow(0 0 10px rgba(39, 174, 96, 0.2));
+        background: linear-gradient(135deg, rgba(var(--success-rgb), 0.7) 0%, #145a32 100%);
+        filter: drop-shadow(0 0 10px rgba(var(--success-rgb), 0.2));
     }
     .portal-pvp .portal-inner {
         /* Image + Darkened Overlay for Text Readability with Green Tint */
@@ -64,14 +64,14 @@
                           url('/static/left_castle.jpeg');
     }
     .portal-pvp:hover {
-        filter: drop-shadow(0 10px 20px rgba(39, 174, 96, 0.4));
+        filter: drop-shadow(0 10px 20px rgba(var(--success-rgb), 0.4));
     }
 
     /* PvE Specific Styling (Red Theme) - Use uploaded right castle image */
     .portal-pve {
         /* Keep the border gradient effect, now aligned with Delaware red */
-        background: linear-gradient(135deg, rgba(227, 0, 15, 0.7) 0%, #500000 100%);
-        filter: drop-shadow(0 0 10px rgba(227, 0, 15, 0.2));
+        background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.7) 0%, #500000 100%);
+        filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.2));
     }
     .portal-pve .portal-inner {
         /* Image + Darkened Overlay for Text Readability with Delaware Red Tint */
@@ -79,7 +79,7 @@
                           url('{{ "/static/right_castle.jpeg" }}');
     }
     .portal-pve:hover {
-        filter: drop-shadow(0 10px 20px rgba(227, 0, 15, 0.4));
+        filter: drop-shadow(0 10px 20px rgba(var(--primary-rgb), 0.4));
     }
 
     /* 4. Typography inside the cards - No changes needed, they layer over the image */
@@ -124,8 +124,8 @@
 
 {% block content %}
 <div style="text-align: center; margin-bottom: 1rem;">
-    <div style="font-size: 2rem; margin-bottom: -0.5rem; filter: drop-shadow(0 0 10px rgba(227, 0, 15, 0.4));">&#9876;</div>
-    <h1 style="font-size: 3.5rem; text-shadow: 0 0 20px rgba(227, 0, 15, 0.6); margin-bottom: 0; color: var(--primary);">JoustAI</h1>
+    <div style="font-size: 2rem; margin-bottom: -0.5rem; filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.4));">&#9876;</div>
+    <h1 style="font-size: 3.5rem; text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.6); margin-bottom: 0; color: var(--primary);">JoustAI</h1>
     <p style="color: var(--text-muted); font-family: 'MedievalSharp', cursive; font-size: 1.3rem; letter-spacing: 0.05em; margin-top: 0.5rem;">
         A Tournament of Wits in the Age of AI
     </p>
@@ -134,8 +134,8 @@
 <div class="arena-split">
     <div class="portal-card portal-pvp">
         <div class="portal-inner">
-            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(39, 174, 96, 0.6));">&#128737;</div>
-            <h2 class="portal-title" style="color: var(--success); text-shadow: 0 0 10px rgba(39, 174, 96, 0.4);">Duel a Rival</h2>
+            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(var(--success-rgb), 0.6));">&#128737;</div>
+            <h2 class="portal-title" style="color: var(--success); text-shadow: 0 0 10px rgba(var(--success-rgb), 0.4);">Duel a Rival</h2>
             
             <p class="portal-desc">
                 Challenge another attendee to a battle of the mind. Take turns playing the role of the steadfast Guard and the cunning Thief.
@@ -148,7 +148,7 @@
             </ul>
 
             <form method="post" action="/game/new" style="margin-top: auto;">
-                <button type="submit" class="glowing-btn glowing-btn-block" style="background: var(--success); color: var(--void-deep); padding: 1.2rem; font-size: 1.1rem; border: 1px solid #1e8449; filter: drop-shadow(0 0 8px rgba(39, 174, 96, 0.3));">
+                <button type="submit" class="glowing-btn glowing-btn-block" style="background: var(--success); color: var(--void-deep); padding: 1.2rem; font-size: 1.1rem; border: 1px solid #1e8449; filter: drop-shadow(0 0 8px rgba(var(--success-rgb), 0.3));">
                     Enter the Arena
                 </button>
             </form>
@@ -157,8 +157,8 @@
 
     <div class="portal-card portal-pve">
         <div class="portal-inner">
-            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(227, 0, 15, 0.6));">&#127984;</div>
-            <h2 class="portal-title" style="color: var(--primary); text-shadow: 0 0 10px rgba(227, 0, 15, 0.4);">The Delaware Quest</h2>
+            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.6));">&#127984;</div>
+            <h2 class="portal-title" style="color: var(--primary); text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.4);">The Delaware Quest</h2>
             
             <p class="portal-desc">
                 Embark on a solo crusade against the grand architect. Breach 5 increasingly fortified Delaware vaults protected by AI.

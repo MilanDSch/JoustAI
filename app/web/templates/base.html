@@ -14,16 +14,40 @@
             --void-deep: #090c15;
             --void-mid: #0f1a30;
             --void-surface: #16213e;
-            --primary: #E3000F; /* Delaware Red */
+            --void-gradient-mid: #0d1b2a;
+            --primary: #e74c3c; /* Delaware Red */
             --primary-dim: rgba(227, 0, 15, 0.15);
+            --primary-rgb: 227, 0, 15;
+            --danger: #e74c3c;
+            --danger-dim: rgba(231, 76, 60, 0.15);
+            --danger-rgb: 231, 76, 60;
             --arcane: #5dade2;
             --arcane-dim: rgba(93, 173, 226, 0.15);
+            --arcane-rgb: 93, 173, 226;
             --alert: #f39c12; /* Amber/Orange */
             --alert-dim: rgba(243, 156, 18, 0.15);
+            --alert-rgb: 243, 156, 18;
             --success: #27ae60;
             --success-dim: rgba(39, 174, 96, 0.15);
+            --success-rgb: 39, 174, 96;
+            --success-light: #a0f5b8;
+            --gold: #f0c040;
+            --gold-dim: rgba(240, 192, 64, 0.15);
+            --gold-rgb: 240, 192, 64;
+            --seal-medium: #f1c40f;
+            --seal-medium-rgb: 241, 196, 15;
+            --seal-hard: #e67e22;
+            --seal-hard-rgb: 230, 126, 34;
+            --legendary: #9b59b6;
+            --legendary-rgb: 155, 89, 182;
+            --rank-silver: #c0c0c0;
+            --rank-silver-rgb: 192, 192, 192;
+            --rank-bronze: #cd7f32;
+            --rank-bronze-rgb: 205, 127, 50;
             --text-primary: #e0d6c8;
+            --text-secondary: #c0b8a8;
             --text-muted: #6a6a8a;
+            --white: #ffffff;
             --border: #2a2a4a;
             --font-terminal: 'JetBrains Mono', 'Fira Code', monospace;
             --chamfer: polygon(
@@ -46,7 +70,7 @@
         /* ── Body ──────────────────────────────────────────── */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(170deg, var(--void-deep) 0%, #0d1b2a 50%, var(--void-surface) 100%);
+            background: linear-gradient(170deg, var(--void-deep) 0%, var(--void-gradient-mid) 50%, var(--void-surface) 100%);
             background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
@@ -60,7 +84,7 @@
         h1, h2, h3 {
             font-family: 'MedievalSharp', cursive;
             color: var(--primary);
-            text-shadow: 0 0 12px rgba(227, 0, 15, 0.3);
+            text-shadow: 0 0 12px rgba(var(--primary-rgb), 0.3);
         }
 
         .container {
@@ -75,7 +99,7 @@
             background: var(--void-surface);
             clip-path: var(--chamfer);
             padding: 3px;
-            filter: drop-shadow(0 0 8px rgba(227, 0, 15, 0.2));
+            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.2));
             margin-bottom: 0;
         }
 
@@ -90,7 +114,7 @@
             background: var(--void-surface);
             clip-path: var(--chamfer);
             padding: 2px;
-            filter: drop-shadow(0 0 6px rgba(93, 173, 226, 0.15));
+            filter: drop-shadow(0 0 6px rgba(var(--arcane-rgb), 0.15));
         }
 
         .cyber-hud-secondary > .cyber-hud-inner {
@@ -135,19 +159,19 @@
 
         .glowing-btn-primary {
             background: var(--primary);
-            color: #ffffff;
+            color: var(--white);
         }
         .glowing-btn-primary:hover {
-            filter: drop-shadow(0 0 14px rgba(227, 0, 15, 0.7));
+            filter: drop-shadow(0 0 14px rgba(var(--primary-rgb), 0.7));
             background: #ff1a2b;
         }
 
         .glowing-btn-danger {
             background: var(--alert);
-            color: #fff;
+            color: var(--white);
         }
         .glowing-btn-danger:hover {
-            filter: drop-shadow(0 0 14px rgba(243, 156, 18, 0.7));
+            filter: drop-shadow(0 0 14px rgba(var(--alert-rgb), 0.7));
         }
 
         .glowing-btn-secondary {
@@ -156,7 +180,7 @@
             border: 1px solid var(--border);
         }
         .glowing-btn-secondary:hover {
-            filter: drop-shadow(0 0 10px rgba(93, 173, 226, 0.4));
+            filter: drop-shadow(0 0 10px rgba(var(--arcane-rgb), 0.4));
             background: #1e2d4d;
         }
 
@@ -166,7 +190,7 @@
             border: 2px solid var(--primary);
         }
         .glowing-btn-arcane:hover {
-            filter: drop-shadow(0 0 14px rgba(93, 173, 226, 0.5));
+            filter: drop-shadow(0 0 14px rgba(var(--arcane-rgb), 0.5));
         }
 
         .glowing-btn-block {
@@ -184,7 +208,7 @@
             display: block;
             margin-bottom: 0.4rem;
             font-weight: 500;
-            color: #c0b8a8;
+            color: var(--text-secondary);
         }
 
         .runic-input {
@@ -193,17 +217,17 @@
             background: var(--void-deep);
             border: 1px solid var(--border);
             border-radius: 2px;
-            color: var(--primary);
+            color: var(--text-primary);
             font-family: var(--font-terminal);
             font-size: 0.95rem;
-            caret-color: var(--primary);
+            caret-color: var(--text-primary);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .runic-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 8px rgba(227, 0, 15, 0.25), inset 0 0 6px rgba(227, 0, 15, 0.05);
+            box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.25), inset 0 0 6px rgba(var(--primary-rgb), 0.05);
         }
 
         .runic-input::placeholder {
@@ -240,13 +264,13 @@
         .alert-error {
             background: var(--alert-dim);
             border-left-color: var(--alert);
-            color: #f39c12;
+            color: var(--alert);
         }
 
         .alert-success {
             background: var(--success-dim);
             border-left-color: var(--success);
-            color: #a0f5b8;
+            color: var(--success-light);
         }
 
         /* ── Loading Spinner ───────────────────────────────── */
@@ -321,13 +345,13 @@
 
         .chat-bubble.user {
             border-left-color: var(--alert);
-            background: rgba(243, 156, 18, 0.06);
+            background: rgba(var(--alert-rgb), 0.06);
             margin-left: 1.5rem;
         }
 
         .chat-bubble.assistant {
             border-left-color: var(--arcane);
-            background: rgba(93, 173, 226, 0.06);
+            background: rgba(var(--arcane-rgb), 0.06);
             margin-right: 1.5rem;
         }
 
@@ -363,7 +387,7 @@
         .result-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(227, 0, 15, 0.4));
+            filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.4));
         }
 
         .stats {
@@ -381,7 +405,7 @@
             font-family: 'MedievalSharp', cursive;
             font-size: 1.8rem;
             color: var(--primary);
-            text-shadow: 0 0 10px rgba(227, 0, 15, 0.35);
+            text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.35);
         }
 
         .stat-label {
@@ -406,7 +430,7 @@
             color: var(--primary);
             margin-bottom: 0.5rem;
             font-family: 'MedievalSharp', cursive;
-            text-shadow: 0 0 8px rgba(227, 0, 15, 0.3);
+            text-shadow: 0 0 8px rgba(var(--primary-rgb), 0.3);
         }
 
         .score-box .score-values {
@@ -429,7 +453,7 @@
         }
 
         .info-panel p {
-            color: #c0b8a8;
+            color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.6;
             font-family: var(--font-terminal);
@@ -482,31 +506,31 @@
             letter-spacing: 0.06em;
         }
 
-        .seal-easy { background: var(--success-dim); color: var(--success); filter: drop-shadow(0 0 6px rgba(39, 174, 96, 0.4)); }
-        .seal-medium { background: rgba(241, 196, 15, 0.2); color: #f1c40f; filter: drop-shadow(0 0 6px rgba(241, 196, 15, 0.4)); }
-        .seal-hard { background: rgba(230, 126, 34, 0.2); color: #e67e22; filter: drop-shadow(0 0 6px rgba(230, 126, 34, 0.4)); }
-        .seal-expert { background: var(--alert-dim); color: var(--alert); filter: drop-shadow(0 0 6px rgba(243, 156, 18, 0.4)); }
+        .seal-easy { background: var(--success-dim); color: var(--success); filter: drop-shadow(0 0 6px rgba(var(--success-rgb), 0.4)); }
+        .seal-medium { background: rgba(var(--seal-medium-rgb), 0.2); color: var(--seal-medium); filter: drop-shadow(0 0 6px rgba(var(--seal-medium-rgb), 0.4)); }
+        .seal-hard { background: rgba(var(--seal-hard-rgb), 0.2); color: var(--seal-hard); filter: drop-shadow(0 0 6px rgba(var(--seal-hard-rgb), 0.4)); }
+        .seal-expert { background: var(--alert-dim); color: var(--alert); filter: drop-shadow(0 0 6px rgba(var(--alert-rgb), 0.4)); }
         .seal-legendary {
-            background: rgba(155, 89, 182, 0.2);
-            color: #9b59b6;
-            filter: drop-shadow(0 0 6px rgba(155, 89, 182, 0.4));
+            background: rgba(var(--legendary-rgb), 0.2);
+            color: var(--legendary);
+            filter: drop-shadow(0 0 6px rgba(var(--legendary-rgb), 0.4));
             animation: pulse-legendary 2s ease-in-out infinite alternate;
         }
 
         @keyframes pulse-legendary {
-            from { filter: drop-shadow(0 0 6px rgba(155, 89, 182, 0.3)); }
-            to { filter: drop-shadow(0 0 16px rgba(155, 89, 182, 0.7)); }
+            from { filter: drop-shadow(0 0 6px rgba(var(--legendary-rgb), 0.3)); }
+            to { filter: drop-shadow(0 0 16px rgba(var(--legendary-rgb), 0.7)); }
         }
 
         /* ── Pulse Alert Animation ─────────────────────────── */
         @keyframes pulse-alert {
-            0%, 100% { box-shadow: inset 0 0 10px rgba(243, 156, 18, 0.1); }
-            50% { box-shadow: inset 0 0 20px rgba(243, 156, 18, 0.3); }
+            0%, 100% { box-shadow: inset 0 0 10px rgba(var(--alert-rgb), 0.1); }
+            50% { box-shadow: inset 0 0 20px rgba(var(--alert-rgb), 0.3); }
         }
 
         @keyframes pulse-primary {
-            0%, 100% { filter: drop-shadow(0 0 6px rgba(227, 0, 15, 0.3)); }
-            50% { filter: drop-shadow(0 0 16px rgba(227, 0, 15, 0.7)); }
+            0%, 100% { filter: drop-shadow(0 0 6px rgba(var(--primary-rgb), 0.3)); }
+            50% { filter: drop-shadow(0 0 16px rgba(var(--primary-rgb), 0.7)); }
         }
 
         /* ── Round Breakdown Item ──────────────────────────── */

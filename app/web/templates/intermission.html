@@ -41,7 +41,7 @@
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        border: 1px solid rgba(227, 0, 15, 0.2);
+        border: 1px solid rgba(var(--primary-rgb), 0.2);
         padding: 2.5rem 2rem;
         clip-path: var(--chamfer);
         display: flex;
@@ -52,24 +52,24 @@
     /* 4. Result specific styles */
     .result-breach {
         color: var(--alert);
-        text-shadow: 0 0 16px rgba(231, 76, 60, 0.5);
+        text-shadow: 0 0 16px rgba(var(--danger-rgb), 0.5);
     }
     .result-icon-breach {
         font-size: 4rem;
-        color: #e74c3c;
-        filter: drop-shadow(0 0 15px rgba(231, 76, 60, 0.5));
+        color: var(--danger);
+        filter: drop-shadow(0 0 15px rgba(var(--danger-rgb), 0.5));
         margin-bottom: 0.5rem;
         line-height: 1;
     }
 
     .result-hold {
         color: var(--success);
-        text-shadow: 0 0 16px rgba(39, 174, 96, 0.5);
+        text-shadow: 0 0 16px rgba(var(--success-rgb), 0.5);
     }
     .result-icon-hold {
         font-size: 4rem;
         color: var(--success);
-        filter: drop-shadow(0 0 15px rgba(39, 174, 96, 0.5));
+        filter: drop-shadow(0 0 15px rgba(var(--success-rgb), 0.5));
         margin-bottom: 0.5rem;
         line-height: 1;
     }
@@ -99,16 +99,16 @@
         font-family: 'MedievalSharp', cursive;
         font-size: 2.2rem;
         color: var(--gold);
-        text-shadow: 0 0 15px rgba(240, 192, 64, 0.4);
+        text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.4);
         letter-spacing: 0.05em;
         word-break: break-all;
     }
 
     /* 6. Score display */
     .score-display {
-        background: rgba(240, 192, 64, 0.05);
-        border-top: 1px solid rgba(240, 192, 64, 0.2);
-        border-bottom: 1px solid rgba(240, 192, 64, 0.2);
+        background: rgba(var(--gold-rgb), 0.05);
+        border-top: 1px solid rgba(var(--gold-rgb), 0.2);
+        border-bottom: 1px solid rgba(var(--gold-rgb), 0.2);
         padding: 1.5rem;
         margin-top: 1.5rem;
     }
@@ -120,7 +120,7 @@
     <p style="font-family: var(--font-terminal); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem;">
         Round {{ round_number }} Concluded
     </p>
-    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(240, 192, 64, 0.3);">
+    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.3);">
         The Dust Settles
     </h1>
 </div>
@@ -136,7 +136,7 @@
             {% else %}
             <h2 class="result-breach" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Castle Has Fallen!</h2>
             <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">
-                <strong style="color: #e74c3c;">{{ attacker_label }}</strong> bypassed the wards in Round {{ round_number }}.
+                <strong style="color: var(--danger);">{{ attacker_label }}</strong> bypassed the wards in Round {{ round_number }}.
             </p>
             {% endif %}
         {% else %}
@@ -177,7 +177,7 @@
     </div>
 
     <div class="scout-panel">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--arcane); border-bottom: 1px solid rgba(93, 173, 226, 0.3); padding-bottom: 0.75rem; font-family: 'MedievalSharp', cursive;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--arcane); border-bottom: 1px solid rgba(var(--arcane-rgb), 0.3); padding-bottom: 0.75rem; font-family: 'MedievalSharp', cursive;">
             The War Council
         </h2>
 
@@ -185,24 +185,24 @@
             {% if is_pve | default(false) %}
                 {% if next_vault %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Scouting Report: {{ next_vault.name }}</h3>
-                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">{{ next_vault.description }}</p>
+                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">{{ next_vault.description }}</p>
                 {% else %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Final Gate Has Closed</h3>
-                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">You have faced all of Delaware's defenses. It is time to gaze upon your final standing in the realm.</p>
+                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">You have faced all of Delaware's defenses. It is time to gaze upon your final standing in the realm.</p>
                 {% endif %}
             {% elif round_number == 1 %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Raw Duel Complete!</h3>
-                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
+                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
                     No guides or tools have been used yet. Prepare for one more raw combat round before the Guild unlocks the Attacker's Arsenal. <strong style="color: var(--arcane);">Player 1</strong> defends again with a newly forged cipher.
                 </p>
             {% elif round_number == 2 %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Arsenal Unlocks!</h3>
-                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
-                    The Thieves' Guild has granted the Attacker access to the <strong style="color: #e74c3c;">Field Guide</strong> &mdash; a primer on deceptive tactics. The Defender must hold the line against these new dark arts.
+                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
+                    The Thieves' Guild has granted the Attacker access to the <strong style="color: var(--danger);">Field Guide</strong> &mdash; a primer on deceptive tactics. The Defender must hold the line against these new dark arts.
                 </p>
             {% elif round_number == 3 %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Chaos Round Awaits!</h3>
-                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
+                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
                     The standard duels are complete. You may end the match now, or enter the legendary <strong style="color: var(--gold);">Chaos Round</strong> where both champions are granted full access to all ancient texts, templates, and artifacts!
                 </p>
             {% endif %}

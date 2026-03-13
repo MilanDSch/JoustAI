@@ -10,7 +10,7 @@
     /* 2. Main Hall Panel */
     .hall-panel {
         background: linear-gradient(180deg, rgba(15, 20, 30, 0.95) 0%, var(--void-deep) 100%);
-        border: 1px solid rgba(93, 173, 226, 0.3);
+        border: 1px solid rgba(var(--arcane-rgb), 0.3);
         border-top: 4px solid var(--gold);
         box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 15px 40px rgba(0,0,0,0.6);
         padding: 3rem 2.5rem;
@@ -35,7 +35,7 @@
         color: var(--arcane);
         padding: 0 1.5rem 0.5rem 1.5rem;
         text-align: left;
-        border-bottom: 1px dashed rgba(93, 173, 226, 0.3);
+        border-bottom: 1px dashed rgba(var(--arcane-rgb), 0.3);
     }
 
     .lb-table th:last-child,
@@ -68,28 +68,28 @@
 
     /* 4. Top 3 Highlight Rows */
     .lb-row-1 td {
-        background: linear-gradient(90deg, rgba(240, 192, 64, 0.1) 0%, rgba(0,0,0,0.4) 50%);
-        border-top-color: rgba(240, 192, 64, 0.3);
-        border-bottom-color: rgba(240, 192, 64, 0.3);
+        background: linear-gradient(90deg, rgba(var(--gold-rgb), 0.1) 0%, rgba(0,0,0,0.4) 50%);
+        border-top-color: rgba(var(--gold-rgb), 0.3);
+        border-bottom-color: rgba(var(--gold-rgb), 0.3);
     }
     .lb-row-1 td:first-child { border-left: 4px solid var(--gold); }
-    .lb-row-1 td:last-child { border-right-color: rgba(240, 192, 64, 0.3); }
+    .lb-row-1 td:last-child { border-right-color: rgba(var(--gold-rgb), 0.3); }
 
     .lb-row-2 td {
-        background: linear-gradient(90deg, rgba(192, 192, 192, 0.08) 0%, rgba(0,0,0,0.4) 50%);
-        border-top-color: rgba(192, 192, 192, 0.2);
-        border-bottom-color: rgba(192, 192, 192, 0.2);
+        background: linear-gradient(90deg, rgba(var(--rank-silver-rgb), 0.08) 0%, rgba(0,0,0,0.4) 50%);
+        border-top-color: rgba(var(--rank-silver-rgb), 0.2);
+        border-bottom-color: rgba(var(--rank-silver-rgb), 0.2);
     }
-    .lb-row-2 td:first-child { border-left: 4px solid #c0c0c0; }
-    .lb-row-2 td:last-child { border-right-color: rgba(192, 192, 192, 0.2); }
+    .lb-row-2 td:first-child { border-left: 4px solid var(--rank-silver); }
+    .lb-row-2 td:last-child { border-right-color: rgba(var(--rank-silver-rgb), 0.2); }
 
     .lb-row-3 td {
-        background: linear-gradient(90deg, rgba(205, 127, 50, 0.08) 0%, rgba(0,0,0,0.4) 50%);
-        border-top-color: rgba(205, 127, 50, 0.2);
-        border-bottom-color: rgba(205, 127, 50, 0.2);
+        background: linear-gradient(90deg, rgba(var(--rank-bronze-rgb), 0.08) 0%, rgba(0,0,0,0.4) 50%);
+        border-top-color: rgba(var(--rank-bronze-rgb), 0.2);
+        border-bottom-color: rgba(var(--rank-bronze-rgb), 0.2);
     }
-    .lb-row-3 td:first-child { border-left: 4px solid #cd7f32; }
-    .lb-row-3 td:last-child { border-right-color: rgba(205, 127, 50, 0.2); }
+    .lb-row-3 td:first-child { border-left: 4px solid var(--rank-bronze); }
+    .lb-row-3 td:last-child { border-right-color: rgba(var(--rank-bronze-rgb), 0.2); }
 
     /* 5. Rank Badges (Hexagonal Seals) */
     .rank-badge {
@@ -107,16 +107,16 @@
     .rank-1 {
         background: var(--gold);
         color: var(--void-deep);
-        filter: drop-shadow(0 0 10px rgba(240, 192, 64, 0.6));
+        filter: drop-shadow(0 0 10px rgba(var(--gold-rgb), 0.6));
         animation: glow-gold 2s ease-in-out infinite alternate;
     }
-    .rank-2 { background: #c0c0c0; color: var(--void-deep); filter: drop-shadow(0 0 8px rgba(192, 192, 192, 0.4)); }
-    .rank-3 { background: #cd7f32; color: var(--void-deep); filter: drop-shadow(0 0 8px rgba(205, 127, 50, 0.4)); }
+    .rank-2 { background: var(--rank-silver); color: var(--void-deep); filter: drop-shadow(0 0 8px rgba(var(--rank-silver-rgb), 0.4)); }
+    .rank-3 { background: var(--rank-bronze); color: var(--void-deep); filter: drop-shadow(0 0 8px rgba(var(--rank-bronze-rgb), 0.4)); }
     .rank-other { background: var(--void-surface); color: var(--text-muted); border: 1px solid var(--border); }
 
     @keyframes glow-gold {
-        from { filter: drop-shadow(0 0 4px rgba(240, 192, 64, 0.4)); }
-        to { filter: drop-shadow(0 0 16px rgba(240, 192, 64, 0.8)); }
+        from { filter: drop-shadow(0 0 4px rgba(var(--gold-rgb), 0.4)); }
+        to { filter: drop-shadow(0 0 16px rgba(var(--gold-rgb), 0.8)); }
     }
 
     /* 6. Vault Pips */
@@ -135,7 +135,7 @@
 
     .vault-pip.cleared {
         background: var(--gold);
-        filter: drop-shadow(0 0 6px rgba(240, 192, 64, 0.6));
+        filter: drop-shadow(0 0 6px rgba(var(--gold-rgb), 0.6));
     }
 
     /* 7. Typography */
@@ -147,7 +147,7 @@
     }
     .player-name-top {
         color: var(--gold);
-        text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);
+        text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);
     }
     .player-guild {
         font-family: var(--font-terminal);
@@ -172,8 +172,8 @@
 {% block content %}
 <div class="hall-panel">
     <div style="text-align: center; margin-bottom: 2.5rem;">
-        <div style="font-size: 3.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 15px rgba(240, 192, 64, 0.5));">&#128081;</div>
-        <h1 style="font-size: 3.5rem; margin-bottom: 0.25rem; text-shadow: 0 0 25px rgba(240, 192, 64, 0.4);">Hall of Fame</h1>
+        <div style="font-size: 3.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 15px rgba(var(--gold-rgb), 0.5));">&#128081;</div>
+        <h1 style="font-size: 3.5rem; margin-bottom: 0.25rem; text-shadow: 0 0 25px rgba(var(--gold-rgb), 0.4);">Hall of Fame</h1>
         <p style="color: var(--arcane); font-size: 1rem; font-family: var(--font-terminal); text-transform: uppercase; letter-spacing: 0.15em;">
             The Greatest Siege Masters of the Digital Tourney
         </p>
