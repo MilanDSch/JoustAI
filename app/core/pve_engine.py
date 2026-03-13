@@ -3,7 +3,7 @@
 import random
 
 from app.config import settings
-from app.core.engine import GameEngine, build_shadow_prompt
+from app.core.engine import BaseEngine, build_shadow_prompt
 from app.core.logger import get_logger
 from app.data.vaults import Vault, get_vault
 from app.models.game import (
@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 TOTAL_VAULTS = 5
 
 
-class PvEEngine(GameEngine):
+class PvEEngine(BaseEngine):
     """Manages a Beat Delaware PvE game — player is always the attacker."""
 
     def __init__(self, llm: LLMService | None = None) -> None:
@@ -104,3 +104,6 @@ class PvEEngine(GameEngine):
 if __name__ == "__main__":
     engine = PvEEngine()
     print("Assigned password:", engine.game.secret_password)
+    engine._setup_vault(2)
+    print(engine.game.vault_level)
+    print(engine.current_vault.system_prompt)

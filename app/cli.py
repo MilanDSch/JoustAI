@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from app.core.engine import GameEngine
+from app.core.pvp_engine import PvPEngine
 from app.models.game import GamePhase, GameResult
 
 console = Console()
@@ -19,7 +19,7 @@ def print_banner() -> None:
     console.print(Panel(banner, border_style="bright_red", padding=(1, 4)))
 
 
-def defender_phase(engine: GameEngine) -> bool:
+def defender_phase(engine: PvPEngine) -> bool:
     """Run the fortification phase. Returns True if sanity check passed."""
     console.print("\n[bold cyan]═══ PHASE 1: FORTIFICATION ═══[/bold cyan]")
     console.print("[dim]Defender, set up your vault.[/dim]\n")
@@ -75,7 +75,7 @@ def defender_phase(engine: GameEngine) -> bool:
             console.print("\n[yellow]Please revise your system prompt.[/yellow]")
 
 
-def attacker_phase(engine: GameEngine) -> None:
+def attacker_phase(engine: PvPEngine) -> None:
     """Run the siege phase."""
     console.print("\n[bold red]═══ PHASE 2: THE SIEGE ═══[/bold red]")
     console.print("[dim]Attacker, extract the password from the AI.[/dim]")
@@ -134,7 +134,7 @@ def attacker_phase(engine: GameEngine) -> None:
                 console.print("[red]✗ Incorrect guess.[/red]")
 
 
-def show_results(engine: GameEngine) -> None:
+def show_results(engine: PvPEngine) -> None:
     """Display the final game results."""
     game = engine.game
     result = game.round.result
@@ -184,7 +184,7 @@ def main() -> None:
         )
         sys.exit(1)
 
-    engine = GameEngine()
+    engine = PvPEngine()
     engine.game.phase = GamePhase.FORTIFICATION
 
     # Phase 1: Defender sets up
