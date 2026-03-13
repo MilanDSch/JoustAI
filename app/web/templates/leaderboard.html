@@ -145,6 +145,10 @@
         color: var(--text-primary);
         letter-spacing: 0.05em;
     }
+    .player-name-top {
+        color: var(--gold);
+        text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);
+    }
     .player-guild {
         font-family: var(--font-terminal);
         font-size: 0.85rem;
@@ -195,7 +199,7 @@
                     </span>
                 </td>
                 <td>
-                    <div class="player-name" style="{% if loop.index == 1 %}color: var(--gold); text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);{% endif %}">
+                    <div class="player-name {% if loop.index == 1 %}player-name-top{% endif %}">
                         {{ entry.name }}
                     </div>
                 </td>
