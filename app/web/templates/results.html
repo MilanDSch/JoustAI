@@ -1,116 +1,286 @@
 {% extends "base.html" %}
-{% block title %}Match Results — AI CTF Duel{% endblock %}
+{% block title %}Match Results | The Digital Tourney{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* 1. Widen container for the breakdown list */
+    .container {
+        max-width: 850px !important;
+        width: 100%;
+        padding: 2rem 1rem;
+    }
+
+    /* 2. Main Decree Panel */
+    .decree-panel {
+        background: linear-gradient(180deg, rgba(15, 26, 48, 0.9) 0%, var(--void-deep) 100%);
+        border: 1px solid var(--border);
+        border-top: 4px solid var(--gold);
+        box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.4);
+        padding: 3rem 2.5rem;
+        clip-path: var(--chamfer);
+    }
+
+    .decree-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px dashed rgba(240, 192, 64, 0.3);
+    }
+
+    .result-icon {
+        font-size: 4.5rem;
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    /* 3. Stat Plaques (Shared with claim.html style) */
+    .plaque-container {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    @media (max-width: 600px) {
+        .plaque-container {
+            flex-direction: column;
+        }
+    }
+
+    .stat-plaque {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        text-align: center;
+        flex: 1;
+        position: relative;
+    }
+    
+    .stat-plaque::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+    }
+    .stat-plaque-gold::before { background: var(--gold); }
+    .stat-plaque-arcane::before { background: var(--arcane); }
+
+    .stat-plaque-value {
+        font-family: var(--font-terminal);
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+    .stat-plaque-label {
+        font-family: var(--font-terminal);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* 4. Chronicle (Round Breakdown) */
+    .chronicle-header {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.6rem;
+        color: var(--arcane);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(93, 173, 226, 0.3);
+    }
+
+    .chronicle-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .chronicle-item {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border);
+        border-left: 3px solid transparent;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: transform 0.2s;
+    }
+
+    .chronicle-item:hover {
+        background: rgba(255, 255, 255, 0.02);
+        transform: translateX(4px);
+    }
+
+    .chronicle-item.breached { border-left-color: var(--alert); }
+    .chronicle-item.held { border-left-color: var(--success); }
+    .chronicle-item.draw { border-left-color: var(--text-muted); }
+
+    .chronicle-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chronicle-title {
+        font-weight: 600;
+        color: var(--gold);
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.2rem;
+        letter-spacing: 0.05em;
+    }
+
+    .chronicle-badge {
+        font-family: var(--font-terminal);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2px;
+        font-weight: 600;
+    }
+    .badge-breach { background: rgba(231, 76, 60, 0.15); color: #f5a9a0; border: 1px solid rgba(231, 76, 60, 0.3); }
+    .badge-held { background: rgba(39, 174, 96, 0.15); color: #a0f5b8; border: 1px solid rgba(39, 174, 96, 0.3); }
+    .badge-draw { background: rgba(136, 136, 170, 0.15); color: var(--text-muted); border: 1px solid rgba(136, 136, 170, 0.3); }
+
+    .chronicle-details {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        font-family: var(--font-terminal);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    @media (max-width: 600px) {
+        .chronicle-details {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="cyber-hud">
-    <div class="cyber-hud-inner text-center">
-        <div class="card-header">
-            {% if is_pve | default(false) %}
-                {% if vaults_breached | default(0) == 5 %}
-                <div class="result-icon" style="filter: drop-shadow(0 0 16px rgba(240, 192, 64, 0.6));">&#128081;</div>
-                <h1 style="color: var(--gold); text-shadow: 0 0 20px rgba(240, 192, 64, 0.5);">System Compromised!</h1>
-                <p class="subtitle">All five vaults have fallen. Total victory.</p>
-                {% elif vaults_breached | default(0) >= 1 %}
-                <div class="result-icon">&#9876;</div>
-                <h1>Run Ended</h1>
-                <p class="subtitle">You breached {{ vaults_breached }} of 5 vaults.</p>
-                {% else %}
-                <div class="result-icon" style="filter: drop-shadow(0 0 10px rgba(39, 174, 96, 0.5));">&#127984;</div>
-                <h1>Run Ended</h1>
-                <p class="subtitle">Delaware's defenses held strong.</p>
-                {% endif %}
-            {% elif overall_winner == "draw" %}
-                <div class="result-icon">&#9878;</div>
-                <h1>It's a Draw!</h1>
-                <p class="subtitle">Evenly matched opponents.</p>
-            {% else %}
-                <div class="result-icon" style="filter: drop-shadow(0 0 16px rgba(240, 192, 64, 0.6));">&#128081;</div>
-                <h1 style="text-shadow: 0 0 20px rgba(240, 192, 64, 0.5);">{{ overall_winner }} Wins the Match!</h1>
-                <p class="subtitle">A dominant performance across {{ rounds_summary|length }} rounds.</p>
-            {% endif %}
-        </div>
-
+<div class="decree-panel">
+    
+    <div class="decree-header">
         {% if is_pve | default(false) %}
-        <div style="display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem;">
-            <div class="stat-box stat-box-gold">
-                <div class="stat-box-value">{{ highest_level | default(0) }} / 5</div>
-                <div class="stat-box-label">Highest Vault Cleared</div>
-            </div>
-            <div class="stat-box stat-box-arcane">
-                <div class="stat-box-value">{{ total_turns | default(0) }}</div>
-                <div class="stat-box-label">Total Turns Used</div>
-            </div>
+            {% if vaults_breached | default(0) == 5 %}
+            <div class="result-icon" style="filter: drop-shadow(0 0 20px rgba(240, 192, 64, 0.6));">&#128081;</div>
+            <h1 style="color: var(--gold); text-shadow: 0 0 20px rgba(240, 192, 64, 0.5); font-size: 3rem; margin-bottom: 0.5rem;">The Grand Architect Falls!</h1>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 1.1rem;">All five vaults have been breached. Absolute victory is yours.</p>
+            {% elif vaults_breached | default(0) >= 1 %}
+            <div class="result-icon" style="filter: drop-shadow(0 0 15px rgba(231, 76, 60, 0.4));">&#9876;</div>
+            <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">The Crusade Concludes</h1>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 1.1rem;">You breached {{ vaults_breached }} of 5 vaults before retreating.</p>
+            {% else %}
+            <div class="result-icon" style="filter: drop-shadow(0 0 15px rgba(39, 174, 96, 0.4));">&#127984;</div>
+            <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">The Defenses Held</h1>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 1.1rem;">Delaware's vaults remain impenetrable. No glory was won today.</p>
+            {% endif %}
+            
+        {% elif overall_winner == "draw" %}
+            <div class="result-icon" style="filter: drop-shadow(0 0 15px rgba(106, 106, 138, 0.5));">&#9878;</div>
+            <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">A Stalemate Declared!</h1>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 1.1rem;">Two evenly matched minds. Neither could claim superiority.</p>
+        {% else %}
+            <div class="result-icon" style="filter: drop-shadow(0 0 20px rgba(240, 192, 64, 0.6));">&#128081;</div>
+            <h1 style="text-shadow: 0 0 20px rgba(240, 192, 64, 0.5); font-size: 3rem; margin-bottom: 0.5rem;">{{ overall_winner }} Prevails!</h1>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 1.1rem;">A dominant performance across {{ rounds_summary|length }} rounds of mental combat.</p>
+        {% endif %}
+    </div>
+
+    <div class="plaque-container">
+        {% if is_pve | default(false) %}
+        <div class="stat-plaque stat-plaque-gold">
+            <div class="stat-plaque-value" style="color: var(--gold); text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);">{{ highest_level | default(0) }} <span style="font-size: 1.5rem; opacity: 0.5;">/ 5</span></div>
+            <div class="stat-plaque-label">Highest Vault Cleared</div>
+        </div>
+        <div class="stat-plaque stat-plaque-arcane">
+            <div class="stat-plaque-value" style="color: var(--arcane); text-shadow: 0 0 10px rgba(93, 173, 226, 0.3);">{{ total_turns | default(0) }}</div>
+            <div class="stat-plaque-label">Total Turns Used</div>
         </div>
         {% else %}
-        <div class="score-box" style="margin-bottom: 1.5rem;">
-            <div class="score-title">Final Score</div>
-            <div class="score-values" style="font-size: 1.4rem;">
-                <span style="color: var(--arcane);">Defender (P1): {{ defender_score }} pts</span>
-                <span style="color: var(--text-muted); margin: 0 0.75rem;">&mdash;</span>
-                <span style="color: var(--gold);">Attacker (P2): {{ attacker_score }} pts</span>
-            </div>
+        <div class="stat-plaque stat-plaque-arcane">
+            <div class="stat-plaque-value" style="color: var(--arcane); text-shadow: 0 0 10px rgba(93, 173, 226, 0.3);">{{ defender_score }}</div>
+            <div class="stat-plaque-label">Defender (P1) Points</div>
+        </div>
+        <div class="stat-plaque stat-plaque-gold">
+            <div class="stat-plaque-value" style="color: var(--gold); text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);">{{ attacker_score }}</div>
+            <div class="stat-plaque-label">Attacker (P2) Points</div>
         </div>
         {% endif %}
+    </div>
 
-        <h2 style="font-size: 1.2rem; margin-bottom: 1rem;">
-            {% if is_pve | default(false) %}Vault Breakdown{% else %}Round Breakdown{% endif %}
-        </h2>
-        <div style="text-align: left; margin-bottom: 1.5rem;">
-            {% for r in rounds_summary %}
-            <div class="breakdown-item">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                    <div style="font-weight: 600; color: var(--gold); font-family: var(--font-terminal);">
-                        {% if is_pve | default(false) and r.vault_name %}
-                        Vault {{ r.number }}: {{ r.vault_name }}
-                        {% else %}
-                        Round {{ r.number }}
-                        {% endif %}
-                    </div>
-                    <div>
-                        {% if r.result == "attacker_win" %}
-                        <span class="badge" style="background: var(--alert-dim); color: var(--alert);">
-                            {% if is_pve | default(false) %}Breached{% else %}Attacker (P2) wins{% endif %}
-                        </span>
-                        {% elif r.result == "defender_win" %}
-                        <span class="badge" style="background: var(--success-dim); color: var(--success);">
-                            {% if is_pve | default(false) %}Held{% else %}Defender (P1) wins{% endif %}
-                        </span>
-                        {% else %}
-                        <span class="badge" style="background: rgba(136, 136, 170, 0.2); color: var(--text-muted);">Draw</span>
-                        {% endif %}
-                    </div>
-                </div>
-                <div style="font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-terminal);">
-                    Password: <span style="color: var(--text-primary);">{{ r.password }}</span>
-                    {% if is_pve | default(false) %}
-                        {% if r.cracked_on_turn %}
-                        &mdash; Cracked in {{ r.cracked_on_turn }} turn{{ "s" if r.cracked_on_turn != 1 }}
-                        {% else %}
-                        &mdash; {{ r.total_turns }}/{{ max_turns }} turns used
-                        {% endif %}
+    <h2 class="chronicle-header">
+        {% if is_pve | default(false) %}The Vault Chronicle{% else %}The Tourney Chronicle{% endif %}
+    </h2>
+    
+    <div class="chronicle-list">
+        {% for r in rounds_summary %}
+        <div class="chronicle-item {% if r.result == 'attacker_win' %}breached{% elif r.result == 'defender_win' %}held{% else %}draw{% endif %}">
+            
+            <div class="chronicle-top">
+                <div class="chronicle-title">
+                    {% if is_pve | default(false) and r.vault_name %}
+                    Vault {{ r.number }}: {{ r.vault_name }}
                     {% else %}
-                        &mdash; {{ r.total_turns }}/{{ max_turns }} turns
-                        {% if r.cracked_on_turn %} (cracked turn {{ r.cracked_on_turn }}){% endif %}
-                        {% if r.points_to %} &mdash; <strong style="color: var(--gold);">+{{ r.points_awarded }} pts to {{ r.points_to }}</strong>{% endif %}
+                    Round {{ r.number }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if r.result == "attacker_win" %}
+                    <span class="chronicle-badge badge-breach">
+                        {% if is_pve | default(false) %}Breached{% else %}Attacker (P2) Wins{% endif %}
+                    </span>
+                    {% elif r.result == "defender_win" %}
+                    <span class="chronicle-badge badge-held">
+                        {% if is_pve | default(false) %}Held Strong{% else %}Defender (P1) Wins{% endif %}
+                    </span>
+                    {% else %}
+                    <span class="chronicle-badge badge-draw">Stalemate</span>
                     {% endif %}
                 </div>
             </div>
-            {% endfor %}
+
+            <div class="chronicle-details">
+                <div>
+                    Cipher: <strong style="color: var(--text-primary); letter-spacing: 0.05em;">{{ r.password }}</strong>
+                </div>
+                <div>
+                    {% if is_pve | default(false) %}
+                        {% if r.cracked_on_turn %}
+                        <span style="color: #e74c3c;">&#9889; Cracked in {{ r.cracked_on_turn }} turn{{ "s" if r.cracked_on_turn != 1 }}</span>
+                        {% else %}
+                        &#10022; {{ r.total_turns }}/{{ max_turns }} turns exhausted
+                        {% endif %}
+                    {% else %}
+                        &#10022; {{ r.total_turns }}/{{ max_turns }} turns
+                        {% if r.cracked_on_turn %} <span style="color: #e74c3c;">(Cracked Turn {{ r.cracked_on_turn }})</span>{% endif %}
+                        {% if r.points_to %} <span style="color: var(--gold); margin-left: 0.5rem;">&#10133; {{ r.points_awarded }} pts to {{ r.points_to }}</span>{% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
         </div>
-
-        {% if eligible_for_leaderboard | default(false) %}
-        <a href="/pve/claim" style="text-decoration: none; display: block; margin-bottom: 0.75rem;">
-            <button type="button" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.1rem; padding: 0.9rem; animation: pulse-gold 2s ease-in-out infinite;">
-                &#128081; Claim Your Place on the Leaderboard
-            </button>
-        </a>
-        {% endif %}
-
-        <form method="post" action="{{ url_prefix | default('/game') }}/restart">
-            <button type="submit" class="glowing-btn glowing-btn-secondary glowing-btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
-                Play Again
-            </button>
-        </form>
+        {% endfor %}
     </div>
+
+    {% if eligible_for_leaderboard | default(false) %}
+    <div style="margin-bottom: 1.5rem;">
+        <a href="/pve/claim" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-decoration: none; display: block; text-align: center; animation: pulse-gold 2s ease-in-out infinite;">
+            &#128081; Sign the Royal Ledger (Leaderboard)
+        </a>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{{ url_prefix | default('/game') }}/restart">
+        <button type="submit" class="glowing-btn glowing-btn-secondary glowing-btn-block" style="font-size: 1.1rem; padding: 1rem;">
+            &#9876; Commence New Tourney (Play Again)
+        </button>
+    </form>
+
 </div>
 {% endblock %}

@@ -1,57 +1,205 @@
 {% extends "base.html" %}
-{% block title %}Claim Your Score — AI CTF Duel{% endblock %}
+{% block title %}Claim Your Place | The Digital Tourney{% endblock %}
+
+{% block head_extra %}
+<style>
+    .ledger-container {
+        max-width: 650px;
+        margin: 2rem auto;
+    }
+
+    .ledger-panel {
+        background: linear-gradient(180deg, rgba(35, 25, 15, 0.95) 0%, var(--void-deep) 100%);
+        border: 1px solid rgba(240, 192, 64, 0.4);
+        border-top: 4px solid var(--gold);
+        border-bottom: 4px solid var(--gold);
+        box-shadow: inset 0 0 50px rgba(240, 192, 64, 0.05), 0 15px 35px rgba(0,0,0,0.6);
+        padding: 3.5rem 3rem;
+        clip-path: var(--chamfer);
+        position: relative;
+    }
+
+    /* Decorative corner accents */
+    .ledger-panel::before, .ledger-panel::after {
+        content: '✦';
+        position: absolute;
+        color: var(--gold);
+        font-size: 1.5rem;
+        opacity: 0.5;
+    }
+    .ledger-panel::before { top: 1rem; left: 1rem; }
+    .ledger-panel::after { top: 1rem; right: 1rem; }
+
+    .ledger-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        border-bottom: 1px dashed rgba(240, 192, 64, 0.3);
+        padding-bottom: 1.5rem;
+    }
+
+    .ledger-icon {
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--gold);
+        filter: drop-shadow(0 0 15px rgba(240, 192, 64, 0.5));
+        line-height: 1;
+    }
+
+    .ledger-stats {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .stat-plaque {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--border);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        flex: 1;
+        position: relative;
+    }
+    
+    .stat-plaque::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+    }
+    .stat-plaque-gold::before { background: var(--gold); }
+    .stat-plaque-arcane::before { background: var(--arcane); }
+
+    .ledger-input-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .ledger-input-group label {
+        display: block;
+        font-family: var(--font-terminal);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        color: #c0b8a8;
+        margin-bottom: 0.5rem;
+    }
+
+    .ledger-input {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(240, 192, 64, 0.2);
+        border-bottom: 2px solid var(--gold);
+        color: var(--text-primary);
+        font-family: 'MedievalSharp', cursive;
+        font-size: 1.4rem;
+        padding: 0.8rem 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .ledger-input:focus {
+        outline: none;
+        background: rgba(240, 192, 64, 0.05);
+        border-color: var(--gold);
+        box-shadow: inset 0 0 15px rgba(240, 192, 64, 0.1);
+    }
+
+    .ledger-input::placeholder {
+        color: rgba(192, 184, 168, 0.3);
+        font-family: var(--font-terminal);
+        font-size: 1rem;
+    }
+
+    .skip-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--font-terminal);
+        font-size: 0.9rem;
+        text-decoration: underline;
+        text-decoration-color: rgba(106, 106, 138, 0.5);
+        text-underline-offset: 4px;
+        cursor: pointer;
+        transition: color 0.2s;
+        padding: 0.5rem;
+    }
+
+    .skip-btn:hover {
+        color: var(--text-primary);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="cyber-hud">
-    <div class="cyber-hud-inner text-center">
-        <div class="card-header">
-            <div class="result-icon" style="filter: drop-shadow(0 0 16px rgba(240, 192, 64, 0.6));">&#128081;</div>
-            <h1 style="text-shadow: 0 0 20px rgba(240, 192, 64, 0.5);">Claim Your Place</h1>
-            <p class="subtitle">Enter your details to join the leaderboard.</p>
+<div class="ledger-container">
+    <div class="ledger-panel">
+        
+        <div class="ledger-header">
+            <div class="ledger-icon">&#128081;</div>
+            <h1 style="font-size: 2.8rem; color: var(--gold); text-shadow: 0 0 20px rgba(240, 192, 64, 0.4); margin-bottom: 0.5rem;">
+                Inscribe Your Legacy
+            </h1>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.95rem;">
+                The realm acknowledges your cunning. Sign the Royal Ledger to cement your place in the Hall of Fame.
+            </p>
         </div>
 
-        <div style="display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem;">
-            <div class="stat-box stat-box-gold">
-                <div class="stat-box-value">{{ highest_level }} / 5</div>
-                <div class="stat-box-label">Vaults Cleared</div>
+        <div class="ledger-stats">
+            <div class="stat-plaque stat-plaque-gold">
+                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);">
+                    {{ highest_level }} / 5
+                </div>
+                <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
+                    Vaults Breached
+                </div>
             </div>
-            <div class="stat-box stat-box-arcane">
-                <div class="stat-box-value">{{ total_turns }}</div>
-                <div class="stat-box-label">Total Turns Used</div>
+            <div class="stat-plaque stat-plaque-arcane">
+                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--arcane); text-shadow: 0 0 10px rgba(93, 173, 226, 0.3);">
+                    {{ total_turns }}
+                </div>
+                <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
+                    Total Turns Used
+                </div>
             </div>
         </div>
 
         {% if error %}
-        <div class="alert alert-error">{{ error }}</div>
+        <div class="alert alert-error" style="border-left: 3px solid var(--alert); background: rgba(231, 76, 60, 0.1); text-align: center; margin-bottom: 2rem;">
+            <strong>&#9888; Ink Spilled:</strong> {{ error }}
+        </div>
         {% endif %}
 
-        <form method="post" action="/pve/claim" style="text-align: left;">
-            <div class="form-group">
-                <label for="name" style="font-family: var(--font-terminal); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em;">Your Name</label>
-                <input type="text" id="name" name="name" class="runic-input" required maxlength="100"
-                       value="{{ name | default('') }}" placeholder="Sir Lancelot">
+        <form method="post" action="/pve/claim">
+            <div class="ledger-input-group">
+                <label for="name">Your Name / Title</label>
+                <input type="text" id="name" name="name" class="ledger-input" required maxlength="100"
+                       value="{{ name | default('') }}" placeholder="e.g., Sir Lancelot">
             </div>
 
-            <div class="form-group">
-                <label for="company" style="font-family: var(--font-terminal); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em;">Company <span style="color: var(--text-muted);">(optional)</span></label>
-                <input type="text" id="company" name="company" class="runic-input" maxlength="100"
-                       value="{{ company | default('') }}" placeholder="Knights of the Round Table">
+            <div class="ledger-input-group">
+                <label for="company">Guild / Company <span style="color: rgba(192, 184, 168, 0.4); text-transform: lowercase;">(optional)</span></label>
+                <input type="text" id="company" name="company" class="ledger-input" maxlength="100"
+                       value="{{ company | default('') }}" placeholder="e.g., Knights of the Round Table">
             </div>
 
-            <div class="form-group">
-                <label for="email" style="font-family: var(--font-terminal); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em;">Email Address</label>
-                <input type="email" id="email" name="email" class="runic-input" required maxlength="200"
-                       value="{{ email | default('') }}" placeholder="lancelot@camelot.com">
+            <div class="ledger-input-group" style="margin-bottom: 2.5rem;">
+                <label for="email">Raven Address (Email)</label>
+                <input type="email" id="email" name="email" class="ledger-input" required maxlength="200"
+                       value="{{ email | default('') }}" placeholder="e.g., lancelot@camelot.com" style="font-family: var(--font-terminal); font-size: 1.1rem;">
             </div>
 
-            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.1rem; padding: 0.9rem; margin-top: 0.5rem;">
-                &#9876; Claim Your Score
+            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 20px rgba(240, 192, 64, 0.2);">
+                &#10022; Seal the Decree
             </button>
         </form>
 
-        <div style="margin-top: 1rem;">
-            <a href="/pve/restart" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; font-family: var(--font-terminal);">Skip &mdash; just play again</a>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <form method="post" action="{{ url_prefix | default('/pve') }}/restart">
+                <button type="submit" class="skip-btn">
+                    Fade into the shadows (Skip & Play Again)
+                </button>
+            </form>
         </div>
+
     </div>
 </div>
 {% endblock %}

@@ -1,45 +1,165 @@
 {% extends "base.html" %}
-{% block title %}Round {{ round_number }} Complete — AI CTF Duel{% endblock %}
+{% block title %}Round {{ round_number }} Complete | The Digital Tourney{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* 1. Expand container for the split view */
+    .container {
+        max-width: 1100px !important;
+        width: 100%;
+        padding: 2rem 1rem;
+    }
+
+    /* 2. Grid Layout */
+    .intermission-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 2rem;
+        align-items: start;
+        margin-top: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+        .intermission-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* 3. Panel Styling */
+    .report-panel {
+        background: linear-gradient(180deg, var(--void-surface) 0%, var(--void-deep) 100%);
+        border: 1px solid var(--border);
+        clip-path: var(--chamfer);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .scout-panel {
+        background: linear-gradient(135deg, rgba(15, 26, 48, 0.8) 0%, var(--void-deep) 100%);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--arcane);
+        padding: 2.5rem 2rem;
+        clip-path: var(--chamfer);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    /* 4. Result specific styles */
+    .result-breach {
+        color: var(--alert);
+        text-shadow: 0 0 16px rgba(231, 76, 60, 0.5);
+    }
+    .result-icon-breach {
+        font-size: 4rem;
+        color: #e74c3c;
+        filter: drop-shadow(0 0 15px rgba(231, 76, 60, 0.5));
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    .result-hold {
+        color: var(--success);
+        text-shadow: 0 0 16px rgba(39, 174, 96, 0.5);
+    }
+    .result-icon-hold {
+        font-size: 4rem;
+        color: var(--success);
+        filter: drop-shadow(0 0 15px rgba(39, 174, 96, 0.5));
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+
+    /* 5. Cipher Reveal Box */
+    .cipher-reveal {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px dashed var(--text-muted);
+        padding: 1.5rem;
+        margin: 2rem 0;
+        position: relative;
+    }
+    .cipher-reveal-label {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--void-surface);
+        padding: 0 1rem;
+        font-family: var(--font-terminal);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .cipher-value {
+        font-family: 'MedievalSharp', cursive;
+        font-size: 2.2rem;
+        color: var(--gold);
+        text-shadow: 0 0 15px rgba(240, 192, 64, 0.4);
+        letter-spacing: 0.05em;
+        word-break: break-all;
+    }
+
+    /* 6. Score display */
+    .score-display {
+        background: rgba(240, 192, 64, 0.05);
+        border-top: 1px solid rgba(240, 192, 64, 0.2);
+        border-bottom: 1px solid rgba(240, 192, 64, 0.2);
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="cyber-hud">
-    <div class="cyber-hud-inner text-center">
-        <div class="card-header">
-            {% if last_result == "attacker_win" %}
-            <div class="result-icon">&#128481;</div>
+<div style="text-align: center;">
+    <p style="font-family: var(--font-terminal); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem;">
+        Round {{ round_number }} Concluded
+    </p>
+    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(240, 192, 64, 0.3);">
+        The Dust Settles
+    </h1>
+</div>
+
+<div class="intermission-grid">
+    
+    <div class="report-panel">
+        {% if last_result == "attacker_win" %}
+            <div class="result-icon-breach">&#9876;</div>
             {% if is_pve | default(false) %}
-            <h1 style="color: var(--alert); text-shadow: 0 0 16px rgba(231, 76, 60, 0.5);">Vault Breached!</h1>
-            <p class="subtitle">You cracked {{ vault_name }}'s defenses.</p>
+            <h2 class="result-breach" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">Vault Breached!</h2>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">You shattered {{ vault_name }}'s defenses.</p>
             {% else %}
-            <h1 style="color: var(--alert); text-shadow: 0 0 16px rgba(231, 76, 60, 0.5);">The Castle Has Fallen!</h1>
-            <p class="subtitle">{{ attacker_label }} cracked the password in Round {{ round_number }}.</p>
+            <h2 class="result-breach" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Castle Has Fallen!</h2>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">
+                <strong style="color: #e74c3c;">{{ attacker_label }}</strong> bypassed the wards in Round {{ round_number }}.
+            </p>
             {% endif %}
-            {% else %}
-            <div class="result-icon" style="filter: drop-shadow(0 0 10px rgba(39, 174, 96, 0.5));">&#127984;</div>
+        {% else %}
+            <div class="result-icon-hold">&#127984;</div>
             {% if is_pve | default(false) %}
-            <h1 style="color: var(--success); text-shadow: 0 0 16px rgba(39, 174, 96, 0.5);">The Vault Holds!</h1>
-            <p class="subtitle">Delaware's {{ vault_name }} withstood your assault.</p>
+            <h2 class="result-hold" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Vault Holds!</h2>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">Delaware's {{ vault_name }} withstood your assault.</p>
             {% else %}
-            <h1 style="color: var(--success); text-shadow: 0 0 16px rgba(39, 174, 96, 0.5);">The Castle Stands!</h1>
-            <p class="subtitle">{{ defender_label }} held strong in Round {{ round_number }}.</p>
+            <h2 class="result-hold" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Castle Stands!</h2>
+            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">
+                <strong style="color: var(--success);">{{ defender_label }}</strong> held strong in Round {{ round_number }}.
+            </p>
             {% endif %}
-            {% endif %}
+        {% endif %}
+
+        <div class="cipher-reveal">
+            <span class="cipher-reveal-label">The Decrypted Cipher</span>
+            <div class="cipher-value">{{ password }}</div>
+            <div style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
+                Siege Duration: <strong style="color: var(--text-primary);">{{ total_turns }} / {{ max_turns }} Turns</strong>
+            </div>
         </div>
 
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value">{{ password }}</div>
-                <div class="stat-label">The Password Was</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">{{ total_turns }}/{{ max_turns }}</div>
-                <div class="stat-label">Turns Used</div>
-            </div>
-        </div>
-
-        <div class="score-box">
-            <div class="score-title">Match Score</div>
-            <div class="score-values">
+        <div class="score-display">
+            <h3 style="font-family: 'MedievalSharp', cursive; font-size: 1.4rem; color: var(--gold); margin-bottom: 0.75rem;">Match Renown</h3>
+            <div style="font-size: 1.15rem; font-family: var(--font-terminal);">
                 {% if is_pve | default(false) %}
                 <span style="color: var(--gold);">Your Score: {{ attacker_score }} pts</span>
                 <span style="color: var(--text-muted); margin: 0 0.75rem;">|</span>
@@ -51,52 +171,71 @@
                 {% endif %}
             </div>
         </div>
+    </div>
 
-        <div class="info-panel scanline-overlay">
+    <div class="scout-panel">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--arcane); border-bottom: 1px solid rgba(93, 173, 226, 0.3); padding-bottom: 0.75rem; font-family: 'MedievalSharp', cursive;">
+            The War Council
+        </h2>
+
+        <div style="flex-grow: 1;">
             {% if is_pve | default(false) %}
                 {% if next_vault %}
-                <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Next: {{ next_vault.name }}</h3>
-                <p>{{ next_vault.description }}</p>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Scouting Report: {{ next_vault.name }}</h3>
+                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">{{ next_vault.description }}</p>
                 {% else %}
-                <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">All vaults attempted!</h3>
-                <p>You've faced all of Delaware's defenses. Time to see the final results.</p>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Final Gate Has Closed</h3>
+                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">You have faced all of Delaware's defenses. It is time to gaze upon your final standing in the realm.</p>
                 {% endif %}
             {% elif round_number == 1 %}
-            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">Raw duel complete!</h3>
-            <p>No guides yet &mdash; one more raw round before the Attacker gets help. Player 1 defends again with a new password.</p>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Raw Duel Complete!</h3>
+                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
+                    No guides or tools have been used yet. Prepare for one more raw combat round before the Guild unlocks the Attacker's Arsenal. <strong style="color: var(--arcane);">Player 1</strong> defends again with a newly forged cipher.
+                </p>
             {% elif round_number == 2 %}
-            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">The Attacker's Arsenal Unlocks!</h3>
-            <p>In the previous round, the Attacker gained access to the <strong style="color: var(--alert);">Field Guide</strong> &mdash; a primer on prompt injection tactics. However there also exist defending tacktics</p>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Arsenal Unlocks!</h3>
+                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
+                    The Thieves' Guild has granted the Attacker access to the <strong style="color: #e74c3c;">Field Guide</strong> &mdash; a primer on deceptive tactics. The Defender must hold the line against these new dark arts.
+                </p>
             {% elif round_number == 3 %}
-            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">The Optional Chaos Round Awaits!</h3>
-            <p>Three rounds are complete. You can end the match now, or enter the <strong style="color: var(--gold);">Chaos Round</strong> where both sides get all tools: <strong style="color: var(--gold);">Field Guides</strong>, <strong style="color: var(--gold);">Starter Templates</strong>, and <strong style="color: var(--gold);">Power-Ups</strong>!</p>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Chaos Round Awaits!</h3>
+                <p style="color: #c0b8a8; font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
+                    The standard duels are complete. You may end the match now, or enter the legendary <strong style="color: var(--gold);">Chaos Round</strong> where both champions are granted full access to all ancient texts, templates, and artifacts!
+                </p>
             {% endif %}
         </div>
 
-        {% if is_optional_round %}
-        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-            <form method="post" action="{{ url_prefix | default('/game') }}/next-round" style="flex: 1;">
-                <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1rem; padding: 0.9rem;">
-                    Enter Optional Chaos Round
+        <div style="margin-top: 2rem;">
+            {% if is_optional_round %}
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <form method="post" action="{{ url_prefix | default('/game') }}/next-round" style="flex: 1;">
+                    <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1rem; padding: 1.2rem;">
+                        &#9889; Enter the Chaos Round
+                    </button>
+                </form>
+                <form method="post" action="{{ url_prefix | default('/game') }}/end-match" style="flex: 1;">
+                    <button type="submit" class="glowing-btn glowing-btn-secondary glowing-btn-block" style="font-size: 1rem; padding: 1.2rem; border-color: var(--gold); color: var(--gold);">
+                        &#127988; Finish Match Now
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
+                <button type="submit" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="font-size: 1.15rem; padding: 1.2rem; letter-spacing: 0.05em;">
+                    {% if is_pve | default(false) %}
+                        {% if next_vault %}
+                        March on Vault {{ round_number + 1 }}
+                        {% else %}
+                        View Final Tally
+                        {% endif %}
+                    {% else %}
+                        Begin Round {{ round_number + 1 }}
+                    {% endif %}
                 </button>
             </form>
-            <form method="post" action="{{ url_prefix | default('/game') }}/end-match" style="flex: 1;">
-                <button type="submit" class="glowing-btn glowing-btn-secondary glowing-btn-block" style="font-size: 1rem; padding: 0.9rem;">
-                    Finish Match Now
-                </button>
-            </form>
+            {% endif %}
         </div>
-        {% else %}
-        <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
-            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
-                {% if is_pve | default(false) %}
-                Enter Vault {{ round_number + 1 }} of {{ max_rounds }}
-                {% else %}
-                Start Round {{ round_number + 1 }} of {{ max_rounds }}
-                {% endif %}
-            </button>
-        </form>
-        {% endif %}
+
     </div>
 </div>
 {% endblock %}

@@ -1,45 +1,180 @@
 {% extends "base.html" %}
-{% block title %}Vault {{ vault.level }} — Beat Delaware{% endblock %}
+{% block title %}Vault {{ vault.level }} | The Delaware Quest{% endblock %}
+
+{% block head_extra %}
+<style>
+    /* 1. Widen container for the cinematic split */
+    .container {
+        max-width: 1100px !important;
+        width: 100%;
+        padding: 2rem 1rem;
+    }
+
+    /* 2. Layout Grid */
+    .vault-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3rem;
+        align-items: center;
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 850px) {
+        .vault-grid {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        .vault-lore-panel {
+            border-left: 1px solid var(--border) !important;
+            border-top: 4px solid var(--arcane);
+        }
+    }
+
+    /* 3. The Lore Panel (Left Side) */
+    .vault-lore-panel {
+        background: linear-gradient(135deg, rgba(15, 26, 48, 0.8) 0%, var(--void-deep) 100%);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--arcane);
+        padding: 3rem;
+        clip-path: var(--chamfer);
+        box-shadow: inset 0 0 30px rgba(93, 173, 226, 0.05);
+        position: relative;
+    }
+
+    .lore-text {
+        color: #c0b8a8;
+        font-family: var(--font-terminal);
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px dashed rgba(93, 173, 226, 0.3);
+    }
+
+    /* 4. The Vault Door Panel (Right Side) */
+    .vault-action-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 5. Pure CSS Rotating Arcane Lock */
+    .rune-lock-container {
+        position: relative;
+        width: 220px;
+        height: 220px;
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .rune-ring-outer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 2px dashed rgba(93, 173, 226, 0.4);
+        border-top-color: var(--arcane);
+        border-bottom-color: var(--arcane);
+        animation: spin-slow 20s linear infinite;
+    }
+
+    .rune-ring-inner {
+        position: absolute;
+        width: 75%;
+        height: 75%;
+        border-radius: 50%;
+        border: 2px dotted rgba(240, 192, 64, 0.4);
+        animation: counter-spin 15s linear infinite;
+    }
+
+    .rune-core {
+        position: absolute;
+        font-family: 'MedievalSharp', cursive;
+        font-size: 4.5rem;
+        color: var(--text-primary);
+        text-shadow: 0 0 20px rgba(93, 173, 226, 0.6);
+        z-index: 5;
+    }
+
+    @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+    @keyframes counter-spin { 100% { transform: rotate(-360deg); } }
+
+    /* 6. Score Box redesign */
+    .quest-score {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--border);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        display: inline-block;
+        font-family: var(--font-terminal);
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="cyber-hud">
-    <div class="cyber-hud-inner text-center">
-        <div class="card-header">
-            <h1>Vault {{ vault.level }} of {{ max_rounds }}</h1>
-            <p style="font-family: 'MedievalSharp', cursive; font-size: 1.5rem; color: var(--gold); text-shadow: 0 0 16px rgba(240, 192, 64, 0.5); margin-top: 0.25rem;">
-                {{ vault.name }}
-            </p>
-        </div>
+<div style="text-align: center;">
+    <p style="font-family: var(--font-terminal); color: var(--arcane); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem;">
+        The Delaware Quest &mdash; Stage {{ vault.level }} of {{ max_rounds }}
+    </p>
+    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(93, 173, 226, 0.3);">
+        Approach the Vault
+    </h1>
+</div>
 
-        <div style="margin: 1.5rem 0;">
+<div class="vault-grid">
+    
+    <div class="vault-lore-panel">
+        <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2.2rem; color: var(--gold); text-shadow: 0 0 15px rgba(240, 192, 64, 0.4); margin-bottom: 1rem;">
+            {{ vault.name }}
+        </h2>
+        
+        <div>
             {% if vault.difficulty == "easy" %}
-            <span class="seal seal-easy">Easy</span>
+            <span class="seal seal-easy">&#10022; Threat Level: Minimal</span>
             {% elif vault.difficulty == "medium" %}
-            <span class="seal seal-medium">Medium</span>
+            <span class="seal seal-medium">&#10022; Threat Level: Moderate</span>
             {% elif vault.difficulty == "hard" %}
-            <span class="seal seal-hard">Hard</span>
+            <span class="seal seal-hard">&#10022; Threat Level: Severe</span>
             {% elif vault.difficulty == "expert" %}
-            <span class="seal seal-expert">Expert</span>
+            <span class="seal seal-expert">&#10022; Threat Level: Lethal</span>
             {% elif vault.difficulty == "legendary" %}
-            <span class="seal seal-legendary">Legendary</span>
+            <span class="seal seal-legendary">&#10022; Threat Level: Mythic</span>
             {% endif %}
         </div>
 
-        <div class="info-panel" style="margin: 1.5rem 0;">
-            <p>{{ vault.description }}</p>
+        <div class="lore-text">
+            {{ vault.description }}
+        </div>
+    </div>
+
+    <div class="vault-action-panel">
+        
+        <div class="quest-score">
+            Current Renown: <strong style="color: var(--gold); font-size: 1.1rem;">{{ attacker_score }} pts</strong>
         </div>
 
-        <div class="score-box">
-            <div class="score-values">
-                <span style="color: var(--gold);">Your Score: {{ attacker_score }} pts</span>
-            </div>
+        <div class="rune-lock-container">
+            <div class="rune-ring-outer"></div>
+            <div class="rune-ring-inner"></div>
+            <div class="rune-core">&#128274;</div>
         </div>
 
-        <form method="post" action="/pve/siege" style="margin-top: 1rem;">
-            <a href="/pve/siege" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.15rem; padding: 1rem; display: block; text-decoration: none; text-align: center;">
-                Begin Siege
+        <div style="width: 100%; max-width: 300px;">
+            <a href="/pve/siege" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; letter-spacing: 0.05em; animation: pulse-legendary 3s infinite alternate; text-decoration: none; text-align: center; display: block;">
+                &#9876; Storm the Gates
             </a>
-        </form>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-terminal); margin-top: 1rem; text-align: center;">
+            Prepare your incantations.
+        </p>
+
     </div>
 </div>
 {% endblock %}
