@@ -54,6 +54,8 @@ class BaseEngine(ABC):
             raise RuntimeError(f"Cannot attack in phase: {self.game.phase}")
         if self.game.is_siege_over:
             raise RuntimeError("No turns remaining.")
+        if self.game.turns_remaining == 1:
+            raise RuntimeError("Last turn — must guess the password.")
 
         setup = self.game.round.defender_setup
         assert setup is not None
@@ -79,6 +81,7 @@ class BaseEngine(ABC):
         enveloped = build_shadow_prompt(setup.system_prompt, setup.password)
         ai_response = self.llm.chat(system_prompt=enveloped, messages=messages)
 
+        print(enveloped)
         turn = Turn(
             turn_number=len(self.game.round.turns) + 1,
             attacker_prompt=attacker_prompt,
@@ -151,10 +154,3 @@ class BaseEngine(ABC):
         """Advance to the next round."""
         ...
 
-    def end_match(self) -> None:
-        """End the match early (skip optional Chaos Round)."""
-        if self.game.phase != GamePhase.INTERMISSION:
-            raise RuntimeError(f"Cannot end match in phase: {self.game.phase}")
-        self.game.rounds_history.append(self.game.round)
-        self.game.phase = GamePhase.COMPLETED
-        logger.info("Match ended early after round %d", self.game.round_number)

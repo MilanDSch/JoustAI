@@ -102,8 +102,7 @@ class PvEEngine(BaseEngine):
         logger.info("Starting vault %d", self.game.vault_level)
 
 if __name__ == "__main__":
-    engine = PvEEngine()
-    print("Assigned password:", engine.game.secret_password)
-    engine._setup_vault(2)
-    print(engine.game.vault_level)
-    print(engine.current_vault.system_prompt)
+    engine_level0 = PvEEngine()
+    print("Assigned password:", engine_level0.game.secret_password)
+    engine_level1 = PvEEngine()
+

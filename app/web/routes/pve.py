@@ -53,7 +53,6 @@ def _round_context(engine: PvEEngine) -> dict:
         "attacker_score": game.attacker_score,
         "attacker_label": game.attacker_label,
         "unlock_tier": game.unlock_tier,
-        "is_optional_round": game.is_optional_round,
         "is_pve": True,
         "url_prefix": "/pve",
         "vault_name": vault.name,
@@ -125,6 +124,7 @@ async def siege_page(
         "turns": engine.game.round.turns,
         "turns_remaining": engine.game.turns_remaining,
         "game_over": engine.game.is_siege_over,
+        "is_last_turn": engine.game.turns_remaining == 1,
         "error": error,
         **_round_context(engine),
     })
@@ -230,16 +230,6 @@ async def next_round(joust_session: str | None = Cookie(default=None)):
 
     engine.next_round()
     return RedirectResponse(url="/pve/vault", status_code=303)
-
-
-@router.post("/end-match")
-async def end_match(joust_session: str | None = Cookie(default=None)):
-    engine = _get_pve_engine(joust_session)
-    if not engine:
-        return RedirectResponse(url="/", status_code=303)
-
-    engine.end_match()
-    return RedirectResponse(url="/pve/results", status_code=303)
 
 
 # --- Results ---

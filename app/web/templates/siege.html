@@ -195,11 +195,13 @@
             </form>
         </div>
 
+        {% if not is_last_turn %}
         <form id="surrender-form" method="post" action="{{ url_prefix | default('/game') }}/surrender" style="margin-top: 1.5rem;">
             <button type="button" id="surrender-btn" class="glowing-btn glowing-btn-danger glowing-btn-block" style="font-size: 0.9rem; padding: 0.75rem; background: transparent; border: 1px solid var(--alert); color: var(--alert);" onclick="document.getElementById('surrender-form').submit();">
                 &#127988; Retreat (Surrender Round)
             </button>
         </form>
+        {% endif %}
         {% endif %}
     </div>
 
@@ -232,24 +234,35 @@
             {% endif %}
 
             {% if not game_over %}
-            <form id="attack-form" method="post" action="{{ url_prefix | default('/game') }}/attack">
-                <div class="form-group" style="margin-bottom: 0;">
-                    <textarea id="attacker_prompt" name="attacker_prompt" class="runic-input" 
-                              placeholder="> Draft your deceptive prompt here..." 
-                              required rows="3" 
-                              style="min-height: 100px; background: rgba(0,0,0,0.3); border: 1px solid rgba(var(--danger-rgb), 0.3); transition: border-color 0.2s; color: var(--text-primary);"></textarea>
+                {% if is_last_turn %}
+                <div style="text-align: center; padding: 2rem 1rem; border: 2px solid var(--gold); background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%); margin-top: 1rem;">
+                    <p style="font-family: 'MedievalSharp', cursive; font-size: 1.4rem; color: var(--gold); margin-bottom: 0.5rem;">
+                        Final Attempt!
+                    </p>
+                    <p style="font-family: var(--font-terminal); font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                        You have one move remaining. You must declare the cipher now.
+                    </p>
                 </div>
-                <button type="submit" id="submit-btn" class="glowing-btn glowing-btn-primary glowing-btn-block" style="background: var(--danger); color: var(--white); border: none; font-size: 1.15rem; padding: 1rem; margin-top: 1rem;">
-                    Cast Incantation
-                </button>
-            </form>
+                {% else %}
+                <form id="attack-form" method="post" action="{{ url_prefix | default('/game') }}/attack">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <textarea id="attacker_prompt" name="attacker_prompt" class="runic-input"
+                                  placeholder="> Draft your deceptive prompt here..."
+                                  required rows="3"
+                                  style="min-height: 100px; background: rgba(0,0,0,0.3); border: 1px solid rgba(var(--danger-rgb), 0.3); transition: border-color 0.2s; color: var(--text-primary);"></textarea>
+                    </div>
+                    <button type="submit" id="submit-btn" class="glowing-btn glowing-btn-primary glowing-btn-block" style="background: var(--danger); color: var(--white); border: none; font-size: 1.15rem; padding: 1rem; margin-top: 1rem;">
+                        Cast Incantation
+                    </button>
+                </form>
 
-            <div id="loading" class="loading" style="margin-top: 1.5rem;">
-                <span class="spinner" style="border-top-color: var(--danger);"></span>
-                <span style="color: var(--danger); font-family: 'MedievalSharp', cursive; font-size: 1.2rem; letter-spacing: 0.05em;">
-                    The Oracle is interpreting your words...
-                </span>
-            </div>
+                <div id="loading" class="loading" style="margin-top: 1.5rem;">
+                    <span class="spinner" style="border-top-color: var(--danger);"></span>
+                    <span style="color: var(--danger); font-family: 'MedievalSharp', cursive; font-size: 1.2rem; letter-spacing: 0.05em;">
+                        The Oracle is interpreting your words...
+                    </span>
+                </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>

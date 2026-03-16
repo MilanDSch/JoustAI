@@ -33,7 +33,6 @@ class Turn(BaseModel):
     turn_number: int
     attacker_prompt: str
     ai_response: str
-    password_leaked: bool = False
     timestamp: datetime = Field(default_factory=datetime.now)
 
 
@@ -63,14 +62,14 @@ class Game(BaseModel):
     phase: GamePhase = GamePhase.SETUP
     round: Round = Field(default_factory=Round)
     rounds_history: list[Round] = Field(default_factory=list)
-    round_number: int = 1
-    max_rounds: int = 4
+    round_number: int = 1  # Must stay in sync with len(rounds_history) + 1
+    max_rounds: int = 3
     defender_score: int = 0
     attacker_score: int = 0
-    secret_password: str = ""
+    secret_password: str = ""  # Active round's password; archived copy in DefenderSetup.password
     max_turns: int = 3
     max_prompt_length: int = 2000
-    vault_level: int = 0
+    vault_level: int = 0  # PvE only: current vault level (1-5)
     created_at: datetime = Field(default_factory=datetime.now)
 
     @property
@@ -108,22 +107,13 @@ class Game(BaseModel):
         return self.game_mode == GameMode.PVE
 
     @property
-    def is_optional_round(self) -> bool:
-        """Round 4 is the optional Chaos Round (PvP only)."""
-        if self.game_mode == GameMode.PVE:
-            return False
-        return self.round_number == 4
-
-    @property
     def unlock_tier(self) -> int:
-        """0 = raw (R1), 1 = attacker guide (R2), 2 = defender guide+templates (R3), 3 = power-ups (R4).
+        """0 = raw (R1), 2 = both guides+templates (R2), 3 = guides+power-ups (R3).
         In PvE, attacker guide is available from round 1."""
         if self.game_mode == GameMode.PVE:
             return min(self.round_number, 3)
         if self.round_number <= 1:
             return 0
         elif self.round_number == 2:
-            return 1
-        elif self.round_number == 3:
             return 2
         return 3

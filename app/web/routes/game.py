@@ -50,7 +50,6 @@ def _round_context(engine) -> dict:
         "defender_label": game.defender_label,
         "attacker_label": game.attacker_label,
         "unlock_tier": game.unlock_tier,
-        "is_optional_round": game.is_optional_round,
     }
 
 
@@ -97,7 +96,7 @@ async def defend_page(
         "system_prompt": "",
         "max_prompt_length": engine.game.max_prompt_length,
         "secret_password": password,
-        "shadow_intro": SHADOW_PROMPT_INTRO.replace("{secret_password}", password),
+        "shadow_intro": SHADOW_PROMPT_INTRO.replace("secret_password", password),
         "shadow_outro": SHADOW_PROMPT_OUTRO,
         **_round_context(engine),
     })
@@ -129,7 +128,7 @@ async def defend_submit(
             "system_prompt": system_prompt,
             "max_prompt_length": engine.game.max_prompt_length,
             "secret_password": password,
-            "shadow_intro": SHADOW_PROMPT_INTRO.replace("{secret_password}", password),
+            "shadow_intro": SHADOW_PROMPT_INTRO.replace("secret_password", password),
             "shadow_outro": SHADOW_PROMPT_OUTRO,
             **_round_context(engine),
         }
@@ -206,6 +205,7 @@ async def siege_page(
         "turns": engine.game.round.turns,
         "turns_remaining": engine.game.turns_remaining,
         "game_over": engine.game.is_siege_over,
+        "is_last_turn": engine.game.turns_remaining == 1,
         "error": error,
         **_round_context(engine),
     })
@@ -359,16 +359,6 @@ async def next_round(joust_session: str | None = Cookie(default=None)):
 
     engine.next_round()
     return RedirectResponse(url="/game/defend", status_code=303)
-
-
-@router.post("/game/end-match")
-async def end_match(joust_session: str | None = Cookie(default=None)):
-    engine = _get_engine(joust_session)
-    if not engine:
-        return RedirectResponse(url="/", status_code=303)
-
-    engine.end_match()
-    return RedirectResponse(url="/game/results", status_code=303)
 
 
 @router.post("/game/restart")

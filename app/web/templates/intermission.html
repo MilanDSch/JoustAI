@@ -193,36 +193,17 @@
             {% elif round_number == 1 %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Raw Duel Complete!</h3>
                 <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
-                    No guides or tools have been used yet. Prepare for one more raw combat round before the Guild unlocks the Attacker's Arsenal. <strong style="color: var(--arcane);">Player 1</strong> defends again with a newly forged cipher.
+                    No guides or tools were used &mdash; pure instinct alone. Next round, the Guild opens the archives: both the <strong style="color: var(--danger);">Infiltrator's Field Guide</strong> and the <strong style="color: var(--arcane);">Archmage's Tome</strong> become available to their respective champions.
                 </p>
             {% elif round_number == 2 %}
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Arsenal Unlocks!</h3>
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Guides Mastered!</h3>
                 <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
-                    The Thieves' Guild has granted the Attacker access to the <strong style="color: var(--danger);">Field Guide</strong> &mdash; a primer on deceptive tactics. The Defender must hold the line against these new dark arts.
-                </p>
-            {% elif round_number == 3 %}
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Chaos Round Awaits!</h3>
-                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
-                    The standard duels are complete. You may end the match now, or enter the legendary <strong style="color: var(--gold);">Chaos Round</strong> where both champions are granted full access to all ancient texts, templates, and artifacts!
+                    Both champions have studied the ancient texts. In the final round, the Guild unseals the <strong style="color: var(--gold);">Dark Artifacts</strong> and <strong style="color: var(--arcane);">Arcane Artifacts</strong> &mdash; power-ups that may turn the tide of battle!
                 </p>
             {% endif %}
         </div>
 
         <div style="margin-top: 2rem;">
-            {% if is_optional_round %}
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <form method="post" action="{{ url_prefix | default('/game') }}/next-round" style="flex: 1;">
-                    <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1rem; padding: 1.2rem;">
-                        &#9889; Enter the Chaos Round
-                    </button>
-                </form>
-                <form method="post" action="{{ url_prefix | default('/game') }}/end-match" style="flex: 1;">
-                    <button type="submit" class="glowing-btn glowing-btn-secondary glowing-btn-block" style="font-size: 1rem; padding: 1.2rem; border-color: var(--gold); color: var(--gold);">
-                        &#127988; Finish Match Now
-                    </button>
-                </form>
-            </div>
-            {% else %}
             <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
                 <button type="submit" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="font-size: 1.15rem; padding: 1.2rem; letter-spacing: 0.05em; background: rgba(30, 58, 95, 0.5); backdrop-filter: blur(4px);">
                     {% if is_pve | default(false) %}
@@ -236,7 +217,6 @@
                     {% endif %}
                 </button>
             </form>
-            {% endif %}
         </div>
 
     </div>
