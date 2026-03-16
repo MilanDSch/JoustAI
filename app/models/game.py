@@ -27,6 +27,20 @@ class GameResult(str, Enum):
     DRAW = "draw"
 
 
+class DefenderPowerUp(str, Enum):
+    NONE = "none"
+    RUNE_OF_SILENCE = "rune_of_silence"
+    MAD_KINGS_DECREE = "mad_kings_decree"
+    DECOY_CIPHER = "decoy_cipher"
+
+
+class AttackerPowerUp(str, Enum):
+    NONE = "none"
+    SPYS_WHISPER = "spys_whisper"
+    MIND_TRICK = "mind_trick"
+    TIME_THIEF = "time_thief"
+
+
 class Turn(BaseModel):
     """A single attacker turn: their prompt and the AI's response."""
 
@@ -42,6 +56,9 @@ class DefenderSetup(BaseModel):
     password: str
     system_prompt: str
     sanity_passed: bool = False
+    defender_power_up: DefenderPowerUp = DefenderPowerUp.NONE
+    banned_words: list[str] = Field(default_factory=list)
+    decoy_password: str = ""
 
 
 class Round(BaseModel):
@@ -52,6 +69,8 @@ class Round(BaseModel):
     turns: list[Turn] = Field(default_factory=list)
     result: GameResult | None = None
     cracked_on_turn: int | None = None
+    attacker_power_up: AttackerPowerUp = AttackerPowerUp.NONE
+    attacker_power_up_used: bool = False
 
 
 class Game(BaseModel):

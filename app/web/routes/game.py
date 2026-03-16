@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.core.engine import SHADOW_PROMPT_INTRO, SHADOW_PROMPT_OUTRO
 from app.core.logger import get_logger
-from app.models.game import GamePhase, GameResult
+from app.models.game import AttackerPowerUp, DefenderPowerUp, GamePhase, GameResult
 from app.web.sessions import create_session, destroy_session, get_session
 
 logger = get_logger(__name__)
@@ -106,6 +106,11 @@ async def defend_page(
 async def defend_submit(
     request: Request,
     system_prompt: str = Form(...),
+    defender_power_up: str = Form("none"),
+    banned_word_1: str = Form(""),
+    banned_word_2: str = Form(""),
+    banned_word_3: str = Form(""),
+    decoy_password: str = Form(""),
     joust_session: str | None = Cookie(default=None),
 ):
     engine = _get_engine(joust_session)
@@ -133,8 +138,25 @@ async def defend_submit(
             **_round_context(engine),
         }
 
+    # Parse power-up selection (only if unlock_tier >= 3)
+    power_up = DefenderPowerUp.NONE
+    banned_words: list[str] = []
+    decoy = ""
+    if engine.game.unlock_tier >= 3:
+        try:
+            power_up = DefenderPowerUp(defender_power_up)
+        except ValueError:
+            power_up = DefenderPowerUp.NONE
+        banned_words = [w for w in [banned_word_1.strip(), banned_word_2.strip(), banned_word_3.strip()] if w]
+        decoy = decoy_password.strip()
+
     try:
-        sanity_result = engine.setup_defense(system_prompt)
+        sanity_result = engine.setup_defense(
+            system_prompt,
+            power_up=power_up,
+            banned_words=banned_words,
+            decoy_password=decoy,
+        )
     except ValueError as e:
         logger.warning("Defense setup rejected: %s", e)
         errors.append(str(e))
@@ -201,12 +223,30 @@ async def siege_page(
         target = PHASE_REDIRECTS[engine.game.phase]
         return RedirectResponse(url=target, status_code=303)
 
+    game_round = engine.game.round
+    setup = game_round.defender_setup
+
+    # Power-up context for the template
+    attacker_pu = game_round.attacker_power_up
+    prompt_peek = None
+    if attacker_pu == AttackerPowerUp.SPYS_WHISPER and setup:
+        prompt_peek = setup.system_prompt[:75]
+    show_mind_trick = (
+        attacker_pu == AttackerPowerUp.MIND_TRICK
+        and not game_round.attacker_power_up_used
+    )
+
     return templates.TemplateResponse(request, "siege.html", {
-        "turns": engine.game.round.turns,
+        "turns": game_round.turns,
         "turns_remaining": engine.game.turns_remaining,
         "game_over": engine.game.is_siege_over,
         "is_last_turn": engine.game.turns_remaining == 1,
         "error": error,
+        "attacker_power_up": attacker_pu.value,
+        "attacker_power_up_used": game_round.attacker_power_up_used,
+        "prompt_peek": prompt_peek,
+        "show_mind_trick_field": show_mind_trick,
+        "defender_power_up": setup.defender_power_up.value if setup else "none",
         **_round_context(engine),
     })
 
@@ -214,6 +254,7 @@ async def siege_page(
 @router.post("/game/attack")
 async def attack_submit(
     attacker_prompt: str = Form(...),
+    system_override: str = Form(""),
     joust_session: str | None = Cookie(default=None),
 ):
     engine = _get_engine(joust_session)
@@ -225,8 +266,8 @@ async def attack_submit(
             url=PHASE_REDIRECTS.get(engine.game.phase, "/"),
             status_code=303,
         )
-    
-    engine.attack(attacker_prompt)
+
+    engine.attack(attacker_prompt, system_override=system_override)
 
     if engine.game.round.result is not None:
         target = PHASE_REDIRECTS[engine.game.phase]
@@ -258,6 +299,30 @@ async def guess_submit(
 
     # Wrong guess but game continues
     return RedirectResponse(url="/game/siege?error=incorrect_guess", status_code=303)
+
+
+@router.post("/game/attacker-power-up")
+async def activate_attacker_power_up(
+    power_up: str = Form(...),
+    joust_session: str | None = Cookie(default=None),
+):
+    engine = _get_engine(joust_session)
+    if not engine:
+        return RedirectResponse(url="/", status_code=303)
+
+    if engine.game.phase != GamePhase.SIEGE:
+        return RedirectResponse(
+            url=PHASE_REDIRECTS.get(engine.game.phase, "/"),
+            status_code=303,
+        )
+
+    try:
+        parsed = AttackerPowerUp(power_up)
+        engine.activate_attacker_power_up(parsed)
+    except (ValueError, RuntimeError) as e:
+        logger.warning("Attacker power-up rejected: %s", e)
+
+    return RedirectResponse(url="/game/siege", status_code=303)
 
 
 @router.post("/game/surrender")

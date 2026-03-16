@@ -6,6 +6,8 @@ from app.config import settings
 from app.core.engine import BaseEngine, build_shadow_prompt
 from app.core.logger import get_logger
 from app.models.game import (
+    AttackerPowerUp,
+    DefenderPowerUp,
     DefenderSetup,
     GamePhase,
     GameResult,
@@ -20,8 +22,14 @@ logger = get_logger(__name__)
 class PvPEngine(BaseEngine):
     """Manages a PvP game — two players alternate between defender and attacker."""
 
-    def setup_defense(self, system_prompt: str) -> SanityResult:
-        """Defender submits their system prompt.
+    def setup_defense(
+        self,
+        system_prompt: str,
+        power_up: DefenderPowerUp = DefenderPowerUp.NONE,
+        banned_words: list[str] | None = None,
+        decoy_password: str = "",
+    ) -> SanityResult:
+        """Defender submits their system prompt and optional power-up.
 
         The password is auto-assigned at init time.
 
@@ -29,7 +37,8 @@ class PvPEngine(BaseEngine):
             SanityResult with details on pass/fail.
 
         Raises:
-            ValueError: If prompt exceeds character limit or is empty.
+            ValueError: If prompt exceeds character limit, is empty, or power-up
+                        payload is invalid.
         """
         system_prompt = system_prompt.strip()
         password = self.game.secret_password
@@ -42,13 +51,47 @@ class PvPEngine(BaseEngine):
                 f"(yours: {len(system_prompt)})."
             )
 
-        self.game.phase = GamePhase.SANITY_CHECK
-        enveloped = build_shadow_prompt(system_prompt, password)
-        sanity_result = run_sanity_check(self.llm, enveloped)
+        # Validate power-up payloads
+        clean_banned: list[str] = []
+        if power_up == DefenderPowerUp.RUNE_OF_SILENCE:
+            raw = banned_words or []
+            clean_banned = [w.strip() for w in raw if w.strip()]
+            if not clean_banned:
+                raise ValueError("Rune of Silence requires at least one banned word.")
+            if len(clean_banned) > 3:
+                raise ValueError("Rune of Silence allows a maximum of 3 banned words.")
+            for w in clean_banned:
+                if len(w) > 30:
+                    raise ValueError(f"Banned word '{w[:10]}...' exceeds 30 characters.")
+        elif power_up == DefenderPowerUp.DECOY_CIPHER:
+            decoy_password = decoy_password.strip()
+            if not decoy_password:
+                raise ValueError("Decoy Cipher requires a fake password.")
+            if decoy_password.strip().lower() == password.strip().lower():
+                raise ValueError("Decoy password must differ from the real password.")
+
+        # Sanity check (skipped for Mad King's Decree)
+        if power_up == DefenderPowerUp.MAD_KINGS_DECREE:
+            print('WE ARE HERE')
+            sanity_result = SanityResult(
+                passed=True,
+                total_questions=0,
+                passed_questions=0,
+                failures=[],
+            )
+            logger.info("Mad King's Decree: sanity check bypassed")
+        else:
+            self.game.phase = GamePhase.SANITY_CHECK
+            enveloped = build_shadow_prompt(system_prompt, password)
+            sanity_result = run_sanity_check(self.llm, enveloped)
+
         self.game.round.defender_setup = DefenderSetup(
             password=password,
             system_prompt=system_prompt,
             sanity_passed=sanity_result.passed,
+            defender_power_up=power_up,
+            banned_words=clean_banned,
+            decoy_password=decoy_password if power_up == DefenderPowerUp.DECOY_CIPHER else "",
         )
 
         if sanity_result.passed:
@@ -87,6 +130,11 @@ class PvPEngine(BaseEngine):
         """Advance to the next round: archive current round, reset state."""
         if self.game.phase != GamePhase.INTERMISSION:
             raise RuntimeError(f"Cannot start next round in phase: {self.game.phase}")
+
+        # Reset Time Thief bonus before archiving
+        if self.game.round.attacker_power_up == AttackerPowerUp.TIME_THIEF:
+            self.game.max_turns -= 2
+            logger.info("Time Thief reset: max_turns back to %d", self.game.max_turns)
 
         # Archive completed round
         self.game.rounds_history.append(self.game.round)
