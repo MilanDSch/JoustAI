@@ -81,7 +81,6 @@ class BaseEngine(ABC):
         enveloped = build_shadow_prompt(setup.system_prompt, setup.password)
         ai_response = self.llm.chat(system_prompt=enveloped, messages=messages)
 
-        print(enveloped)
         turn = Turn(
             turn_number=len(self.game.round.turns) + 1,
             attacker_prompt=attacker_prompt,

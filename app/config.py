@@ -31,6 +31,9 @@ class Settings(BaseSettings):
         ["blue"],
     ]
 
+    app_username: str | None = None
+    app_password: str | None = None
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 

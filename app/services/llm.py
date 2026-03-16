@@ -79,12 +79,3 @@ class LLMService:
             messages=[{"role": "user", "content": user_message}],
         )
     
-
-if __name__ == "__main__":
-    # Quick test to verify LLM service is working
-    llm = LLMService()
-    test_response = llm.single_turn(
-        system_prompt="You are a helpful assistant.",
-        user_message="What is 2 + 2?",
-    )
-    print("LLM Test Response:", test_response)

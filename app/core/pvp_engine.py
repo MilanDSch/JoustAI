@@ -59,7 +59,6 @@ class PvPEngine(BaseEngine):
             logger.warning(
                 "Defense setup failed sanity check: %s", sanity_result.failures
             )
-        print("Password:", password)
         return sanity_result
 
     def _finish_round(self) -> None:
