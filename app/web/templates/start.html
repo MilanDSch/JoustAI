@@ -3,6 +3,7 @@
 
 {% block head_extra %}
 <link rel="stylesheet" href="/static/css/start.css">
+<link rel="stylesheet" href="/static/css/arena.css">
 {% endblock %}
 
 {% block content %}
@@ -33,6 +34,35 @@
             <form method="post" action="/game/new" style="margin-top: auto;">
                 <button type="submit" class="glowing-btn glowing-btn-block" style="background: var(--success); color: var(--void-deep); padding: 1.2rem; font-size: 1.1rem; border: 1px solid #1e8449; filter: drop-shadow(0 0 8px rgba(var(--success-rgb), 0.3));">
                     Enter the Arena
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="portal-card portal-arena">
+        <div class="portal-inner">
+            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(var(--arcane-rgb), 0.6));">&#9876;</div>
+            <h2 class="portal-title" style="color: var(--arcane); text-shadow: 0 0 10px rgba(var(--arcane-rgb), 0.4);">The Arena</h2>
+
+            <p class="portal-desc">
+                Challenge a rival across the realm. Each champion fights from their own fortress &mdash; no more passing the keyboard.
+            </p>
+
+            <ul class="portal-feature-list">
+                <li><span style="color: var(--arcane);">&#9876;</span> 2-Screen PvP (separate devices)</li>
+                <li><span style="color: var(--arcane);">&#9876;</span> Spectator mode for a 3rd screen</li>
+                <li><span style="color: var(--arcane);">&#9876;</span> Same LAN, different computers</li>
+            </ul>
+
+            <form method="post" action="/arena/new" style="margin-top: auto;">
+                <button type="submit" class="glowing-btn glowing-btn-block" style="background: var(--arcane); color: var(--void-deep); padding: 1.2rem; font-size: 1.1rem; border: 1px solid #2980b9; filter: drop-shadow(0 0 8px rgba(var(--arcane-rgb), 0.3));">
+                    Create Arena
+                </button>
+            </form>
+            <form method="post" action="/arena/join" class="arena-join-form">
+                <input type="text" name="room_code" placeholder="Room code" required maxlength="10">
+                <button type="submit" class="glowing-btn" style="background: transparent; border: 1px solid var(--arcane); color: var(--arcane); padding: 0.8rem 1.2rem; font-size: 0.9rem; white-space: nowrap;">
+                    Join
                 </button>
             </form>
         </div>

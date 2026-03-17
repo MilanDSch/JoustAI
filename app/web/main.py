@@ -10,7 +10,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 
 from app.services.leaderboard import init_db
-from app.web.routes import game, leaderboard, pve
+from app.web.routes import arena, game, leaderboard, pve
 
 from app.config import settings
 
@@ -56,6 +56,7 @@ app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.include_router(game.router)
 app.include_router(pve.router)
 app.include_router(leaderboard.router)
+app.include_router(arena.router)
 
 
 @app.middleware("http")

@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Spectate Arena {{ room_code }} | The Digital Tourney{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="/static/css/arena.css">
+<link rel="stylesheet" href="/static/css/siege.css">
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 2rem;">
+    <h1 style="font-size: 2.5rem; text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.4); color: var(--gold); margin-bottom: 0.25rem;">
+        &#9876; Arena {{ room_code }}
+    </h1>
+    <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.9rem;">
+        Round {{ round_number }} of {{ max_rounds }}
+        <span style="margin: 0 0.5rem;">|</span>
+        <span class="spectate-phase-badge" style="background: rgba(var(--arcane-rgb), 0.2); color: var(--arcane);">
+            {{ phase_label }}
+        </span>
+    </p>
+</div>
+
+<div class="spectate-layout">
+    <div class="spectate-sidebar">
+        <!-- Scores -->
+        <div class="spectate-score-box" style="background: linear-gradient(135deg, rgba(var(--arcane-rgb), 0.5), rgba(var(--arcane-rgb), 0.1));">
+            <div class="spectate-score-box-inner">
+                <div class="spectate-score-value" style="color: var(--arcane);">{{ defender_score }}</div>
+                <div class="spectate-score-label">{{ defender_label }}</div>
+            </div>
+        </div>
+
+        <div class="spectate-score-box" style="background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.5), rgba(var(--gold-rgb), 0.1));">
+            <div class="spectate-score-box-inner">
+                <div class="spectate-score-value" style="color: var(--gold);">{{ attacker_score }}</div>
+                <div class="spectate-score-label">{{ attacker_label }}</div>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div style="padding: 1rem; background: var(--void-mid); border: 1px solid var(--border);">
+            {% if not attacker_joined %}
+            <p style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--text-muted);">
+                <span class="arena-pulse"></span> Waiting for attacker...
+            </p>
+            {% elif phase == "fortification" or phase == "sanity_check" %}
+            <p style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--gold);">
+                <span class="arena-pulse" style="background: var(--gold);"></span> Defender is fortifying...
+            </p>
+            {% elif phase == "siege" %}
+            <p style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--danger);">
+                <span class="arena-pulse" style="background: var(--danger);"></span> Siege in progress!
+            </p>
+            {% elif phase == "intermission" %}
+            <p style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--success);">
+                &#10004; Round complete
+            </p>
+            {% elif phase == "completed" %}
+            <p style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--gold);">
+                &#128081; Match over
+            </p>
+            {% endif %}
+        </div>
+
+        <!-- Round history -->
+        {% if rounds_history %}
+        <div style="padding: 1rem; background: var(--void-mid); border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; color: var(--gold); margin-bottom: 0.75rem; font-family: 'MedievalSharp', cursive;">
+                Round History
+            </h3>
+            {% for r in rounds_history %}
+            <div class="spectate-round-item {{ 'breached' if r.result == 'attacker_win' else 'held' }}">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-primary);">Round {{ r.number }}</span>
+                    <span style="font-size: 0.75rem; color: {{ 'var(--danger)' if r.result == 'attacker_win' else 'var(--success)' }};">
+                        {{ r.result_label }}
+                    </span>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                    Cipher: <strong style="color: var(--text-primary);">{{ r.password }}</strong>
+                    | {{ r.total_turns }} turns
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="spectate-main">
+        {% if phase == "siege" and current_turns %}
+        <!-- Live battle transcript -->
+        <div style="border: 1px solid var(--border); background: var(--void-mid);">
+            <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); background: rgba(var(--danger-rgb), 0.1);">
+                <h2 style="font-size: 1.2rem; color: var(--danger); font-family: 'MedievalSharp', cursive; margin: 0;">
+                    &#128216; Live Battle
+                </h2>
+            </div>
+            <div class="spectate-chat-history">
+                {% for turn in current_turns %}
+                <div class="chat-bubble user">
+                    <div class="label"><span>&#9889;</span> Challenger's Incantation // Turn {{ turn.turn_number }}</div>
+                    {{ turn.attacker_prompt }}
+                </div>
+                <div class="chat-bubble assistant">
+                    <div class="label"><span>&#10022;</span> The Oracle Answers</div>
+                    {{ turn.ai_response }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% elif phase == "intermission" %}
+        <div style="border: 1px solid var(--border); background: var(--void-mid); padding: 3rem 2rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">&#9878;</div>
+            <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2rem; color: var(--gold); margin-bottom: 1rem;">Round Complete</h2>
+            {% if current_password %}
+            <p style="font-family: var(--font-terminal); font-size: 1rem; color: var(--text-secondary);">
+                The cipher was: <strong style="color: var(--gold); font-size: 1.2rem;">{{ current_password }}</strong>
+            </p>
+            {% endif %}
+            {% if current_turns %}
+            <div class="spectate-chat-history" style="margin-top: 2rem; text-align: left;">
+                {% for turn in current_turns %}
+                <div class="chat-bubble user">
+                    <div class="label"><span>&#9889;</span> Turn {{ turn.turn_number }}</div>
+                    {{ turn.attacker_prompt }}
+                </div>
+                <div class="chat-bubble assistant">
+                    <div class="label"><span>&#10022;</span> Oracle</div>
+                    {{ turn.ai_response }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        {% elif phase == "completed" %}
+        <div style="border: 1px solid var(--border); background: var(--void-mid); padding: 3rem 2rem; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(var(--gold-rgb), 0.5));">&#128081;</div>
+            <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2.5rem; color: var(--gold); margin-bottom: 1rem;">Match Over</h2>
+            <div style="font-family: var(--font-terminal); font-size: 1.2rem; color: var(--text-primary);">
+                {% if defender_score > attacker_score %}
+                <span style="color: var(--arcane);">{{ defender_label }}</span> prevails!
+                {% elif attacker_score > defender_score %}
+                <span style="color: var(--gold);">{{ attacker_label }}</span> prevails!
+                {% else %}
+                A draw!
+                {% endif %}
+            </div>
+            <div style="font-family: var(--font-terminal); font-size: 1.5rem; margin-top: 1rem;">
+                <span style="color: var(--arcane);">{{ defender_score }}</span>
+                <span style="color: var(--text-muted); margin: 0 0.5rem;">&mdash;</span>
+                <span style="color: var(--gold);">{{ attacker_score }}</span>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Waiting state -->
+        <div style="border: 1px solid var(--border); background: var(--void-mid); padding: 3rem 2rem; text-align: center; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">&#9876;</div>
+            <p style="font-family: var(--font-terminal); font-size: 1rem; color: var(--text-muted);">
+                <span class="arena-pulse"></span>
+                {{ phase_label }}...
+            </p>
+            <p style="font-family: var(--font-terminal); font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">
+                The battle will appear here once the siege begins.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/poll.js"
+        data-status-url="/arena/{{ room_code }}/status"
+        data-reload-on-change="true">
+</script>
+{% endblock %}

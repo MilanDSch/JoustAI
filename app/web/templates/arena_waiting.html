@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Awaiting Fortification | The Digital Tourney{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="/static/css/arena.css">
+{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 2rem;">
+    <h1 style="font-size: 2.5rem; color: var(--gold); text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.4); margin-bottom: 0.5rem;">
+        Round {{ round_number }} of {{ max_rounds }}
+    </h1>
+    <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;">
+        Arena {{ room_code }}
+    </p>
+</div>
+
+<div class="arena-status-card">
+    <div class="arena-status-inner">
+        <div style="font-size: 4rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(var(--gold-rgb), 0.3));">&#127984;</div>
+
+        <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2rem; color: var(--gold); margin-bottom: 1rem;">
+            The Defender Fortifies
+        </h2>
+
+        <p style="font-family: var(--font-terminal); font-size: 1rem; color: var(--text-secondary); line-height: 1.6; max-width: 500px; margin: 0 auto;">
+            <span class="arena-pulse"></span>
+            Your opponent is inscribing their defensive wards. The siege will begin once fortifications are sealed.
+        </p>
+
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+            <div style="font-family: var(--font-terminal); font-size: 0.9rem; color: var(--text-muted);">
+                <span style="color: var(--arcane);">{{ defender_label }}:</span> {{ defender_score }} pts
+                <span style="margin: 0 0.75rem;">&mdash;</span>
+                <span style="color: var(--gold);">{{ attacker_label }}:</span> {{ attacker_score }} pts
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/poll.js"
+        data-status-url="/arena/{{ room_code }}/status"
+        data-redirect-on="siege:/arena/{{ room_code }}/siege">
+</script>
+{% endblock %}
