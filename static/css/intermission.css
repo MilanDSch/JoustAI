@@ -1,0 +1,109 @@
+/* 1. Expand container for the split view */
+.container {
+    max-width: 1100px !important;
+    width: 100%;
+    padding: 2rem 1rem;
+}
+
+/* 2. Grid Layout */
+.intermission-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .intermission-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 3. Panel Styling */
+.report-panel {
+    background: linear-gradient(180deg, var(--void-surface) 0%, var(--void-deep) 100%);
+    border: 1px solid var(--border);
+    clip-path: var(--chamfer);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.scout-panel {
+    background-image: linear-gradient(180deg, rgba(30, 10, 10, 0.55) 0%, rgba(9, 12, 21, 0.75) 100%),
+                      url('/static/right_castle.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+    padding: 2.5rem 2rem;
+    clip-path: var(--chamfer);
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+}
+
+/* 4. Result specific styles */
+.result-breach {
+    color: var(--alert);
+    text-shadow: 0 0 16px rgba(var(--danger-rgb), 0.5);
+}
+.result-icon-breach {
+    font-size: 4rem;
+    color: var(--danger);
+    filter: drop-shadow(0 0 15px rgba(var(--danger-rgb), 0.5));
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.result-hold {
+    color: var(--success);
+    text-shadow: 0 0 16px rgba(var(--success-rgb), 0.5);
+}
+.result-icon-hold {
+    font-size: 4rem;
+    color: var(--success);
+    filter: drop-shadow(0 0 15px rgba(var(--success-rgb), 0.5));
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+/* 5. Cipher Reveal Box */
+.cipher-reveal {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px dashed var(--text-muted);
+    padding: 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+}
+.cipher-reveal-label {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--void-surface);
+    padding: 0 1rem;
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.cipher-value {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2.2rem;
+    color: var(--gold);
+    text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.4);
+    letter-spacing: 0.05em;
+    word-break: break-all;
+}
+
+/* 6. Score display */
+.score-display {
+    background: rgba(var(--gold-rgb), 0.05);
+    border-top: 1px solid rgba(var(--gold-rgb), 0.2);
+    border-bottom: 1px solid rgba(var(--gold-rgb), 0.2);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}

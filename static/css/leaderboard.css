@@ -1,0 +1,157 @@
+/* 1. Container sizing */
+.container { max-width: 1000px !important; width: 100%; }
+
+/* 2. Main Hall Panel */
+.hall-panel {
+    background: linear-gradient(180deg, rgba(15, 20, 30, 0.95) 0%, var(--void-deep) 100%);
+    border: 1px solid rgba(var(--arcane-rgb), 0.3);
+    border-top: 4px solid var(--gold);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 15px 40px rgba(0,0,0,0.6);
+    padding: 3rem 2.5rem;
+    clip-path: var(--chamfer);
+    position: relative;
+}
+
+/* 3. Plaque-style Table */
+.lb-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.8rem;
+    margin-top: 1rem;
+}
+
+.lb-table th {
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--arcane);
+    padding: 0 1.5rem 0.5rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px dashed rgba(var(--arcane-rgb), 0.3);
+}
+
+.lb-table th:last-child,
+.lb-table td:last-child { text-align: right; }
+
+.lb-table td {
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    font-size: 1.1rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.lb-table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Left and Right borders for the rows */
+.lb-table tr td:first-child {
+    border-left: 3px solid var(--border);
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.lb-table tr td:last-child {
+    border-right: 1px solid var(--border);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+/* 4. Top 3 Highlight Rows */
+.lb-row-1 td {
+    background: linear-gradient(90deg, rgba(var(--gold-rgb), 0.1) 0%, rgba(0,0,0,0.4) 50%);
+    border-top-color: rgba(var(--gold-rgb), 0.3);
+    border-bottom-color: rgba(var(--gold-rgb), 0.3);
+}
+.lb-row-1 td:first-child { border-left: 4px solid var(--gold); }
+.lb-row-1 td:last-child { border-right-color: rgba(var(--gold-rgb), 0.3); }
+
+.lb-row-2 td {
+    background: linear-gradient(90deg, rgba(var(--rank-silver-rgb), 0.08) 0%, rgba(0,0,0,0.4) 50%);
+    border-top-color: rgba(var(--rank-silver-rgb), 0.2);
+    border-bottom-color: rgba(var(--rank-silver-rgb), 0.2);
+}
+.lb-row-2 td:first-child { border-left: 4px solid var(--rank-silver); }
+.lb-row-2 td:last-child { border-right-color: rgba(var(--rank-silver-rgb), 0.2); }
+
+.lb-row-3 td {
+    background: linear-gradient(90deg, rgba(var(--rank-bronze-rgb), 0.08) 0%, rgba(0,0,0,0.4) 50%);
+    border-top-color: rgba(var(--rank-bronze-rgb), 0.2);
+    border-bottom-color: rgba(var(--rank-bronze-rgb), 0.2);
+}
+.lb-row-3 td:first-child { border-left: 4px solid var(--rank-bronze); }
+.lb-row-3 td:last-child { border-right-color: rgba(var(--rank-bronze-rgb), 0.2); }
+
+/* 5. Rank Badges (Hexagonal Seals) */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    font-family: var(--font-terminal);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.rank-1 {
+    background: var(--gold);
+    color: var(--void-deep);
+    filter: drop-shadow(0 0 10px rgba(var(--gold-rgb), 0.6));
+    animation: glow-gold 2s ease-in-out infinite alternate;
+}
+.rank-2 { background: var(--rank-silver); color: var(--void-deep); filter: drop-shadow(0 0 8px rgba(var(--rank-silver-rgb), 0.4)); }
+.rank-3 { background: var(--rank-bronze); color: var(--void-deep); filter: drop-shadow(0 0 8px rgba(var(--rank-bronze-rgb), 0.4)); }
+.rank-other { background: var(--void-surface); color: var(--text-muted); border: 1px solid var(--border); }
+
+/* 6. Vault Pips */
+.vaults-bar {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.vault-pip {
+    width: 1.2rem;
+    height: 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.vault-pip.cleared {
+    background: var(--gold);
+    filter: drop-shadow(0 0 6px rgba(var(--gold-rgb), 0.6));
+}
+
+/* 7. Typography */
+.player-name {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+}
+.player-name-top {
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);
+}
+.player-guild {
+    font-family: var(--font-terminal);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.lb-empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-family: var(--font-terminal);
+    border: 1px dashed var(--border);
+    margin-top: 2rem;
+    background: rgba(0,0,0,0.2);
+}

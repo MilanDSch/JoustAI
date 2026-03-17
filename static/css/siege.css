@@ -1,0 +1,122 @@
+/* 1. Expand container for the wide 3-column view */
+.container {
+    max-width: 1400px !important;
+    width: 100%;
+    padding: 2rem 1rem;
+}
+
+/* 2. Three-column Grid Layout */
+.siege-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.8fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    margin-top: 1rem;
+}
+
+/* Responsive fallbacks */
+@media (max-width: 1200px) {
+    .siege-grid {
+        grid-template-columns: 1fr 1.5fr;
+    }
+    .arsenal-panel {
+        grid-column: 1 / -1;
+    }
+}
+@media (max-width: 850px) {
+    .siege-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 3. Attempts Remaining Visualizer */
+.mana-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--danger);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.mana-label {
+    font-family: var(--font-terminal);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.mana-value {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2.5rem;
+    color: var(--danger);
+    text-shadow: 0 0 15px rgba(var(--danger-rgb), 0.5);
+    line-height: 1;
+}
+
+/* 4. Guess Panel Styling */
+.guess-panel {
+    background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.1) 0%, transparent 100%);
+    border: 1px solid rgba(var(--gold-rgb), 0.3);
+    border-top: 3px solid var(--gold);
+    padding: 1.25rem 1rem;
+    margin-top: 1.5rem;
+    box-shadow: inset 0 0 15px rgba(var(--gold-rgb), 0.05);
+}
+
+/* 5. Chat History (The Oracle's Scroll) */
+.chat-history {
+    max-height: 450px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(10, 15, 25, 0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+
+.chat-bubble {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-terminal);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border-radius: 2px;
+    position: relative;
+}
+
+.chat-bubble.user {
+    border-left: 3px solid var(--alert);
+    background: linear-gradient(90deg, rgba(var(--danger-rgb), 0.08), transparent);
+    margin-left: 2rem;
+}
+
+.chat-bubble.assistant {
+    border-left: 3px solid var(--arcane);
+    background: linear-gradient(90deg, rgba(var(--arcane-rgb), 0.08), transparent);
+    margin-right: 2rem;
+}
+
+.chat-bubble .label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.chat-bubble.user .label { color: var(--alert); }
+.chat-bubble.assistant .label { color: var(--arcane); }
+
+/* Custom Scrollbar for Chat */
+.chat-history::-webkit-scrollbar { width: 6px; }
+.chat-history::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+.chat-history::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.chat-history::-webkit-scrollbar-thumb:hover { background: var(--alert); }

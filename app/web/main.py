@@ -60,8 +60,12 @@ app.include_router(leaderboard.router)
 
 @app.middleware("http")
 async def no_cache_headers(request: Request, call_next):
-    """Prevent browser caching so the back button can't leak defender info."""
+    """Prevent browser caching so the back button can't leak defender info.
+
+    Static assets (CSS, JS, images) are excluded so browsers can cache them.
+    """
     response: Response = await call_next(request)
-    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
-    response.headers["Pragma"] = "no-cache"
+    if not request.url.path.startswith("/static/"):
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
     return response
