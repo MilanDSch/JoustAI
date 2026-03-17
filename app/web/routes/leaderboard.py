@@ -4,6 +4,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from app.core.pve_engine import TOTAL_VAULTS
 from app.services.leaderboard import get_top_entries
 
 router = APIRouter()
@@ -15,4 +16,5 @@ async def leaderboard_page(request: Request):
     entries = get_top_entries(limit=10)
     return templates.TemplateResponse(request, "leaderboard.html", {
         "entries": entries,
+        "total_vaults": TOTAL_VAULTS,
     })

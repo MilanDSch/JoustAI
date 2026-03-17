@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     azure_api_key: str = ""
     azure_openai_endpoint: str = ""
+    azure_api_version: str = "2024-12-01-preview"
     llm_provider: str = "openai"  # "openai" (Azure) or "local"
     local_api_base: str = "http://localhost:11434/v1"
     local_model_name: str = "llama3.2:3b"

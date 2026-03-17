@@ -146,7 +146,7 @@
         <div class="ledger-stats">
             <div class="stat-plaque stat-plaque-gold">
                 <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);">
-                    {{ highest_level }} / 5
+                    {{ highest_level }} / {{ total_vaults }}
                 </div>
                 <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
                     Vaults Breached
@@ -168,7 +168,7 @@
         </div>
         {% endif %}
 
-        <form method="post" action="/pve/claim">
+        <form method="post" action="{{ url_prefix | default('/pve') }}/claim">
             <div class="ledger-input-group">
                 <label for="name">Your Name / Title</label>
                 <input type="text" id="name" name="name" class="ledger-input" required maxlength="100"

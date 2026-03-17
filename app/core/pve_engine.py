@@ -3,7 +3,7 @@
 import random
 
 from app.config import settings
-from app.core.engine import BaseEngine, build_shadow_prompt
+from app.core.engine import ATTACKER_BASE_POINTS, BaseEngine
 from app.core.logger import get_logger
 from app.data.vaults import Vault, get_vault
 from app.models.game import (
@@ -73,7 +73,7 @@ class PvEEngine(BaseEngine):
 
         if result == GameResult.ATTACKER_WIN:
             cracked_on = game.round.cracked_on_turn or 1
-            points = max(11 - cracked_on, 1)
+            points = max(ATTACKER_BASE_POINTS - cracked_on, 1)
             game.attacker_score += points
             logger.info("Vault %d breached! +%d pts to player", game.vault_level, points)
 

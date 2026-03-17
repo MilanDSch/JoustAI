@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from app.core.logger import get_logger
-from app.core.pve_engine import PvEEngine
+from app.core.pve_engine import PvEEngine, TOTAL_VAULTS
 from app.data.vaults import get_vault
 from app.models.game import GamePhase, GameResult
 from app.services.leaderboard import add_entry
@@ -280,7 +280,7 @@ async def results_page(
         "vaults_breached": vaults_breached,
         "highest_level": highest_level,
         "total_turns": total_turns,
-        "total_vaults": len(all_rounds),
+        "total_vaults": TOTAL_VAULTS,
         "eligible_for_leaderboard": highest_level >= 1,
         **_round_context(engine),
     })
@@ -316,6 +316,7 @@ async def claim_page(
     return templates.TemplateResponse(request, "claim.html", {
         "highest_level": highest_level,
         "total_turns": total_turns,
+        "total_vaults": TOTAL_VAULTS,
         **_round_context(engine),
     })
 

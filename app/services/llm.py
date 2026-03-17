@@ -26,7 +26,7 @@ class LLMService:
             self.client = AzureOpenAI(
                 azure_endpoint=settings.azure_openai_endpoint,
                 api_key=settings.azure_api_key,
-                api_version="2024-12-01-preview",
+                api_version=settings.azure_api_version,
             )
             self.model = settings.openai_model_name
 

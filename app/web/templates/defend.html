@@ -203,7 +203,7 @@
     <div class="cyber-hud" style="filter: drop-shadow(0 0 15px rgba(var(--gold-rgb), 0.1));">
         <div class="cyber-hud-inner" style="padding: 2rem;">
             
-            <form id="defend-form" method="post" action="/game/defend">
+            <form id="defend-form" method="post" action="{{ url_prefix | default('/game') }}/defend">
                 <div class="form-group">
                     <label style="font-size: 1.5rem; color: var(--gold); font-family: 'MedievalSharp', cursive; text-shadow: 0 0 8px rgba(var(--gold-rgb), 0.3);">
                         Your Defensive Wards

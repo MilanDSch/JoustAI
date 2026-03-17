@@ -17,7 +17,7 @@
             {{ attacker_label }}, press the button below when you are ready to begin the siege.
         </p>
 
-        <form method="post" action="/game/handoff" class="mt-3">
+        <form method="post" action="{{ url_prefix | default('/game') }}/handoff" class="mt-3">
             <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.1rem; padding: 0.9rem;">
                 I'm {{ attacker_label }} &mdash; Begin Siege
             </button>

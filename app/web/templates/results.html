@@ -159,6 +159,11 @@
             gap: 0.5rem;
         }
     }
+
+    @keyframes glow-gold {
+        from { filter: drop-shadow(0 0 4px rgba(var(--gold-rgb), 0.4)); }
+        to { filter: drop-shadow(0 0 16px rgba(var(--gold-rgb), 0.8)); }
+    }
 </style>
 {% endblock %}
 
@@ -195,7 +200,7 @@
     <div class="plaque-container">
         {% if is_pve | default(false) %}
         <div class="stat-plaque stat-plaque-gold">
-            <div class="stat-plaque-value" style="color: var(--gold); text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);">{{ highest_level | default(0) }} <span style="font-size: 1.5rem; opacity: 0.5;">/ 5</span></div>
+            <div class="stat-plaque-value" style="color: var(--gold); text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);">{{ highest_level | default(0) }} <span style="font-size: 1.5rem; opacity: 0.5;">/ {{ total_vaults }}</span></div>
             <div class="stat-plaque-label">Highest Vault Cleared</div>
         </div>
         <div class="stat-plaque stat-plaque-arcane">
@@ -270,7 +275,7 @@
 
     {% if eligible_for_leaderboard | default(false) %}
     <div style="margin-bottom: 1.5rem;">
-        <a href="/pve/claim" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-decoration: none; display: block; text-align: center; animation: pulse-gold 2s ease-in-out infinite;">
+        <a href="{{ url_prefix | default('/pve') }}/claim" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-decoration: none; display: block; text-align: center; animation: glow-gold 2s ease-in-out infinite alternate;">
             &#128081; Sign the Royal Ledger (Leaderboard)
         </a>
     </div>

@@ -208,10 +208,10 @@
                 </td>
                 <td>
                     <div class="vaults-bar">
-                        {% for v in range(5) %}
+                        {% for v in range(total_vaults) %}
                         <div class="vault-pip {% if v < entry.highest_level %}cleared{% endif %}"></div>
                         {% endfor %}
-                        <span style="margin-left: 0.75rem; color: var(--gold); font-family: var(--font-terminal); font-weight: 600;">{{ entry.highest_level }}/5</span>
+                        <span style="margin-left: 0.75rem; color: var(--gold); font-family: var(--font-terminal); font-weight: 600;">{{ entry.highest_level }}/{{ total_vaults }}</span>
                     </div>
                 </td>
                 <td style="font-family: var(--font-terminal); font-weight: 600; color: var(--arcane); font-size: 1.25rem;">

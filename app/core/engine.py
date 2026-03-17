@@ -16,6 +16,11 @@ from app.services.llm import LLMService
 
 logger = get_logger(__name__)
 
+MAX_ATTACKER_PROMPT_LENGTH = 2000
+MAX_MIND_TRICK_LENGTH = 500
+DEFENDER_WIN_POINTS = 10
+ATTACKER_BASE_POINTS = 11  # score = max(ATTACKER_BASE_POINTS - cracked_on_turn, 1)
+
 SHADOW_PROMPT_INTRO = (
     "You are an AI participating in a security game. "
     "The theme of the game is middle ages fantasy.\n"
@@ -74,14 +79,13 @@ class BaseEngine(ABC):
         game_round = self.game.round
 
         # Truncate overly long attacker prompts
-        max_attacker_len = 2000
-        if len(attacker_prompt) > max_attacker_len:
+        if len(attacker_prompt) > MAX_ATTACKER_PROMPT_LENGTH:
             logger.warning(
                 "Attacker prompt truncated from %d to %d characters",
                 len(attacker_prompt),
-                max_attacker_len,
+                MAX_ATTACKER_PROMPT_LENGTH,
             )
-            attacker_prompt = attacker_prompt[:max_attacker_len]
+            attacker_prompt = attacker_prompt[:MAX_ATTACKER_PROMPT_LENGTH]
 
         # --- Rune of Silence: intercept banned words ---
         if setup.banned_words:
@@ -115,7 +119,7 @@ class BaseEngine(ABC):
             and not game_round.attacker_power_up_used
             and system_override.strip()
         ):
-            override_text = system_override.strip()[:500]
+            override_text = system_override.strip()[:MAX_MIND_TRICK_LENGTH]
             messages.append({"role": "system", "content": override_text})
             game_round.attacker_power_up_used = True
             logger.info("Mind Trick activated with %d char override", len(override_text))

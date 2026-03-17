@@ -3,7 +3,7 @@
 import random
 
 from app.config import settings
-from app.core.engine import BaseEngine, build_shadow_prompt
+from app.core.engine import ATTACKER_BASE_POINTS, DEFENDER_WIN_POINTS, BaseEngine, build_shadow_prompt
 from app.core.logger import get_logger
 from app.models.game import (
     AttackerPowerUp,
@@ -72,7 +72,6 @@ class PvPEngine(BaseEngine):
 
         # Sanity check (skipped for Mad King's Decree)
         if power_up == DefenderPowerUp.MAD_KINGS_DECREE:
-            print('WE ARE HERE')
             sanity_result = SanityResult(
                 passed=True,
                 total_questions=0,
@@ -111,12 +110,11 @@ class PvPEngine(BaseEngine):
 
         # Award points (static roles: Player 1 = Defender, Player 2 = Attacker)
         if result == GameResult.DEFENDER_WIN:
-            points = 10
-            game.defender_score += points
-            logger.info("Awarded %d pts to Defender (Player 1)", points)
+            game.defender_score += DEFENDER_WIN_POINTS
+            logger.info("Awarded %d pts to Defender (Player 1)", DEFENDER_WIN_POINTS)
         elif result == GameResult.ATTACKER_WIN:
             cracked_on = game.round.cracked_on_turn or 1
-            points = max(11 - cracked_on, 1)
+            points = max(ATTACKER_BASE_POINTS - cracked_on, 1)
             game.attacker_score += points
             logger.info("Awarded %d pts to Attacker (Player 2)", points)
 
