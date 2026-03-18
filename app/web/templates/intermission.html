@@ -78,6 +78,19 @@
             {% if is_pve | default(false) %}
                 {% if next_vault %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Scouting Report: {{ next_vault.name }}</h3>
+                <div style="margin-bottom: 0.75rem;">
+                    {% if next_vault.difficulty == "easy" %}
+                    <span class="seal seal-easy">&#10022; Threat Level: Minimal</span>
+                    {% elif next_vault.difficulty == "medium" %}
+                    <span class="seal seal-medium">&#10022; Threat Level: Moderate</span>
+                    {% elif next_vault.difficulty == "hard" %}
+                    <span class="seal seal-hard">&#10022; Threat Level: Severe</span>
+                    {% elif next_vault.difficulty == "expert" %}
+                    <span class="seal seal-expert">&#10022; Threat Level: Lethal</span>
+                    {% elif next_vault.difficulty == "legendary" %}
+                    <span class="seal seal-legendary">&#10022; Threat Level: Mythic</span>
+                    {% endif %}
+                </div>
                 <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">{{ next_vault.description }}</p>
                 {% else %}
                 <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Final Gate Has Closed</h3>

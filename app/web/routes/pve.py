@@ -231,7 +231,7 @@ async def next_round(joust_session: str | None = Cookie(default=None)):
         return RedirectResponse(url="/", status_code=303)
 
     engine.next_round()
-    return RedirectResponse(url="/pve/vault", status_code=303)
+    return RedirectResponse(url="/pve/siege", status_code=303)
 
 
 # --- Results ---

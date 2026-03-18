@@ -11,7 +11,21 @@ from sqlalchemy.orm import DeclarativeBase
 from app.config import settings
 
 
-engine = create_async_engine(settings.database_url, echo=False)
+def _build_engine_kwargs() -> dict:
+    """Return dialect-specific kwargs for create_async_engine."""
+    url = settings.database_url
+    kwargs: dict = {"echo": False}
+
+    if url.startswith("postgresql"):
+        kwargs["connect_args"] = {"ssl": True}
+        kwargs["pool_pre_ping"] = True
+        kwargs["pool_size"] = 5
+        kwargs["max_overflow"] = 10
+
+    return kwargs
+
+
+engine = create_async_engine(settings.database_url, **_build_engine_kwargs())
 
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
