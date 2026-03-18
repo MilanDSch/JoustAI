@@ -10,7 +10,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 
 from app.db.base import init_db
-from app.web.routes import arena, game, leaderboard, pve
+from app.web.routes import admin, arena, game, leaderboard, pve
 
 from app.config import settings
 
@@ -57,6 +57,7 @@ app.include_router(game.router)
 app.include_router(pve.router)
 app.include_router(leaderboard.router)
 app.include_router(arena.router)
+app.include_router(admin.router)
 
 
 @app.middleware("http")

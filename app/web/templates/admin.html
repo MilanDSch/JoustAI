@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Admin | The Digital Tourney{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="/static/css/admin.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.25rem; text-shadow: 0 0 25px rgba(var(--gold-rgb), 0.4);">Admin Dashboard</h1>
+        <p style="color: var(--arcane); font-size: 0.9rem; font-family: var(--font-terminal); text-transform: uppercase; letter-spacing: 0.15em;">
+            Leaderboard Management
+        </p>
+    </div>
+
+    <!-- Active Event Section -->
+    <div class="admin-section">
+        <h2 class="admin-section-title">Active Event</h2>
+        <form method="post" action="/admin/event" class="event-form">
+            <div class="event-current">
+                Current: <span class="event-badge">{{ active_event }}</span>
+            </div>
+            <div class="event-controls">
+                <input type="text" name="new_event" value="{{ active_event }}" class="admin-input" placeholder="Event name...">
+                <button type="submit" class="admin-btn admin-btn-primary">Update Event</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Entries Table -->
+    <div class="admin-section">
+        <h2 class="admin-section-title">All Entries ({{ entries|length }})</h2>
+
+        {% if entries %}
+        <div class="table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Background</th>
+                        <th>Email</th>
+                        <th>Level</th>
+                        <th>Turns</th>
+                        <th>Event</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td class="cell-mono">{{ entry.id }}</td>
+                        <td class="cell-name">{{ entry.name }}</td>
+                        <td class="cell-mono">{{ entry.company or "—" }}</td>
+                        <td class="cell-mono">{{ entry.background or "—" }}</td>
+                        <td class="cell-mono">{{ entry.email }}</td>
+                        <td class="cell-mono" style="text-align: center;">{{ entry.highest_level }}</td>
+                        <td class="cell-mono" style="text-align: center;">{{ entry.total_turns }}</td>
+                        <td><span class="event-badge">{{ entry.event }}</span></td>
+                        <td class="cell-mono cell-date">{{ entry.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td class="cell-actions">
+                            <form method="post" action="/admin/reassign/{{ entry.id }}" class="inline-form">
+                                <input type="text" name="new_event" value="{{ entry.event }}" class="admin-input admin-input-sm">
+                                <button type="submit" class="admin-btn admin-btn-small">Move</button>
+                            </form>
+                            <form method="post" action="/admin/delete/{{ entry.id }}" class="inline-form"
+                                  onsubmit="return confirm('Delete entry #{{ entry.id }} ({{ entry.name }})?')">
+                                <button type="submit" class="admin-btn admin-btn-danger admin-btn-small">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="admin-empty">No leaderboard entries found.</div>
+        {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="/leaderboard" class="glowing-btn glowing-btn-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.5rem; font-family: var(--font-terminal); text-transform: uppercase; letter-spacing: 0.1em;">
+            View Leaderboard
+        </a>
+    </div>
+</div>
+{% endblock %}

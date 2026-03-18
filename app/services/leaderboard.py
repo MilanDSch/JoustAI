@@ -32,6 +32,54 @@ async def add_entry(
     return entry.id
 
 
+async def get_all_entries(session: AsyncSession) -> list[dict]:
+    """Return all leaderboard entries across all events."""
+    stmt = (
+        select(LeaderboardEntry)
+        .order_by(LeaderboardEntry.created_at.desc())
+    )
+    result = await session.execute(stmt)
+    rows = result.scalars().all()
+    return [
+        {
+            "id": r.id,
+            "name": r.name,
+            "company": r.company,
+            "background": r.background,
+            "email": r.email,
+            "highest_level": r.highest_level,
+            "total_turns": r.total_turns,
+            "event": r.event,
+            "created_at": r.created_at,
+        }
+        for r in rows
+    ]
+
+
+async def delete_entry(session: AsyncSession, entry_id: int) -> bool:
+    """Delete a leaderboard entry by ID. Returns True if found and deleted."""
+    stmt = select(LeaderboardEntry).where(LeaderboardEntry.id == entry_id)
+    result = await session.execute(stmt)
+    entry = result.scalar_one_or_none()
+    if entry is None:
+        return False
+    await session.delete(entry)
+    await session.commit()
+    return True
+
+
+async def update_entry_event(session: AsyncSession, entry_id: int, new_event: str) -> bool:
+    """Reassign a leaderboard entry to a different event. Returns True if found."""
+    stmt = select(LeaderboardEntry).where(LeaderboardEntry.id == entry_id)
+    result = await session.execute(stmt)
+    entry = result.scalar_one_or_none()
+    if entry is None:
+        return False
+    entry.event = new_event
+    await session.commit()
+    return True
+
+
 async def get_top_entries(session: AsyncSession, limit: int = 10, event: str = "default") -> list[dict]:
     """Return top leaderboard entries for the given event, ordered by highest level DESC, then fewest turns ASC."""
     stmt = (

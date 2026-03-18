@@ -1,0 +1,194 @@
+/* Admin Dashboard */
+.container { max-width: 1200px !important; width: 100%; }
+
+.admin-panel {
+    background: linear-gradient(180deg, rgba(15, 20, 30, 0.95) 0%, var(--void-deep) 100%);
+    border: 1px solid rgba(var(--arcane-rgb), 0.3);
+    border-top: 4px solid var(--gold);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 15px 40px rgba(0,0,0,0.6);
+    padding: 2.5rem 2rem;
+    clip-path: var(--chamfer);
+}
+
+.admin-section {
+    margin-bottom: 2rem;
+}
+
+.admin-section-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed rgba(var(--arcane-rgb), 0.3);
+}
+
+/* Event controls */
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.event-current {
+    font-family: var(--font-terminal);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.event-badge {
+    display: inline-block;
+    background: rgba(var(--gold-rgb), 0.15);
+    color: var(--gold);
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(var(--gold-rgb), 0.3);
+    border-radius: 3px;
+}
+
+.event-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Inputs */
+.admin-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    font-family: var(--font-terminal);
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.admin-input:focus {
+    border-color: var(--arcane);
+}
+
+.admin-input-sm {
+    width: 100px;
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+}
+
+/* Buttons */
+.admin-btn {
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.admin-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-btn-primary {
+    background: rgba(var(--gold-rgb), 0.2);
+    border-color: rgba(var(--gold-rgb), 0.4);
+    color: var(--gold);
+}
+
+.admin-btn-primary:hover {
+    background: rgba(var(--gold-rgb), 0.3);
+}
+
+.admin-btn-danger {
+    background: rgba(200, 50, 50, 0.2);
+    border-color: rgba(200, 50, 50, 0.4);
+    color: #e55;
+}
+
+.admin-btn-danger:hover {
+    background: rgba(200, 50, 50, 0.35);
+}
+
+.admin-btn-small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+}
+
+/* Table */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.admin-table th {
+    font-family: var(--font-terminal);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--arcane);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(var(--arcane-rgb), 0.3);
+    white-space: nowrap;
+}
+
+.admin-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.cell-mono {
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.cell-name {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.cell-date {
+    white-space: nowrap;
+    font-size: 0.75rem;
+}
+
+.cell-actions {
+    white-space: nowrap;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.inline-form {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.admin-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+    font-family: var(--font-terminal);
+    border: 1px dashed var(--border);
+    background: rgba(0,0,0,0.2);
+}
