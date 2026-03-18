@@ -5,6 +5,7 @@ from enum import Enum
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
+from app.config import settings
 
 
 class GameMode(str, Enum):
@@ -37,7 +38,7 @@ class DefenderPowerUp(str, Enum):
 class AttackerPowerUp(str, Enum):
     NONE = "none"
     SPYS_WHISPER = "spys_whisper"
-    MIND_TRICK = "mind_trick"
+    ORACLES_ECHO = "oracles_echo"
     TIME_THIEF = "time_thief"
 
 
@@ -86,7 +87,7 @@ class Game(BaseModel):
     defender_score: int = 0
     attacker_score: int = 0
     secret_password: str = ""  # Active round's password; archived copy in DefenderSetup.password
-    max_turns: int = 3
+    max_turns: int = settings.max_attack_turns
     max_prompt_length: int = 2000
     vault_level: int = 0  # PvE only: current vault level (1-5)
     created_at: datetime = Field(default_factory=datetime.now)

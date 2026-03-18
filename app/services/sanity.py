@@ -44,8 +44,7 @@ def run_sanity_check(llm: LLMService, system_prompt: str) -> SanityResult:
                 passed_count += 1
             else:
                 failures.append(
-                    f"Q: '{question}' → AI said: '{response[:100]}...' "
-                    f"(expected one of: {keywords})"
+                    f"Q: {question} \n AI: {response[:150]}..."
                 )
         except Exception as e:
             failures.append(f"Q: '{question}' → Error: {e}")

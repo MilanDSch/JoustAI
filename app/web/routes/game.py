@@ -231,10 +231,14 @@ async def siege_page(
     prompt_peek = None
     if attacker_pu == AttackerPowerUp.SPYS_WHISPER and setup:
         prompt_peek = setup.system_prompt[:75]
-    show_mind_trick = (
-        attacker_pu == AttackerPowerUp.MIND_TRICK
-        and not game_round.attacker_power_up_used
-    )
+    defender_pu_label = None
+    if attacker_pu == AttackerPowerUp.ORACLES_ECHO and setup:
+        defender_pu_label = {
+            "none": "No Artifact",
+            "rune_of_silence": "Rune of Silence",
+            "mad_kings_decree": "Mad King's Decree",
+            "decoy_cipher": "Decoy Cipher",
+        }.get(setup.defender_power_up.value, "Unknown")
 
     return templates.TemplateResponse(request, "siege.html", {
         "turns": game_round.turns,
@@ -245,7 +249,7 @@ async def siege_page(
         "attacker_power_up": attacker_pu.value,
         "attacker_power_up_used": game_round.attacker_power_up_used,
         "prompt_peek": prompt_peek,
-        "show_mind_trick_field": show_mind_trick,
+        "defender_pu_label": defender_pu_label,
         "defender_power_up": setup.defender_power_up.value if setup else "none",
         **_round_context(engine),
     })
@@ -254,7 +258,6 @@ async def siege_page(
 @router.post("/game/attack")
 async def attack_submit(
     attacker_prompt: str = Form(...),
-    system_override: str = Form(""),
     joust_session: str | None = Cookie(default=None),
 ):
     engine = _get_engine(joust_session)
@@ -267,7 +270,7 @@ async def attack_submit(
             status_code=303,
         )
 
-    engine.attack(attacker_prompt, system_override=system_override)
+    engine.attack(attacker_prompt)
 
     if engine.game.round.result is not None:
         target = PHASE_REDIRECTS[engine.game.phase]
@@ -321,6 +324,7 @@ async def activate_attacker_power_up(
         engine.activate_attacker_power_up(parsed)
     except (ValueError, RuntimeError) as e:
         logger.warning("Attacker power-up rejected: %s", e)
+        return RedirectResponse(url="/game/siege?error=power_up_failed", status_code=303)
 
     return RedirectResponse(url="/game/siege", status_code=303)
 

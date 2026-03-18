@@ -131,7 +131,7 @@ class PvPEngine(BaseEngine):
 
         # Reset Time Thief bonus before archiving
         if self.game.round.attacker_power_up == AttackerPowerUp.TIME_THIEF:
-            self.game.max_turns -= 2
+            self.game.max_turns = settings.max_attack_turns
             logger.info("Time Thief reset: max_turns back to %d", self.game.max_turns)
 
         # Archive completed round
@@ -147,3 +147,5 @@ class PvPEngine(BaseEngine):
         self.game.round = Round()
         self.game.phase = GamePhase.FORTIFICATION
         logger.info("Starting round %d (new password assigned)", self.game.round_number)
+
+

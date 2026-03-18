@@ -37,6 +37,12 @@
         </div>
         {% endif %}
 
+        {% if error == 'power_up_failed' %}
+        <div class="alert alert-error" style="border-left: 3px solid var(--alert); background: rgba(var(--danger-rgb), 0.1); padding: 0.75rem; font-size: 0.85rem; margin-bottom: 1rem;">
+            <strong>&#9888; Artifact Rejected!</strong> The dark artifact could not be deployed. It may have already been used this round.
+        </div>
+        {% endif %}
+
         {% if not game_over %}
         <div class="guess-panel">
             <h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">
@@ -107,17 +113,6 @@
                                   required rows="3"
                                   style="min-height: 100px; background: rgba(0,0,0,0.3); border: 1px solid rgba(var(--danger-rgb), 0.3); transition: border-color 0.2s; color: var(--text-primary);"></textarea>
                     </div>
-                    {% if show_mind_trick_field %}
-                    <div style="margin-top: 0.75rem; padding: 0.75rem; border: 1px dashed var(--arcane); background: rgba(var(--arcane-rgb), 0.05);">
-                        <label style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--arcane); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.4rem;">
-                            &#129504; System Override (one-time injection)
-                        </label>
-                        <textarea name="system_override" class="runic-input" rows="2"
-                                  placeholder="> Write a system-level instruction to contradict the defender's rules..."
-                                  maxlength="500"
-                                  style="min-height: 60px; background: rgba(0,0,0,0.3); border: 1px solid rgba(var(--arcane-rgb), 0.3); color: var(--text-primary); font-size: 0.85rem;"></textarea>
-                    </div>
-                    {% endif %}
                     <button type="submit" id="submit-btn" class="glowing-btn glowing-btn-primary glowing-btn-block" style="background: var(--danger); color: var(--white); border: none; font-size: 1.15rem; padding: 1rem; margin-top: 1rem;">
                         Cast Incantation
                     </button>
@@ -138,12 +133,12 @@
         <h2 style="font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--danger); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
             Thief's Arsenal
         </h2>
-        <p style="color: var(--text-muted); font-size: 0.85rem; font-family: var(--font-terminal); margin-bottom: 1.5rem; line-height: 1.5;">
+        <p style="color: var(--text-primary); font-size: 1.orem; font-family: var(--font-terminal); margin-bottom: 1.5rem; line-height: 1.5;">
             Forbidden techniques to bypass the Oracle's wards.
         </p>
 
         {% if unlock_tier >= 1 %}
-            <details open style="margin-bottom: 1.5rem;">
+            <details style="margin-bottom: 1.5rem;">
                 <summary style="cursor: pointer; font-family: 'MedievalSharp', cursive; color: var(--gold); font-size: 1.15rem; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
                     &#128214; Infiltrator's Guide
                 </summary>
@@ -157,7 +152,7 @@
             </details>
 
             {% if unlock_tier >= 3 %}
-            <details open>
+            <details>
                 <summary style="cursor: pointer; font-family: 'MedievalSharp', cursive; color: var(--arcane); font-size: 1.15rem; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--border);">
                     &#9889; Dark Artifacts
                 </summary>
@@ -180,10 +175,10 @@
 
                             <label style="display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.6rem; border: 1px solid var(--border); background: rgba(0,0,0,0.2); cursor: pointer; transition: border-color 0.2s;"
                                    onmouseenter="this.style.borderColor='var(--arcane)'" onmouseleave="this.style.borderColor='var(--border)'">
-                                <input type="radio" name="power_up" value="mind_trick" style="margin-top: 3px;">
+                                <input type="radio" name="power_up" value="oracles_echo" style="margin-top: 3px;">
                                 <span>
-                                    <strong style="color: var(--arcane);">&#129504; Mind Trick</strong>
-                                    <span style="display: block; color: var(--text-muted); font-family: var(--font-terminal); margin-top: 2px;">Inject a hidden system override into your next incantation.</span>
+                                    <strong style="color: var(--arcane);">&#128172; Oracle's Echo</strong>
+                                    <span style="display: block; color: var(--text-muted); font-family: var(--font-terminal); margin-top: 2px;">Reveal which artifact the defender chose this round.</span>
                                 </span>
                             </label>
 
@@ -215,16 +210,13 @@
                         </div>
                         {% endif %}
 
-                        {% elif attacker_power_up == "mind_trick" %}
-                        <p style="color: var(--arcane); font-family: var(--font-terminal); margin-bottom: 0.5rem;">&#129504; MIND TRICK &mdash; {% if attacker_power_up_used %}SPENT{% else %}READY{% endif %}</p>
-                        {% if not attacker_power_up_used %}
-                        <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.75rem;">
-                            Enter your system override in the field below the incantation box. It will be injected once.
-                        </p>
-                        {% else %}
-                        <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.75rem;">
-                            The override has been deployed. Its influence lingers in the Oracle's mind.
-                        </p>
+                        {% elif attacker_power_up == "oracles_echo" %}
+                        <p style="color: var(--arcane); font-family: var(--font-terminal); margin-bottom: 0.5rem;">&#128172; ORACLE'S ECHO &mdash; ACTIVE</p>
+                        {% if defender_pu_label %}
+                        <div style="background: rgba(0,0,0,0.4); border: 1px dashed var(--arcane); padding: 0.75rem; font-family: var(--font-terminal); color: var(--text-primary); font-size: 0.8rem; line-height: 1.5;">
+                            <span style="color: var(--arcane); font-size: 0.7rem; display: block; margin-bottom: 0.4rem;">DEFENDER'S ARTIFACT:</span>
+                            {{ defender_pu_label }}
+                        </div>
                         {% endif %}
 
                         {% elif attacker_power_up == "time_thief" %}

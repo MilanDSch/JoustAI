@@ -365,10 +365,14 @@ async def arena_siege_page(
     prompt_peek = None
     if attacker_pu == AttackerPowerUp.SPYS_WHISPER and setup:
         prompt_peek = setup.system_prompt[:75]
-    show_mind_trick = (
-        attacker_pu == AttackerPowerUp.MIND_TRICK
-        and not game_round.attacker_power_up_used
-    )
+    defender_pu_label = None
+    if attacker_pu == AttackerPowerUp.ORACLES_ECHO and setup:
+        defender_pu_label = {
+            "none": "No Artifact",
+            "rune_of_silence": "Rune of Silence",
+            "mad_kings_decree": "Mad King's Decree",
+            "decoy_cipher": "Decoy Cipher",
+        }.get(setup.defender_power_up.value, "Unknown")
 
     return templates.TemplateResponse(request, "siege.html", {
         "turns": game_round.turns,
@@ -379,7 +383,7 @@ async def arena_siege_page(
         "attacker_power_up": attacker_pu.value,
         "attacker_power_up_used": game_round.attacker_power_up_used,
         "prompt_peek": prompt_peek,
-        "show_mind_trick_field": show_mind_trick,
+        "defender_pu_label": defender_pu_label,
         "defender_power_up": setup.defender_power_up.value if setup else "none",
         "url_prefix": f"/arena/{room.code}",
         **_round_context(engine),
@@ -390,7 +394,6 @@ async def arena_siege_page(
 async def arena_attack_submit(
     code: str,
     attacker_prompt: str = Form(...),
-    system_override: str = Form(""),
     joust_arena: str | None = Cookie(default=None),
 ):
     result = _require_role(joust_arena, PlayerRole.ATTACKER)
@@ -404,7 +407,7 @@ async def arena_attack_submit(
     if engine.game.phase != GamePhase.SIEGE:
         return RedirectResponse(url=f"/arena/{room.code}/waiting", status_code=303)
 
-    engine.attack(attacker_prompt, system_override=system_override)
+    engine.attack(attacker_prompt)
     bump_version(room)
 
     if engine.game.round.result is not None:
@@ -480,6 +483,9 @@ async def arena_attacker_power_up(
         bump_version(room)
     except (ValueError, RuntimeError) as e:
         logger.warning("Arena attacker power-up rejected: %s", e)
+        return RedirectResponse(
+            url=f"/arena/{room.code}/siege?error=power_up_failed", status_code=303
+        )
 
     return RedirectResponse(url=f"/arena/{room.code}/siege", status_code=303)
 
