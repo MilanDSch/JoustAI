@@ -21,6 +21,7 @@
 /* 3. Styling the individual portal cards */
 .portal-card {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -56,7 +57,7 @@
 .portal-pve .portal-inner {
     /* Image + Darkened Overlay for Text Readability with Delaware Red Tint */
     background-image: linear-gradient(180deg, rgba(30, 10, 10, 0.8) 0%, rgba(9, 12, 21, 0.95) 100%),
-                      url('/static/right_castle.jpeg');
+                      url('/static/castle_right_delaware.jpg');
 }
 .portal-pve:hover {
     filter: drop-shadow(0 10px 20px rgba(var(--primary-rgb), 0.4));

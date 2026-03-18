@@ -18,6 +18,7 @@ class LeaderboardEntry(Base):
     email: Mapped[str] = mapped_column(String, nullable=False)
     highest_level: Mapped[int] = mapped_column(Integer, nullable=False)
     total_turns: Mapped[int] = mapped_column(Integer, nullable=False)
+    event: Mapped[str] = mapped_column(String, nullable=False, server_default="default")
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), nullable=False
     )

@@ -14,6 +14,7 @@ async def add_entry(
     email: str,
     highest_level: int,
     total_turns: int,
+    event: str = "default",
 ) -> int:
     """Insert a leaderboard entry and return its ID."""
     entry = LeaderboardEntry(
@@ -23,6 +24,7 @@ async def add_entry(
         email=email,
         highest_level=highest_level,
         total_turns=total_turns,
+        event=event,
     )
     session.add(entry)
     await session.commit()
@@ -30,10 +32,11 @@ async def add_entry(
     return entry.id
 
 
-async def get_top_entries(session: AsyncSession, limit: int = 10) -> list[dict]:
-    """Return top leaderboard entries ordered by highest level DESC, then fewest turns ASC."""
+async def get_top_entries(session: AsyncSession, limit: int = 10, event: str = "default") -> list[dict]:
+    """Return top leaderboard entries for the given event, ordered by highest level DESC, then fewest turns ASC."""
     stmt = (
         select(LeaderboardEntry)
+        .where(LeaderboardEntry.event == event)
         .order_by(
             LeaderboardEntry.highest_level.desc(),
             LeaderboardEntry.total_turns.asc(),

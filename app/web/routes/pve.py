@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.core.logger import get_logger
 from app.core.pve_engine import PvEEngine, TOTAL_VAULTS
 from app.data.vaults import get_vault
@@ -375,6 +376,7 @@ async def claim_submit(
         email=email,
         highest_level=highest_level,
         total_turns=total_turns,
+        event=settings.active_event,
     )
 
     if joust_session:

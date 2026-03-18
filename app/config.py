@@ -37,6 +37,8 @@ class Settings(BaseSettings):
     app_username: str | None = None
     app_password: str | None = None
 
+    active_event: str = "default"
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 

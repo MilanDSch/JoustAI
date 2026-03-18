@@ -31,8 +31,8 @@
 }
 
 .scout-panel {
-    background-image: linear-gradient(180deg, rgba(30, 10, 10, 0.55) 0%, rgba(9, 12, 21, 0.75) 100%),
-                      url('/static/right_castle.jpeg');
+    background-image: linear-gradient(180deg, rgba(30, 10, 10, 0.55) 100%, rgba(9, 12, 21, 0.75) 200%),
+                      url('/static/castle_right_delaware.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
