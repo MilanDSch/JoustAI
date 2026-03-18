@@ -32,6 +32,8 @@ class Settings(BaseSettings):
         ["blue"],
     ]
 
+    database_url: str = "sqlite+aiosqlite:///./leaderboard.db"
+
     app_username: str | None = None
     app_password: str | None = None
 

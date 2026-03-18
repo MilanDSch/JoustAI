@@ -1,12 +1,14 @@
 """PvE routes for the Beat Delaware single-player mode."""
 
-from fastapi import APIRouter, Cookie, Form, Request
+from fastapi import APIRouter, Cookie, Depends, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.logger import get_logger
 from app.core.pve_engine import PvEEngine, TOTAL_VAULTS
 from app.data.vaults import get_vault
+from app.db.base import get_session as get_db_session
 from app.models.game import GamePhase, GameResult
 from app.services.leaderboard import add_entry
 from app.web.sessions import create_pve_session, destroy_session, get_session
@@ -327,7 +329,9 @@ async def claim_submit(
     name: str = Form(...),
     email: str = Form(...),
     company: str = Form(default=""),
+    background: str = Form(default=""),
     joust_session: str | None = Cookie(default=None),
+    db: AsyncSession = Depends(get_db_session),
 ):
     engine = _get_pve_engine(joust_session)
     if not engine:
@@ -349,6 +353,7 @@ async def claim_submit(
     name = name.strip()
     email = email.strip()
     company = company.strip() or None
+    background = background.strip() or None
 
     if not name or not email:
         return templates.TemplateResponse(request, "claim.html", {
@@ -357,13 +362,16 @@ async def claim_submit(
             "error": "Name and email are required.",
             "name": name,
             "company": company or "",
+            "background": background or "",
             "email": email,
             **_round_context(engine),
         })
 
-    add_entry(
+    await add_entry(
+        session=db,
         name=name,
         company=company,
+        background=background,
         email=email,
         highest_level=highest_level,
         total_turns=total_turns,

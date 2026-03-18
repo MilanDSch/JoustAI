@@ -9,7 +9,7 @@ from fastapi.responses import Response
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 
-from app.services.leaderboard import init_db
+from app.db.base import init_db
 from app.web.routes import arena, game, leaderboard, pve
 
 from app.config import settings
@@ -17,7 +17,7 @@ from app.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    await init_db()
     yield
 
 

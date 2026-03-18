@@ -57,6 +57,24 @@
                        value="{{ company | default('') }}" placeholder="e.g., Knights of the Round Table">
             </div>
 
+            <div class="ledger-input-group">
+                <label for="background">Professional Background <span style="color: rgba(192, 184, 168, 0.4); text-transform: lowercase;">(optional)</span></label>
+                <select id="background" name="background" class="ledger-input">
+                    <option value="">— Select your background —</option>
+                    {% set bg = background | default('') %}
+                    <option value="Developer" {{ 'selected' if bg == 'Developer' }}>Developer</option>
+                    <option value="Data & AI" {{ 'selected' if bg == 'Data & AI' }}>Data & AI</option>
+                    <option value="Cloud & Infra" {{ 'selected' if bg == 'Cloud & Infra' }}>Cloud & Infra</option>
+                    <option value="Cybersecurity" {{ 'selected' if bg == 'Cybersecurity' }}>Cybersecurity</option>
+                    <option value="IT Management" {{ 'selected' if bg == 'IT Management' }}>IT Management</option>
+                    <option value="HR" {{ 'selected' if bg == 'HR' }}>HR</option>
+                    <option value="Sales" {{ 'selected' if bg == 'Sales' }}>Sales</option>
+                    <option value="Marketing" {{ 'selected' if bg == 'Marketing' }}>Marketing</option>
+                    <option value="Finance" {{ 'selected' if bg == 'Finance' }}>Finance</option>
+                    <option value="Other" {{ 'selected' if bg == 'Other' }}>Other</option>
+                </select>
+            </div>
+
             <div class="ledger-input-group" style="margin-bottom: 2.5rem;">
                 <label for="email">Raven Address (Email)</label>
                 <input type="email" id="email" name="email" class="ledger-input" required maxlength="200"

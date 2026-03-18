@@ -23,6 +23,7 @@
                 <th style="width: 80px; text-align: center;">Rank</th>
                 <th>Champion</th>
                 <th>Guild / Allegiance</th>
+                <th>Background</th>
                 <th>Vaults Cleared</th>
                 <th>Turns Exhausted</th>
             </tr>
@@ -42,6 +43,9 @@
                 </td>
                 <td>
                     <div class="player-guild">{{ entry.company or "—" }}</div>
+                </td>
+                <td>
+                    <div class="player-guild">{{ entry.background or "—" }}</div>
                 </td>
                 <td>
                     <div class="vaults-bar">
