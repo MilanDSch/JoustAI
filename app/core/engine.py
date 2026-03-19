@@ -169,15 +169,32 @@ class BaseEngine(ABC):
         setup = self.game.round.defender_setup
         assert setup is not None
 
+        correct = guess.strip().lower() == setup.password.strip().lower()
+
+        if correct:
+            ai_response = "You got me! Well played"
+        else:
+            wrong_guess_responses = [
+                "Nice try, but the castle walls hold!",
+                "Not quite! The password eludes you.",
+                "Close, but no cigar. Try again!",
+                "The defender smirks. That's not it.",
+                "Wrong! The gates remain shut.",
+                "Nope! Keep guessing.",
+                "Almost... but not quite. Try again!",
+                "The fortress stands. Guess again!",
+                "Not this time. The secret holds.",
+                "Incorrect! The defender is safe... for now.",
+            ]
+            ai_response = random.choice(wrong_guess_responses)
+
         # Record the guess as a turn
         turn = Turn(
             turn_number=len(self.game.round.turns) + 1,
             attacker_prompt=f"[GUESS SUBMITTED: {guess}]",
-            ai_response="SYSTEM: Guess evaluated.",
+            ai_response=ai_response,
         )
         self.game.round.turns.append(turn)
-
-        correct = guess.strip().lower() == setup.password.strip().lower()
 
         if correct:
             self.game.round.result = GameResult.ATTACKER_WIN
