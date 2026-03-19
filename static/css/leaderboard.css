@@ -1,6 +1,3 @@
-/* 1. Container sizing */
-.container { max-width: 1000px !important; width: 100%; }
-
 /* 2. Main Hall Panel */
 .hall-panel {
     background: linear-gradient(180deg, rgba(15, 20, 30, 0.95) 0%, var(--void-deep) 100%);
@@ -10,6 +7,36 @@
     padding: 3rem 2.5rem;
     clip-path: var(--chamfer);
     position: relative;
+}
+
+/* Leaderboard-specific typography */
+.lb-crown-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 15px rgba(var(--gold-rgb), 0.5));
+}
+
+.lb-hall-title {
+    font-size: 3.5rem;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 0 25px rgba(var(--gold-rgb), 0.4);
+}
+
+.lb-hall-subtitle {
+    color: var(--arcane);
+    font-size: 1rem;
+    font-family: var(--font-terminal);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+.lb-event-label {
+    color: var(--gold);
+    font-size: 0.85rem;
+    font-family: var(--font-terminal);
+    letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+    opacity: 0.8;
 }
 
 /* 3. Plaque-style Table */
@@ -32,6 +59,11 @@
     border-bottom: 1px dashed rgba(var(--arcane-rgb), 0.3);
 }
 
+.lb-th-rank {
+    width: 80px;
+    text-align: center;
+}
+
 .lb-table th:last-child,
 .lb-table td:last-child { text-align: right; }
 
@@ -46,6 +78,10 @@
 
 .lb-table tr:hover td {
     background: rgba(255, 255, 255, 0.03);
+}
+
+.lb-td-rank {
+    text-align: center;
 }
 
 /* Left and Right borders for the rows */
@@ -127,6 +163,13 @@
     filter: drop-shadow(0 0 6px rgba(var(--gold-rgb), 0.6));
 }
 
+.vaults-count {
+    margin-left: 0.75rem;
+    color: var(--gold);
+    font-family: var(--font-terminal);
+    font-weight: 600;
+}
+
 /* 7. Typography */
 .player-name {
     font-family: 'MedievalSharp', cursive;
@@ -145,6 +188,13 @@
     text-transform: uppercase;
 }
 
+.lb-turns-cell {
+    font-family: var(--font-terminal);
+    font-weight: 600;
+    color: var(--arcane);
+    font-size: 1.25rem;
+}
+
 .lb-empty {
     text-align: center;
     padding: 4rem 1rem;
@@ -154,4 +204,49 @@
     border: 1px dashed var(--border);
     margin-top: 2rem;
     background: rgba(0,0,0,0.2);
+}
+
+.lb-empty__icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.lb-empty__title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+/* 8. Footer */
+.lb-footer {
+    text-align: center;
+    margin-top: 3.5rem;
+}
+
+.lb-return-btn {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+    font-family: var(--font-terminal);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.lb-meta {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-family: var(--font-terminal);
+    opacity: 0.7;
+}
+
+/* 9. Big-screen tuning */
+@media (min-width: 1920px) {
+    .lb-table td { font-size: 1.25rem; padding: 1.25rem 2rem; }
+    .player-name { font-size: 1.6rem; }
+    .rank-badge { width: 3rem; height: 3rem; font-size: 1.2rem; }
+    .vault-pip { width: 1.5rem; height: 1.5rem; }
+    .lb-hall-title { font-size: 4rem; }
 }

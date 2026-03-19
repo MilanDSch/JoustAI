@@ -5,23 +5,25 @@
 <link rel="stylesheet" href="/static/css/pve_vault.css">
 {% endblock %}
 
+{% block container_class %}container--xl{% endblock %}
+
 {% block content %}
-<div style="text-align: center;">
-    <p style="font-family: var(--font-terminal); color: var(--arcane); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem;">
+<div class="page-header reveal">
+    <p class="page-header__subtitle--sm text-arcane">
         The Delaware Quest &mdash; Stage {{ vault.level }} of {{ max_rounds }}
     </p>
-    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(var(--arcane-rgb), 0.3);">
+    <h1 class="page-header__title--xl ts-arcane-lg">
         Approach the Vault
     </h1>
 </div>
 
 <div class="vault-grid">
-    
-    <div class="vault-lore-panel">
-        <h2 style="font-family: 'MedievalSharp', cursive; font-size: 2.2rem; color: var(--gold); text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.4); margin-bottom: 1rem;">
+
+    <div class="vault-lore-panel reveal-left reveal-d2">
+        <h2 class="vault-name">
             {{ vault.name }}
         </h2>
-        
+
         <div>
             {% if vault.difficulty == "easy" %}
             <span class="seal seal-easy">&#10022; Threat Level: Minimal</span>
@@ -41,17 +43,17 @@
         </div>
     </div>
 
-    <div class="vault-action-panel">
-        
+    <div class="vault-action-panel reveal-right reveal-d2">
+
         <div class="quest-score">
-            Current Renown: <strong style="color: var(--gold); font-size: 1.1rem;">{{ attacker_score }} pts</strong>
+            Current Renown: <strong class="quest-score__value">{{ attacker_score }} pts</strong>
         </div>
 
-        <div style="width: 100%; max-width: 300px; margin-top: auto;">
-            <a href="{{ url_prefix | default('/pve') }}/siege" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="padding: 1.2rem; font-size: 1.1rem; text-decoration: none; text-align: center; display: block; background: rgba(30, 58, 95, 0.5); backdrop-filter: blur(4px);">
+        <div class="vault-action-cta">
+            <a href="{{ url_prefix | default('/pve') }}/siege" class="glowing-btn glowing-btn-arcane glowing-btn-block vault-storm-btn">
                 &#9876; Storm the Gates
             </a>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-terminal); margin-top: 1rem; text-align: center;">
+            <p class="vault-action-hint">
                 Prepare your incantations.
             </p>
         </div>

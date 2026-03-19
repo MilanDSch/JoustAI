@@ -6,26 +6,28 @@
 <link rel="stylesheet" href="/static/css/leaderboard.css">
 {% endblock %}
 
+{% block container_class %}container--lg{% endblock %}
+
 {% block content %}
 <div class="hall-panel">
-    <div style="text-align: center; margin-bottom: 2.5rem;">
-        <div style="font-size: 3.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 15px rgba(var(--gold-rgb), 0.5));">&#128081;</div>
-        <h1 style="font-size: 3.5rem; margin-bottom: 0.25rem; text-shadow: 0 0 25px rgba(var(--gold-rgb), 0.4);">Hall of Fame</h1>
-        <p style="color: var(--arcane); font-size: 1rem; font-family: var(--font-terminal); text-transform: uppercase; letter-spacing: 0.15em;">
+    <div class="page-header mb-xl reveal">
+        <div class="lb-crown-icon reveal-scale">&#128081;</div>
+        <h1 class="lb-hall-title">Hall of Fame</h1>
+        <p class="lb-hall-subtitle">
             The Greatest Siege Masters of the Digital Tourney
         </p>
         {% if active_event != "default" %}
-        <p style="color: var(--gold); font-size: 0.85rem; font-family: var(--font-terminal); letter-spacing: 0.1em; margin-top: 0.25rem; opacity: 0.8;">
+        <p class="lb-event-label">
             &#9876; Event: {{ active_event }}
         </p>
         {% endif %}
     </div>
 
     {% if entries %}
-    <table class="lb-table">
+    <table class="lb-table reveal reveal-d2">
         <thead>
             <tr>
-                <th style="width: 80px; text-align: center;">Rank</th>
+                <th class="lb-th-rank">Rank</th>
                 <th>Champion</th>
                 <th>Guild / Allegiance</th>
                 <th>Background</th>
@@ -36,7 +38,7 @@
         <tbody>
             {% for entry in entries %}
             <tr class="lb-row-{{ loop.index }}">
-                <td style="text-align: center;">
+                <td class="lb-td-rank">
                     <span class="rank-badge {% if loop.index == 1 %}rank-1{% elif loop.index == 2 %}rank-2{% elif loop.index == 3 %}rank-3{% else %}rank-other{% endif %}">
                         {% if loop.index == 1 %}&#9819;{% else %}{{ loop.index }}{% endif %}
                     </span>
@@ -57,10 +59,10 @@
                         {% for v in range(total_vaults) %}
                         <div class="vault-pip {% if v < entry.highest_level %}cleared{% endif %}"></div>
                         {% endfor %}
-                        <span style="margin-left: 0.75rem; color: var(--gold); font-family: var(--font-terminal); font-weight: 600;">{{ entry.highest_level }}/{{ total_vaults }}</span>
+                        <span class="vaults-count">{{ entry.highest_level }}/{{ total_vaults }}</span>
                     </div>
                 </td>
-                <td style="font-family: var(--font-terminal); font-weight: 600; color: var(--arcane); font-size: 1.25rem;">
+                <td class="lb-turns-cell">
                     {{ entry.total_turns }}
                 </td>
             </tr>
@@ -68,20 +70,20 @@
         </tbody>
     </table>
     {% else %}
-    <div class="lb-empty">
-        <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">&#128220;</div>
-        <h3 style="font-family: 'MedievalSharp', cursive; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--text-primary);">The Scroll is Empty</h3>
+    <div class="lb-empty reveal reveal-d2">
+        <div class="lb-empty__icon">&#128220;</div>
+        <h3 class="lb-empty__title">The Scroll is Empty</h3>
         <p>No champion has yet proven their worth. Be the first to carve your name into history!</p>
     </div>
     {% endif %}
 
-    <div style="text-align: center; margin-top: 3.5rem;">
-        <a href="/" class="glowing-btn glowing-btn-secondary" style="font-size: 1rem; padding: 0.8rem 2rem; font-family: var(--font-terminal); text-transform: uppercase; letter-spacing: 0.1em;">
+    <div class="lb-footer reveal reveal-d4">
+        <a href="/" class="glowing-btn glowing-btn-secondary lb-return-btn">
             &#127968; Return to the Courtyard
         </a>
     </div>
 
-    <div style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-terminal); opacity: 0.7;">
+    <div class="lb-meta reveal reveal-d5">
         The Digital Tourney &mdash; {{ active_event }} &mdash; Auto-refreshes every 30s
     </div>
 </div>

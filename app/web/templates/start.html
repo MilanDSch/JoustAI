@@ -6,62 +6,64 @@
 <link rel="stylesheet" href="/static/css/arena.css">
 {% endblock %}
 
+{% block container_class %}container--lg{% endblock %}
+
 {% block content %}
-<div style="text-align: center; margin-bottom: 1rem;">
-    <div style="font-size: 2rem; margin-bottom: -0.5rem; filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.4));">&#9876;</div>
-    <h1 style="font-size: 3.5rem; text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.6); margin-bottom: 0; color: var(--primary);">JoustAI</h1>
-    <p style="color: var(--text-muted); font-family: 'MedievalSharp', cursive; font-size: 1.3rem; letter-spacing: 0.05em; margin-top: 0.5rem;">
+<div class="page-header reveal">
+    <div class="page-header__icon drop-glow-primary-icon">&#9876;</div>
+    <h1 class="page-header__title--hero ts-primary-lg text-primary-c">JoustAI</h1>
+    <p class="page-header__subtitle--lg text-muted">
         A Tournament of Wits in the Age of AI
     </p>
 </div>
 
 <div class="arena-split">
-    <div class="portal-card portal-arena">
+    <div class="portal-card portal-arena reveal-left reveal-d2">
         <div class="portal-inner">
-            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(var(--arcane-rgb), 0.6));">&#9876;</div>
-            <h2 class="portal-title" style="color: var(--arcane); text-shadow: 0 0 10px rgba(var(--arcane-rgb), 0.4);">The Arena</h2>
+            <div class="portal-icon drop-glow-arcane">&#9876;</div>
+            <h2 class="portal-title text-arcane ts-arcane-sm">The Arena</h2>
 
             <p class="portal-desc">
                 Challenge a rival across the realm. Each champion fights from their own fortress &mdash; no more passing the keyboard.
             </p>
 
             <ul class="portal-feature-list">
-                <li><span style="color: var(--arcane);">&#9876;</span> 2-Screen PvP (separate devices)</li>
-                <li><span style="color: var(--arcane);">&#9876;</span> Spectator mode for a 3rd screen</li>
-                <li><span style="color: var(--arcane);">&#9876;</span> Same LAN, different computers</li>
+                <li><span class="text-arcane">&#9876;</span> 2-Screen PvP (separate devices)</li>
+                <li><span class="text-arcane">&#9876;</span> Spectator mode for a 3rd screen</li>
+                <li><span class="text-arcane">&#9876;</span> Same LAN, different computers</li>
             </ul>
 
-            <form method="post" action="/arena/new" style="margin-top: auto;">
-                <button type="submit" class="glowing-btn glowing-btn-block" style="background: var(--arcane); color: var(--void-deep); padding: 1.2rem; font-size: 1.1rem; border: 1px solid #2980b9; filter: drop-shadow(0 0 8px rgba(var(--arcane-rgb), 0.3));">
+            <form method="post" action="/arena/new" class="mt-auto">
+                <button type="submit" class="glowing-btn glowing-btn-block glowing-btn--arcane-fill glowing-btn--lg">
                     Create Arena
                 </button>
             </form>
             <form method="post" action="/arena/join" class="arena-join-form">
                 <input type="text" name="room_code" placeholder="Room code" required maxlength="10">
-                <button type="submit" class="glowing-btn" style="background: transparent; border: 1px solid var(--arcane); color: var(--arcane); padding: 0.8rem 1.2rem; font-size: 0.9rem; white-space: nowrap;">
+                <button type="submit" class="glowing-btn arena-join-btn">
                     Join
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="portal-card portal-pve">
+    <div class="portal-card portal-pve reveal-right reveal-d2">
         <div class="portal-inner">
-            <div class="portal-icon" style="filter: drop-shadow(0 0 10px rgba(var(--primary-rgb), 0.6));">&#127984;</div>
-            <h2 class="portal-title" style="color: var(--primary); text-shadow: 0 0 10px rgba(var(--primary-rgb), 0.4);">The Delaware Quest</h2>
-            
+            <div class="portal-icon drop-glow-primary">&#127984;</div>
+            <h2 class="portal-title text-primary-c ts-primary-sm">The Delaware Quest</h2>
+
             <p class="portal-desc">
                 Embark on a solo crusade against the grand architect. Breach 5 increasingly fortified Delaware vaults protected by AI.
             </p>
 
             <ul class="portal-feature-list">
-                <li><span style="color: var(--primary);">&#10022;</span> Solo Campaign Mode</li>
-                <li><span style="color: var(--primary);">&#10022;</span> 5 Threat Levels</li>
-                <li><span style="color: var(--primary);">&#10022;</span> Earn your place on the Leaderboard</li>
+                <li><span class="text-primary-c">&#10022;</span> Solo Campaign Mode</li>
+                <li><span class="text-primary-c">&#10022;</span> 5 Threat Levels</li>
+                <li><span class="text-primary-c">&#10022;</span> Earn your place on the Leaderboard</li>
             </ul>
 
-            <form method="post" action="/pve/new" style="margin-top: auto;">
-                <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="padding: 1.2rem; font-size: 1.1rem;">
+            <form method="post" action="/pve/new" class="mt-auto">
+                <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block glowing-btn--lg">
                     Begin the Quest
                 </button>
             </form>
@@ -69,9 +71,9 @@
     </div>
 </div>
 
-<div style="text-align: center; margin-top: 3rem;">
-    <a href="/leaderboard" class="glowing-btn glowing-btn-secondary" style="font-family: 'MedievalSharp', cursive; font-size: 1.1rem; letter-spacing: 0.1em; padding: 0.8rem 2rem;">
-        <span style="color: var(--primary);">&#128081;</span> View the Hall of Fame
+<div class="start-footer reveal reveal-d4">
+    <a href="/leaderboard" class="glowing-btn glowing-btn-secondary glowing-btn--hall">
+        <span class="text-primary-c">&#128081;</span> View the Hall of Fame
     </a>
 </div>
 {% endblock %}

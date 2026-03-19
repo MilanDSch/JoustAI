@@ -7,44 +7,44 @@
 
 {% block content %}
 <div class="ledger-container">
-    <div class="ledger-panel">
-        
+    <div class="ledger-panel reveal">
+
         <div class="ledger-header">
-            <div class="ledger-icon">&#128081;</div>
-            <h1 style="font-size: 2.8rem; color: var(--gold); text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.4); margin-bottom: 0.5rem;">
+            <div class="ledger-icon reveal-scale">&#128081;</div>
+            <h1 class="ledger-title">
                 Inscribe Your Legacy
             </h1>
-            <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 0.95rem;">
+            <p class="term-text term-text--muted">
                 The realm acknowledges your cunning. Sign the Royal Ledger to cement your place in the Hall of Fame.
             </p>
         </div>
 
-        <div class="ledger-stats">
+        <div class="ledger-stats reveal reveal-d2">
             <div class="stat-plaque stat-plaque-gold">
-                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(var(--gold-rgb), 0.3);">
+                <div class="stat-plaque-value text-gold glow-gold">
                     {{ highest_level }} / {{ total_vaults }}
                 </div>
-                <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
+                <div class="stat-plaque-label">
                     Vaults Breached
                 </div>
             </div>
             <div class="stat-plaque stat-plaque-arcane">
-                <div style="font-family: var(--font-terminal); font-size: 1.8rem; font-weight: 700; color: var(--arcane); text-shadow: 0 0 10px rgba(var(--arcane-rgb), 0.3);">
+                <div class="stat-plaque-value text-arcane glow-arcane">
                     {{ total_turns }}
                 </div>
-                <div style="font-family: var(--font-terminal); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem;">
+                <div class="stat-plaque-label">
                     Total Turns Used
                 </div>
             </div>
         </div>
 
         {% if error %}
-        <div class="alert alert-error" style="border-left: 3px solid var(--alert); background: rgba(var(--danger-rgb), 0.1); text-align: center; margin-bottom: 2rem;">
+        <div class="alert alert-error claim-error">
             <strong>&#9888; Ink Spilled:</strong> {{ error }}
         </div>
         {% endif %}
 
-        <form method="post" action="{{ url_prefix | default('/pve') }}/claim">
+        <form method="post" action="{{ url_prefix | default('/pve') }}/claim" class="reveal reveal-d3">
             <div class="ledger-input-group">
                 <label for="name">Your Name / Title</label>
                 <input type="text" id="name" name="name" class="ledger-input" required maxlength="100"
@@ -52,13 +52,13 @@
             </div>
 
             <div class="ledger-input-group">
-                <label for="company">Guild / Company <span style="color: rgba(192, 184, 168, 0.4); text-transform: lowercase;">(optional)</span></label>
+                <label for="company">Guild / Company <span class="claim-optional">(optional)</span></label>
                 <input type="text" id="company" name="company" class="ledger-input" maxlength="100"
                        value="{{ company | default('') }}" placeholder="e.g., Knights of the Round Table">
             </div>
 
             <div class="ledger-input-group">
-                <label for="background">Professional Background <span style="color: rgba(192, 184, 168, 0.4); text-transform: lowercase;">(optional)</span></label>
+                <label for="background">Professional Background <span class="claim-optional">(optional)</span></label>
                 <select id="background" name="background" class="ledger-input">
                     <option value="">— Select your background —</option>
                     {% set bg = background | default('') %}
@@ -75,18 +75,18 @@
                 </select>
             </div>
 
-            <div class="ledger-input-group" style="margin-bottom: 2.5rem;">
+            <div class="ledger-input-group mb-xl">
                 <label for="email">Raven Address (Email)</label>
-                <input type="email" id="email" name="email" class="ledger-input" required maxlength="200"
-                       value="{{ email | default('') }}" placeholder="e.g., lancelot@camelot.com" style="font-family: var(--font-terminal); font-size: 1.1rem;">
+                <input type="email" id="email" name="email" class="ledger-input claim-email-input" required maxlength="200"
+                       value="{{ email | default('') }}" placeholder="e.g., lancelot@camelot.com">
             </div>
 
-            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block" style="font-size: 1.25rem; padding: 1.2rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 20px rgba(var(--gold-rgb), 0.2);">
+            <button type="submit" class="glowing-btn glowing-btn-primary glowing-btn-block glowing-btn--claim">
                 &#10022; Seal the Decree
             </button>
         </form>
 
-        <div style="text-align: center; margin-top: 1.5rem;">
+        <div class="claim-skip reveal reveal-d4">
             <form method="post" action="{{ url_prefix | default('/pve') }}/restart">
                 <button type="submit" class="skip-btn">
                     Fade into the shadows (Skip & Play Again)

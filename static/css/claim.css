@@ -111,3 +111,33 @@
 .skip-btn:hover {
     color: var(--text-primary);
 }
+
+/* Claim-specific classes */
+.ledger-title {
+    font-size: 2.8rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.4);
+    margin-bottom: 0.5rem;
+}
+
+.claim-optional {
+    color: rgba(192, 184, 168, 0.4);
+    text-transform: lowercase;
+}
+
+.claim-email-input {
+    font-family: var(--font-terminal);
+    font-size: 1.1rem;
+}
+
+.claim-error {
+    border-left: 3px solid var(--alert);
+    background: rgba(var(--danger-rgb), 0.1);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.claim-skip {
+    text-align: center;
+    margin-top: 1.5rem;
+}

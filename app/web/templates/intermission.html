@@ -8,77 +8,79 @@
 {% endif %}
 {% endblock %}
 
+{% block container_class %}container--xl{% endblock %}
+
 {% block content %}
-<div style="text-align: center;">
-    <p style="font-family: var(--font-terminal); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.85rem; margin-bottom: 0.5rem;">
+<div class="page-header reveal">
+    <p class="page-header__subtitle--sm">
         Round {{ round_number }} Concluded
     </p>
-    <h1 style="font-size: 3rem; margin-bottom: 0.25rem; text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.3);">
+    <h1 class="page-header__title--xl ts-gold-header">
         The Dust Settles
     </h1>
 </div>
 
 <div class="intermission-grid">
-    
-    <div class="report-panel">
+
+    <div class="report-panel reveal-left reveal-d2">
         {% if last_result == "attacker_win" %}
-            <div class="result-icon-breach">&#9876;</div>
+            <div class="result-icon-breach reveal-scale">&#9876;</div>
             {% if is_pve | default(false) %}
-            <h2 class="result-breach" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">Vault Breached!</h2>
-            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">You shattered {{ vault_name }}'s defenses.</p>
+            <h2 class="result-breach intermission-result-title">Vault Breached!</h2>
+            <p class="term-text term-text--muted">You shattered {{ vault_name }}'s defenses.</p>
             {% else %}
-            <h2 class="result-breach" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Castle Has Fallen!</h2>
-            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">
-                <strong style="color: var(--danger);">{{ attacker_label }}</strong> bypassed the wards in Round {{ round_number }}.
+            <h2 class="result-breach intermission-result-title">The Castle Has Fallen!</h2>
+            <p class="term-text term-text--muted">
+                <strong class="text-danger">{{ attacker_label }}</strong> bypassed the wards in Round {{ round_number }}.
             </p>
             {% endif %}
         {% else %}
-            <div class="result-icon-hold">&#127984;</div>
+            <div class="result-icon-hold reveal-scale">&#127984;</div>
             {% if is_pve | default(false) %}
-            <h2 class="result-hold" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Vault Holds!</h2>
-            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">Delaware's {{ vault_name }} withstood your assault.</p>
+            <h2 class="result-hold intermission-result-title">The Vault Holds!</h2>
+            <p class="term-text term-text--muted">Delaware's {{ vault_name }} withstood your assault.</p>
             {% else %}
-            <h2 class="result-hold" style="font-size: 2.5rem; font-family: 'MedievalSharp', cursive;">The Castle Stands!</h2>
-            <p style="color: var(--text-muted); font-family: var(--font-terminal); margin-top: 0.5rem;">
-                <strong style="color: var(--success);">{{ defender_label }}</strong> held strong in Round {{ round_number }}.
+            <h2 class="result-hold intermission-result-title">The Castle Stands!</h2>
+            <p class="term-text term-text--muted">
+                <strong class="text-success">{{ defender_label }}</strong> held strong in Round {{ round_number }}.
             </p>
             {% endif %}
         {% endif %}
 
-        <div class="cipher-reveal">
+        <div class="cipher-reveal reveal reveal-d3">
             <span class="cipher-reveal-label">The Decrypted Cipher</span>
             <div class="cipher-value">{{ password }}</div>
-            <div style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
-                Siege Duration: <strong style="color: var(--text-primary);">{{ total_turns }} / {{ max_turns }} Turns</strong>
+            <div class="cipher-meta">
+                Siege Duration: <strong class="text-primary-c">{{ total_turns }} / {{ max_turns }} Turns</strong>
             </div>
         </div>
 
-        <div class="score-display">
-            <h3 style="font-family: 'MedievalSharp', cursive; font-size: 1.4rem; color: var(--gold); margin-bottom: 0.75rem;">Match Renown</h3>
-            <div style="font-size: 1.15rem; font-family: var(--font-terminal);">
+        <div class="score-display reveal reveal-d4">
+            <h3 class="score-display__title">Match Renown</h3>
+            <div class="score-display__values">
                 {% if is_pve | default(false) %}
-                <span style="color: var(--gold);">Your Score: {{ attacker_score }} pts</span>
-                <span style="color: var(--text-muted); margin: 0 0.75rem;">|</span>
-                <span style="color: var(--arcane);">Vaults Cleared: {{ round_number }} / {{ max_rounds }}</span>
+                <span class="text-gold">Your Score: {{ attacker_score }} pts</span>
+                <span class="score-display__sep">|</span>
+                <span class="text-arcane">Vaults Cleared: {{ round_number }} / {{ max_rounds }}</span>
                 {% else %}
-                <span style="color: var(--arcane);">Defender (P1): {{ defender_score }} pts</span>
-                <span style="color: var(--text-muted); margin: 0 0.75rem;">&mdash;</span>
-                <span style="color: var(--gold);">Attacker (P2): {{ attacker_score }} pts</span>
+                <span class="text-arcane">Defender (P1): {{ defender_score }} pts</span>
+                <span class="score-display__sep">&mdash;</span>
+                <span class="text-gold">Attacker (P2): {{ attacker_score }} pts</span>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <div class="scout-panel">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--arcane); border-bottom: 1px solid rgba(var(--arcane-rgb), 0.3); padding-bottom: 0.75rem; font-family: 'MedievalSharp', cursive;">
+    <div class="scout-panel reveal-right reveal-d2">
+        <h2 class="scout-panel__title">
             The War Council
         </h2>
 
-        <div style="flex-grow: 1;">
+        <div class="scout-panel__body">
             {% if is_pve | default(false) %}
                 {% if next_vault %}
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Scouting Report: {{ next_vault.name }}</h3>
-                <div style="margin-bottom: 0.75rem;">
+                <h3 class="scout-heading">Scouting Report: {{ next_vault.name }}</h3>
+                <div class="mb-md">
                     {% if next_vault.difficulty == "easy" %}
                     <span class="seal seal-easy">&#10022; Threat Level: Minimal</span>
                     {% elif next_vault.difficulty == "medium" %}
@@ -91,33 +93,33 @@
                     <span class="seal seal-legendary">&#10022; Threat Level: Mythic</span>
                     {% endif %}
                 </div>
-                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">{{ next_vault.description }}</p>
+                <p class="scout-text">{{ next_vault.description }}</p>
                 {% else %}
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">The Final Gate Has Closed</h3>
-                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">You have faced all of Delaware's defenses. It is time to gaze upon your final standing in the realm.</p>
+                <h3 class="scout-heading">The Final Gate Has Closed</h3>
+                <p class="scout-text">You have faced all of Delaware's defenses. It is time to gaze upon your final standing in the realm.</p>
                 {% endif %}
             {% elif round_number == 1 %}
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Raw Duel Complete!</h3>
-                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
-                    No guides or tools were used &mdash; pure instinct alone. Next round, the Guild opens the archives: both the <strong style="color: var(--danger);">Infiltrator's Field Guide</strong> and the <strong style="color: var(--arcane);">Archmage's Tome</strong> become available to their respective champions.
+                <h3 class="scout-heading">Raw Duel Complete!</h3>
+                <p class="scout-text">
+                    No guides or tools were used &mdash; pure instinct alone. Next round, the Guild opens the archives: both the <strong class="text-danger">Infiltrator's Field Guide</strong> and the <strong class="text-arcane">Archmage's Tome</strong> become available to their respective champions.
                 </p>
             {% elif round_number == 2 %}
-                <h3 style="font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--gold); font-family: 'MedievalSharp', cursive;">Guides Mastered!</h3>
-                <p style="color: var(--text-secondary); font-family: var(--font-terminal); font-size: 0.95rem; line-height: 1.7;">
-                    Both champions have studied the ancient texts. In the final round, the Guild unseals the <strong style="color: var(--gold);">Dark Artifacts</strong> and <strong style="color: var(--arcane);">Arcane Artifacts</strong> &mdash; power-ups that may turn the tide of battle!
+                <h3 class="scout-heading">Guides Mastered!</h3>
+                <p class="scout-text">
+                    Both champions have studied the ancient texts. In the final round, the Guild unseals the <strong class="text-gold">Dark Artifacts</strong> and <strong class="text-arcane">Arcane Artifacts</strong> &mdash; power-ups that may turn the tide of battle!
                 </p>
             {% endif %}
         </div>
 
-        <div style="margin-top: 2rem;">
+        <div class="mt-xl">
             {% if is_arena | default(false) and arena_role == "attacker" %}
-            <div style="text-align: center; padding: 1rem; font-family: var(--font-terminal); color: var(--text-muted); font-size: 0.9rem;">
-                <span class="arena-pulse" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--arcane); animation: arena-pulse 1.5s ease-in-out infinite; margin-right: 0.5rem; vertical-align: middle;"></span>
+            <div class="intermission-waiting">
+                <span class="arena-pulse"></span>
                 Waiting for the Defender to begin the next round...
             </div>
             {% else %}
             <form method="post" action="{{ url_prefix | default('/game') }}/next-round">
-                <button type="submit" class="glowing-btn glowing-btn-arcane glowing-btn-block" style="font-size: 1.15rem; padding: 1.2rem; letter-spacing: 0.05em; background: rgba(30, 58, 95, 0.5); backdrop-filter: blur(4px);">
+                <button type="submit" class="glowing-btn glowing-btn-arcane glowing-btn-block intermission-next-btn">
                     {% if is_pve | default(false) %}
                         {% if next_vault %}
                         March on Vault {{ round_number + 1 }}

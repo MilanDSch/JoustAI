@@ -1,10 +1,3 @@
-/* 1. Expand container for the wide 3-column view */
-.container {
-    max-width: 1400px !important;
-    width: 100%;
-    padding: 2rem 1rem;
-}
-
 /* 2. Three-column Grid Layout */
 .siege-grid {
     display: grid;
@@ -67,6 +60,13 @@
     box-shadow: inset 0 0 15px rgba(var(--gold-rgb), 0.05);
 }
 
+.guess-panel__title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: var(--gold);
+    font-family: 'MedievalSharp', cursive;
+}
+
 /* 5. Chat History (The Oracle's Scroll) */
 .chat-history {
     max-height: 450px;
@@ -120,3 +120,86 @@
 .chat-history::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
 .chat-history::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 .chat-history::-webkit-scrollbar-thumb:hover { background: var(--alert); }
+
+/* 6. Siege-specific classes */
+.siege-hud {
+    filter: drop-shadow(0 0 15px rgba(var(--danger-rgb), 0.1));
+}
+
+.siege-hud-inner {
+    padding: 2rem;
+}
+
+.siege-scroll-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    font-family: 'MedievalSharp', cursive;
+    margin-bottom: 1rem;
+}
+
+.siege-empty-scroll {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.siege-empty-text {
+    font-style: italic;
+}
+
+.siege-alert {
+    border-left: 3px solid var(--alert);
+    background: rgba(var(--danger-rgb), 0.1);
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.siege-guess-input {
+    min-height: auto;
+    padding: 0.6rem;
+}
+
+.siege-final-turn {
+    text-align: center;
+    padding: 2rem 1rem;
+    border: 2px solid var(--gold);
+    background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+    margin-top: 1rem;
+}
+
+.siege-final-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.4rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.siege-textarea {
+    min-height: 100px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(var(--danger-rgb), 0.3);
+    transition: border-color 0.2s;
+    color: var(--text-primary);
+}
+
+.siege-cast-btn {
+    background: var(--danger);
+    color: var(--white);
+    border: none;
+    font-size: 1.15rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.siege-spinner {
+    border-top-color: var(--danger);
+}
+
+.siege-loading-text {
+    color: var(--danger);
+    font-family: 'MedievalSharp', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+}

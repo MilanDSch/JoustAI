@@ -1,7 +1,10 @@
 document.getElementById('defend-form').addEventListener('submit', function() {
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('submit-btn').innerHTML = '&#9878; Sealing Vault...';
-    document.getElementById('loading').style.display = 'block';
+    var loadEl = document.getElementById('loading');
+    loadEl.style.display = 'block';
+    loadEl.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>' +
+        '<span class="defend-loading-text">The Oracle is pondering your wards...</span>';
 });
 
 function toggleArtifactFields() {

@@ -7,13 +7,16 @@
     <title>{% block title %}AI CTF Duel{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Crimson+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/base.css">
     {% block head_extra %}{% endblock %}
 </head>
 <body>
-    <img src="/static/delaware-logo-white-rgb.png" alt="Delaware" style="position: fixed; top: 1.5rem; right: 1.5rem; height: 80px; opacity: 0.7; z-index: 100; pointer-events: none;">
-    <div class="container">
+    <script>
+        (function(){var k='visited:'+location.pathname;if(sessionStorage.getItem(k)){document.body.classList.add('no-reveal')}else{sessionStorage.setItem(k,'1')}})();
+    </script>
+    <img src="/static/delaware-logo-white-rgb.png" alt="Delaware" class="delaware-logo">
+    <div class="container {% block container_class %}{% endblock %}">
         {% block content %}{% endblock %}
     </div>
 

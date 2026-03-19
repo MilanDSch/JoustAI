@@ -1,6 +1,4 @@
 /* Admin Dashboard */
-.container { max-width: 1200px !important; width: 100%; }
-
 .admin-panel {
     background: linear-gradient(180deg, rgba(15, 20, 30, 0.95) 0%, var(--void-deep) 100%);
     border: 1px solid rgba(var(--arcane-rgb), 0.3);
@@ -8,6 +6,14 @@
     box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 15px 40px rgba(0,0,0,0.6);
     padding: 2.5rem 2rem;
     clip-path: var(--chamfer);
+}
+
+.admin-subtitle {
+    color: var(--arcane);
+    font-size: 0.9rem;
+    font-family: var(--font-terminal);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
 }
 
 .admin-section {
@@ -160,6 +166,10 @@
     color: var(--text-muted);
 }
 
+.cell-center {
+    text-align: center;
+}
+
 .cell-name {
     font-family: 'MedievalSharp', cursive;
     font-size: 1rem;
@@ -191,4 +201,18 @@
     font-family: var(--font-terminal);
     border: 1px dashed var(--border);
     background: rgba(0,0,0,0.2);
+}
+
+/* Footer */
+.admin-footer {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.admin-view-btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+    font-family: var(--font-terminal);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }

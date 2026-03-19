@@ -181,3 +181,152 @@
     border-color: var(--arcane);
     box-shadow: 0 0 10px rgba(var(--arcane-rgb), 0.3);
 }
+
+/* ── Spectate Extracted Classes ───────────────────── */
+.spectate-score-box--arcane {
+    background: linear-gradient(135deg, rgba(var(--arcane-rgb), 0.5), rgba(var(--arcane-rgb), 0.1));
+}
+
+.spectate-score-box--gold {
+    background: linear-gradient(135deg, rgba(var(--gold-rgb), 0.5), rgba(var(--gold-rgb), 0.1));
+}
+
+.spectate-phase-badge--arcane {
+    background: rgba(var(--arcane-rgb), 0.2);
+    color: var(--arcane);
+}
+
+.spectate-sep {
+    margin: 0 0.5rem;
+}
+
+.spectate-pulse--gold { background: var(--gold); }
+.spectate-pulse--danger { background: var(--danger); }
+.spectate-pulse--success { background: var(--success); }
+
+.spectate-history-title {
+    font-size: 1rem;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    font-family: 'MedievalSharp', cursive;
+}
+
+.spectate-round-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spectate-round-result {
+    font-size: 0.75rem;
+}
+
+.spectate-round-detail {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.spectate-live-panel {
+    border: 1px solid var(--border);
+    background: var(--void-mid);
+}
+
+.spectate-live-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(var(--danger-rgb), 0.1);
+}
+
+.spectate-live-title {
+    font-size: 1.2rem;
+    color: var(--danger);
+    font-family: 'MedievalSharp', cursive;
+    margin: 0;
+}
+
+.spectate-complete-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.spectate-cipher-value {
+    color: var(--gold);
+    font-size: 1.2rem;
+}
+
+.spectate-chat-replay {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+.spectate-match-over-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2.5rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.spectate-winner-text {
+    font-family: var(--font-terminal);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+.spectate-final-score {
+    font-family: var(--font-terminal);
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.spectate-score-dash {
+    margin: 0 0.5rem;
+}
+
+.spectate-waiting__icon--dim {
+    opacity: 0.5;
+}
+
+/* ── Arena Status Card Variants ───────────────────── */
+.arena-status-card--success {
+    background: linear-gradient(135deg, rgba(var(--success-rgb), 0.5) 0%, rgba(var(--success-rgb), 0.1) 100%);
+}
+
+/* ── Arena Lobby Classes ──────────────────────────── */
+.arena-lobby-label {
+    font-family: var(--font-terminal);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+}
+
+/* ── Arena Waiting Classes ─────────────────────────── */
+.arena-wait-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.arena-wait-title {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.arena-wait-desc {
+    font-family: var(--font-terminal);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.arena-wait-scores {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}

@@ -6,29 +6,29 @@
 {% endblock %}
 
 {% block content %}
-<div style="text-align: center; margin-bottom: 2rem;">
-    <div style="font-size: 2rem; margin-bottom: -0.5rem; filter: drop-shadow(0 0 10px rgba(var(--arcane-rgb), 0.4));">&#9876;</div>
-    <h1 style="font-size: 2.5rem; color: var(--arcane); text-shadow: 0 0 20px rgba(var(--arcane-rgb), 0.5); margin-bottom: 0.5rem;">
+<div class="page-header reveal">
+    <div class="page-header__icon drop-glow-arcane">&#9876;</div>
+    <h1 class="page-header__title text-arcane ts-arcane-lg">
         The Arena Awaits
     </h1>
-    <p style="color: var(--text-muted); font-family: var(--font-terminal); font-size: 1rem;">
+    <p class="page-header__subtitle">
         Share this code with your challenger to begin the duel.
     </p>
 </div>
 
-<div class="arena-status-card">
+<div class="arena-status-card reveal reveal-d2">
     <div class="arena-status-inner">
-        <p style="font-family: var(--font-terminal); font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem;">
+        <p class="arena-lobby-label">
             Arena Code
         </p>
         <div class="room-code-display">{{ room_code }}</div>
 
-        <div style="margin-top: 2rem;">
-            <p style="font-family: var(--font-terminal); font-size: 1rem; color: var(--text-secondary);">
+        <div class="mt-xl">
+            <p class="arena-wait-desc">
                 <span class="arena-pulse"></span>
                 Waiting for challenger to join...
             </p>
-            <p style="font-family: var(--font-terminal); font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">
+            <p class="term-text term-text--muted term-text--xs mt-lg">
                 Tell your opponent to enter this code on their device.
             </p>
         </div>
